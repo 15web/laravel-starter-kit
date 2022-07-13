@@ -1,0 +1,65 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "doctrine/annotations": "^1.13",
+        "doctrine/dbal": "^3.3",
+        "doctrine/migrations": "^3.4",
+        "doctrine/orm": "^2.11",
+        "guzzlehttp/guzzle": "^7.2",
+        "kalnoy/nestedset": "^6.0",
+        "laravel/framework": "^9.2",
+        "laravel/sanctum": "^2.14.1",
+        "spatie/laravel-route-attributes": "^1.10",
+        "symfony/cache": "^6.0",
+        "symfony/property-access": "^6.0",
+        "symfony/serializer": "^6.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "laravel/sail": "^1.0.1",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.1",
+        "phpstan/phpstan": "^1.4",
+        "phpstan/phpstan-doctrine": "^1.2",
+        "phpstan/phpstan-strict-rules": "^1.1",
+        "phpunit/phpunit": "^9.5.10",
+        "slevomat/coding-standard": "^7.0",
+        "spatie/laravel-ignition": "^1.0",
+        "squizlabs/php_codesniffer": "^3.6",
+        "symplify/phpstan-rules": "^10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "App\\PHPStan\\": "phpstan/"
+        }
+    },
+    "scripts": {
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,49 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Configuration\Migration\PhpFile;
+use Doctrine\Migrations\Tools\Console\Command;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Symfony\Component\Console\Application;
+
+
+/** @var Illuminate\Foundation\Application $app */
+$app = require __DIR__.'/../bootstrap/app.php';
+
+// Инициируем Laravel Console
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
+
+// Подключаем EntityManager
+$em = $app->make(EntityManager::class);
+
+$config = new PhpFile(__DIR__.'/../config/migrations.php');
+$dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($em));
+$managerProvider = new SingleManagerProvider($em);
+
+$cli = new Application('Doctrine Migrations');
+$cli->setCatchExceptions(true);
+
+// подключаем команды миграции
+$cli->addCommands(array(
+    new Command\DiffCommand($dependencyFactory),
+    new Command\DumpSchemaCommand($dependencyFactory),
+    new Command\ExecuteCommand($dependencyFactory),
+    new Command\GenerateCommand($dependencyFactory),
+    new Command\LatestCommand($dependencyFactory),
+    new Command\ListCommand($dependencyFactory),
+    new Command\MigrateCommand($dependencyFactory),
+    new Command\RollupCommand($dependencyFactory),
+    new Command\StatusCommand($dependencyFactory),
+    new Command\SyncMetadataCommand($dependencyFactory),
+    new Command\VersionCommand($dependencyFactory),
+    new GenerateProxiesCommand($managerProvider)
+));
+
+$cli->run();

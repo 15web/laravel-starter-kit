@@ -1,0 +1,59 @@
+services:
+    backend:
+        build:
+            context: ./backend/
+            target: base
+            args:
+                USER_ID: ${USER_ID:-1000}
+        volumes:
+            - ../backend/:/app/
+        env_file: backend/.env
+        depends_on: [ mysql ]
+    backend-cli:
+        build:
+            context: ./backend/
+            target: cli
+            args:
+                USER_ID: ${USER_ID:-1000}
+        volumes:
+            - ../backend/:/app/
+            - backend_cache:/home/dev/.composer
+        env_file: backend/.env
+        depends_on: [ mysql ]
+        init: true
+    queue:
+        build:
+            context: ./backend/
+            target: queue
+            args:
+                USER_ID: ${USER_ID:-1000}
+        volumes:
+            - ../backend/:/app/
+            - backend_cache:/home/dev/.composer
+        env_file: backend/.env
+        depends_on: [ mysql ]
+    nginx:
+        build:
+            context: ./nginx/
+        ports:
+            - ${NGINX_PORT}:80
+        volumes:
+            - ../backend/public/storage/:/app/:ro
+        depends_on: [ backend ]
+    mysql:
+        build:
+            context: ./mysql/
+        volumes:
+            - mysql:/var/lib/mysql/
+        ports:
+            - ${MYSQL_PORT}:3306
+        env_file: ./mysql/.env
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - ${MAILHOG_HTTP_PORT}:8025
+        logging:
+            driver: 'none'
+volumes:
+    mysql:
+    backend_cache:
