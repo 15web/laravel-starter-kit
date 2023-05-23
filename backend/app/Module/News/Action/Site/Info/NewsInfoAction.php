@@ -9,7 +9,6 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiRequest\ResolveApiRequest;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\News\Model\NewsCollection;
-use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Middleware;
@@ -23,7 +22,6 @@ final class NewsInfoAction
         private readonly NewsCollection $newsCollection,
         private readonly ResolveApiRequest $resolveApiRequest,
         private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly DenyUnlessUserHasRole $denyUnlessUserHasRole,
     ) {
     }
 

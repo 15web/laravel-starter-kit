@@ -35,7 +35,6 @@ final class Users
         Assert::notEmpty($token);
         Assert::uuid($token);
 
-        /** @var User|null $user */
         $user = $this->repository->createQueryBuilder('user')
             ->join('user.tokens', 'tokens', 'WITH', 'tokens.id = :tokenId')
             ->setParameter('tokenId', $token)

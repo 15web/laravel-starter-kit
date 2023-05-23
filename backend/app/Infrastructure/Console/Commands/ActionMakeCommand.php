@@ -35,8 +35,7 @@ final class ActionMakeCommand extends GeneratorCommand
      *
      * Replace the base method and resolve custom stub replacement.
      *
-     * @param  string  $name
-     * @return string
+     * @param string $name
      */
     protected function buildClass($name): string
     {
@@ -46,14 +45,14 @@ final class ActionMakeCommand extends GeneratorCommand
         ];
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
     }
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
     protected function getStub(): string
     {
@@ -63,7 +62,7 @@ final class ActionMakeCommand extends GeneratorCommand
     /**
      * Get the console command arguments.
      *
-     * @return array
+     * @return non-empty-list<array{0: string, 1: int, 2: string}>
      */
     protected function getArguments(): array
     {

@@ -8,7 +8,6 @@ use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\News\Model\NewsCollection;
 use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use App\Module\User\Authorization\ByRole\Role;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Middleware;
@@ -21,7 +20,6 @@ final class NewsListAction
     public function __construct(
         private readonly NewsCollection $newsCollection,
         private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly Gate $gate,
         private readonly DenyUnlessUserHasRole $denyUnlessUserHasRole,
     ) {
     }

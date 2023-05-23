@@ -14,8 +14,8 @@ use App\Module\News\Model\NewsCollection;
 use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use App\Module\User\Authorization\ByRole\Role;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
 use Spatie\RouteAttributes\Attributes\Middleware;
+use Spatie\RouteAttributes\Attributes\Post;
 use Spatie\RouteAttributes\Attributes\Prefix;
 
 #[Prefix('api')]
@@ -31,7 +31,7 @@ final class NewsCreateAction
     ) {
     }
 
-    #[Get('/news/create')]
+    #[Post('/news/create')]
     public function __invoke(): JsonResponse
     {
         ($this->denyUnlessUserHasRole)(Role::Admin);

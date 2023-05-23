@@ -6,33 +6,34 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "doctrine/annotations": "^1.13",
+        "doctrine/annotations": "^2.0",
         "doctrine/dbal": "^3.3",
         "doctrine/migrations": "^3.4",
         "doctrine/orm": "^2.11",
         "guzzlehttp/guzzle": "^7.2",
         "kalnoy/nestedset": "^6.0",
-        "laravel/framework": "^9.2",
-        "laravel/sanctum": "^2.14.1",
+        "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.2",
+        "laravel/tinker": "^2.8",
         "spatie/laravel-route-attributes": "^1.10",
         "symfony/cache": "^6.0",
         "symfony/property-access": "^6.0",
-        "symfony/serializer": "^6.0"
+        "symfony/serializer": "^6.0",
+        "symplify/phpstan-rules": "12.0.2.72"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
+        "fakerphp/faker": "^1.20",
         "friendsofphp/php-cs-fixer": "^3.8",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpstan/phpstan": "^1.4",
+        "mockery/mockery": "^1.5",
+        "nunomaduro/collision": "^7.5",
+        "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-doctrine": "^1.2",
         "phpstan/phpstan-strict-rules": "^1.1",
-        "phpunit/phpunit": "^9.5.10",
-        "slevomat/coding-standard": "^7.0",
-        "spatie/laravel-ignition": "^1.0",
-        "squizlabs/php_codesniffer": "^3.6",
-        "symplify/phpstan-rules": "^10.1"
+        "phpunit/phpunit": "^10.0",
+        "roave/security-advisories": "dev-latest",
+        "slevomat/coding-standard": "^8.0",
+        "spatie/laravel-ignition": "^2.0",
+        "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
         "psr-4": {
@@ -60,6 +61,6 @@
             "dealerdirect/phpcodesniffer-composer-installer": false
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
