@@ -55,21 +55,31 @@ final class Handler extends ExceptionHandler
     private static function handleSpecificException(\Throwable $e): ?\Throwable
     {
         if ($e instanceof NotFoundHttpException) {
-            return ApiException::createNotFoundException('Запрашиваемый ресурс не найден.', Error::NOT_FOUND, $e);
+            /** @var string $message */
+            $message = __('handler.not-found');
+
+            return ApiException::createNotFoundException($message, Error::NOT_FOUND, $e);
         }
 
         if ($e instanceof MethodNotAllowedHttpException) {
-            $message = sprintf('Метод не поддерживается этим ресурсом. Доступные методы: %s.', $e->getHeaders()['Allow']);
+            /** @var string $message */
+            $message = __('handler.method-not-allowed', ['methods' => $e->getHeaders()['Allow']]);
 
             return ApiException::createMethodNotAllowedException($message, Error::METHOD_NOT_ALLOWED, $e);
         }
 
         if ($e instanceof UnauthorizedHttpException || $e instanceof AuthenticationException) {
-            return ApiException::createUnauthorizedException('Для доступ к ресурсу требуется аутентификация.', Error::UNAUTHORIZED, $e);
+            /** @var string $message */
+            $message = __('handler.not-authenticated');
+
+            return ApiException::createUnauthorizedException($message, Error::UNAUTHORIZED, $e);
         }
 
         if ($e instanceof AccessDeniedHttpException || $e instanceof AuthorizationException) {
-            return ApiException::createAccessDeniedException('Доступ к ресурсу ограничен.', Error::ACCESS_DENIED, $e);
+            /** @var string $message */
+            $message = __('handler.forbidden');
+
+            return ApiException::createAccessDeniedException($message, Error::ACCESS_DENIED, $e);
         }
 
         return null;

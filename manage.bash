@@ -97,10 +97,15 @@ case $COMMAND in
         ARGS_WITHOUT_FIRST="${@:2}"
         runBackend $ARGS_WITHOUT_FIRST;
         ;;
+    tinker)
+        setupEnvs;
+
+        runBackend php artisan tinker;
+        ;;
     stan)
         setupEnvs;
 
-        runBackend vendor/bin/phpstan analyse -c phpstan.neon --ansi;
+        runBackend vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=256M;
         ;;
     fixer-check | fc)
         setupEnvs;

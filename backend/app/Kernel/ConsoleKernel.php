@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Kernel;
 
-use function base_path;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as BaseConsoleKernel;
 

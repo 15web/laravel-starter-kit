@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine;
 
 use App\Infrastructure\Doctrine\EntityManager\EntityManagerFactory;
-use function base_path;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
