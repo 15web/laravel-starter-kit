@@ -6,9 +6,10 @@ C_BLUE='\033[0;34m'
 C_END='\033[0m'
 
 init: setup
-	docker compose build
+	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 	docker compose up --detach --force-recreate --remove-orphans backend nginx mysql mailhog
+	docker compose run --rm backend-cli php artisan migrate --force
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 	docker compose up --detach --force-recreate queue
 	@echo -e ${C_GREEN}Done${C_END}
