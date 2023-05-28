@@ -7,10 +7,9 @@ namespace App\Module\Blog\Action\List;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Blog\Model\Post;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class PostListAction
 {
     public function __construct(
@@ -18,7 +17,7 @@ final class PostListAction
     ) {
     }
 
-    #[Get('/blog/list')]
+    #[Router\Get('/blog/list')]
     public function __invoke(): JsonResponse
     {
         return ($this->resolveApiResponse)($this->getPostsData());

@@ -11,10 +11,9 @@ use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
 // use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Post;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class LoginAction
 {
     public function __construct(
@@ -26,7 +25,7 @@ final class LoginAction
     ) {
     }
 
-    #[Post('/auth/login')]
+    #[Router\Post('/auth/login')]
     public function __invoke(): JsonResponse
     {
         $loginRequest = ($this->resolveApiRequest)(LoginRequest::class);

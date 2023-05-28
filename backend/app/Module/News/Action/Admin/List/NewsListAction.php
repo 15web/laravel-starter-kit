@@ -9,12 +9,10 @@ use App\Module\News\Model\NewsCollection;
 use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use App\Module\User\Authorization\ByRole\Role;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Middleware;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
-#[Middleware('auth')]
+#[Router\Prefix('api')]
+#[Router\Middleware('auth')]
 final class NewsListAction
 {
     public function __construct(
@@ -24,7 +22,7 @@ final class NewsListAction
     ) {
     }
 
-    #[Get('/news/list')]
+    #[Router\Get('/news/list')]
     public function __invoke(): JsonResponse
     {
         ($this->denyUnlessUserHasRole)(Role::Admin);
