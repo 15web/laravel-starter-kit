@@ -5,27 +5,27 @@ C_RED='\033[0;31m'
 C_BLUE='\033[0;34m'
 C_END='\033[0m'
 
-init: setup
-	make build
-	docker compose run --rm backend-cli php artisan migrate --force
-	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
-	docker compose up --detach --force-recreate queue
+init: build \
+	up \
+	migrate
 	@echo -e ${C_GREEN}Done${C_END}
 
 up: setup
-	docker compose up -d --force-recreate --remove-orphans
+	docker compose up --detach --force-recreate --remove-orphans
 
 down:
 	docker compose down --remove-orphans
 
-update: setup
-	docker compose build --pull
-	docker compose run --rm backend-cli composer update
-
 build: setup
 	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
-	docker compose up --detach --force-recreate --remove-orphans backend nginx mysql mailhog
+
+update:
+	docker compose run --rm backend-cli composer update
+
+migrate:
+	docker compose run --rm backend-cli php artisan migrate --force
+	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 
 tinker:
 	docker compose run --rm backend-cli php artisan tinker
@@ -48,17 +48,15 @@ sniffer-fix:
 test:
 	docker compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
 
-check:
-	# todo: параллельный запуск
-	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
-	docker compose run --rm backend-cli ./vendor/bin/phpcs -p
-	docker compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
+check: stan \
+	fixer-check \
+	sniffer-check \
+	test
 	@echo -e ${C_GREEN}Checking is successfully completed${C_END}
 
-fix:
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
-	docker compose run --rm backend-cli ./vendor/bin/phpcbf -p
+fix: fixer-fix \
+	sniffer-fix
+	@echo -e ${C_GREEN}Fix is successfully completed${C_END}
 
 logs:
 	@docker compose logs $(Arguments)
