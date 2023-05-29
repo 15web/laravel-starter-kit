@@ -7,6 +7,7 @@ services:
                 USER_ID: ${USER_ID:-1000}
         volumes:
             - ../backend/:/app/
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
         env_file: backend/.env
         depends_on: [ mysql ]
     backend-cli:
@@ -17,6 +18,7 @@ services:
                 USER_ID: ${USER_ID:-1000}
         volumes:
             - ../backend/:/app/
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
             - backend_cache:/home/dev/.composer
         env_file: backend/.env
         depends_on: [ mysql ]

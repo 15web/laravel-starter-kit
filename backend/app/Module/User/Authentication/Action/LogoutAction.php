@@ -12,12 +12,10 @@ use App\Module\User\Authentication\Model\Tokens;
 use App\Module\User\Model\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Middleware;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes  as Router;
 
-#[Prefix('api')]
-#[Middleware('auth')]
+#[Router\Prefix('api')]
+#[Router\Middleware('auth')]
 final class LogoutAction
 {
     public function __construct(
@@ -27,7 +25,7 @@ final class LogoutAction
     ) {
     }
 
-    #[Get('/auth/logout')]
+    #[Router\Get('/auth/logout')]
     public function __invoke(Request $request): JsonResponse
     {
         /**

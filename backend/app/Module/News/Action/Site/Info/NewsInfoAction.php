@@ -9,25 +9,21 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiRequest\ResolveApiRequest;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\News\Model\NewsCollection;
-use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Middleware;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
-#[Middleware('auth')]
+#[Router\Prefix('api')]
+#[Router\Middleware('auth')]
 final class NewsInfoAction
 {
     public function __construct(
         private readonly NewsCollection $newsCollection,
         private readonly ResolveApiRequest $resolveApiRequest,
         private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly DenyUnlessUserHasRole $denyUnlessUserHasRole,
     ) {
     }
 
-    #[Get('/news/info')]
+    #[Router\Get('/news/info')]
     public function __invoke(): JsonResponse
     {
         $newsInfoRequest = ($this->resolveApiRequest)(NewsInfoRequest::class);

@@ -9,12 +9,11 @@ use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
-use Illuminate\Contracts\Hashing\Hasher;
+// use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Post;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class LoginAction
 {
     public function __construct(
@@ -22,11 +21,11 @@ final class LoginAction
         private readonly Flusher $flusher,
         private readonly ResolveApiResponse $resolveApiResponse,
         private readonly ResolveApiRequest $resolveApiRequest,
-        private readonly Hasher $hasher,
+        // private readonly Hasher $hasher,
     ) {
     }
 
-    #[Post('/auth/login')]
+    #[Router\Post('/auth/login')]
     public function __invoke(): JsonResponse
     {
         $loginRequest = ($this->resolveApiRequest)(LoginRequest::class);
@@ -36,7 +35,7 @@ final class LoginAction
         if ($user === null /* || $this->hasher->check($credentials['password'], $user->getPassword()) */) {
             $user = new User($loginRequest->getEmail(), $loginRequest->getPassword());
             $this->users->add($user);
-//            throw ApiException::createBadRequestException('Указан не верный логин или пароль', Error::BAD_REQUEST);
+            // throw ApiException::createBadRequestException('Указан не верный логин или пароль', Error::BAD_REQUEST);
         }
 
         $token = $user->addToken();

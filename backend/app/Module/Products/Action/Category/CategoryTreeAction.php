@@ -7,10 +7,9 @@ namespace App\Module\Products\Action\Category;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Products\Model\Category;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class CategoryTreeAction
 {
     public function __construct(
@@ -18,7 +17,7 @@ final class CategoryTreeAction
     ) {
     }
 
-    #[Get('/category/tree')]
+    #[Router\Get('/category/tree')]
     public function __invoke(): JsonResponse
     {
         /** @var Category[] $categories */

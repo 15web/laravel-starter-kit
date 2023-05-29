@@ -10,10 +10,9 @@ use App\Infrastructure\ApiRequest\ResolveApiRequest;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Blog\Model\Post;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class PostCreateAction
 {
     public function __construct(
@@ -22,7 +21,7 @@ final class PostCreateAction
     ) {
     }
 
-    #[Get('/blog/create')]
+    #[Router\Post('/blog/create')]
     public function __invoke(): JsonResponse
     {
         $postCreateData = ($this->resolveApiRequest)(PostCreateRequest::class);

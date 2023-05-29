@@ -29,7 +29,10 @@ final class ResolveApiRequest
         try {
             return $this->serializer->denormalize($this->request->all(), $className);
         } catch (\Throwable $e) {
-            throw ApiException::createBadRequestException('Неверный формат запроса', Error::BAD_REQUEST, $e);
+            /** @var string $message */
+            $message = __('handler.invalid-request-format');
+
+            throw ApiException::createBadRequestException($message, Error::BAD_REQUEST, $e);
         }
     }
 }

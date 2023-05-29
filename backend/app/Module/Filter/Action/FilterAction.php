@@ -9,10 +9,9 @@ use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Filter\FilterAggregator;
 use App\Module\Filter\SearchRequest;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class FilterAction
 {
     public function __construct(
@@ -22,7 +21,7 @@ final class FilterAction
     ) {
     }
 
-    #[Get('/filter')]
+    #[Router\Get('/filter')]
     public function __invoke(): JsonResponse
     {
         $searchRequest = ($this->resolveApiRequest)(SearchRequest::class);

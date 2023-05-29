@@ -96,18 +96,24 @@ final class ApiException extends \Exception
 
     public static function createUnexpectedHttpException(HttpExceptionInterface $httpException): self
     {
+        /** @var string $message */
+        $message = __('handler.unexpected-http-exception');
+
         return new self(
-            'Ошибка фреймворка не обрабатывается приложением. Обратитесь к разработчикам бэкенда.',
+            $message,
             Error::UNEXPECTED,
             StatusCode::SERVER_ERROR,
-            $httpException,
+            $httpException
         );
     }
 
     public static function createUnexpectedException(\Throwable $previous): self
     {
+        /** @var string $message */
+        $message = __('handler.unexpected-exception');
+
         return new self(
-            'Произошла неожиданная ошибка. Обратитесь к администратору',
+            $message,
             Error::UNEXPECTED,
             StatusCode::SERVER_ERROR,
             $previous
