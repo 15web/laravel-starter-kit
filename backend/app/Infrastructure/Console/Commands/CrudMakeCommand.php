@@ -45,9 +45,12 @@ final class CrudMakeCommand extends Command
     public function handle(): void
     {
         foreach (self::ACTION_LIST as $actionName => $actionMethod) {
+            /** @var string $name */
+            $name = $this->argument('name');
+
             $this->call('make:action', [
-                'name' => sprintf(self::ACTION_TEMPLATE, $this->argument('name'), $actionName),
-                'route' => strtolower(sprintf('/%s/%s', $this->argument('name'), $actionName)),
+                'name' => sprintf(self::ACTION_TEMPLATE, $name, $actionName),
+                'route' => strtolower(sprintf('/%s/%s', $name, $actionName)),
                 'method' => $actionMethod,
             ]);
         }

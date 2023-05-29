@@ -9,10 +9,9 @@ use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\News\Notification\Subscribe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
-use Spatie\RouteAttributes\Attributes\Post;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class SubscribeAction
 {
     public function __construct(
@@ -21,7 +20,7 @@ final class SubscribeAction
     ) {
     }
 
-    #[Post('/news/subscribe')]
+    #[Router\Post('/news/subscribe')]
     public function __invoke(): JsonResponse
     {
         $subscribeRequest = ($this->resolveApiRequest)(SubscribeRequest::class);

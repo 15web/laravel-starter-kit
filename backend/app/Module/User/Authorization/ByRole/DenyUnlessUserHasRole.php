@@ -19,9 +19,7 @@ final class DenyUnlessUserHasRole
      */
     public function __invoke(Role $role): void
     {
-        /**
-         * @var User $user
-         */
+        /** @var User|null $user */
         $user = $this->request->user();
 
         if ($user === null) {

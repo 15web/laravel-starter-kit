@@ -6,10 +6,9 @@ namespace App\Module\Products\Action\List;
 
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class ProductsListAction
 {
     public function __construct(
@@ -17,7 +16,7 @@ final class ProductsListAction
     ) {
     }
 
-    #[Get('/products/list')]
+    #[Router\Get('/products/list')]
     public function __invoke(): JsonResponse
     {
         return ($this->resolveApiResponse)([]);

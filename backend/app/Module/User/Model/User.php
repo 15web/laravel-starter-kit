@@ -117,7 +117,7 @@ class User implements Authenticatable
     }
 
     /**
-     * @return string[]
+     * @return array<Role>
      */
     public function getRoles(): array
     {

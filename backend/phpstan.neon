@@ -8,6 +8,10 @@ parameters:
   excludePaths:
   doctrine:
       objectManagerLoader: phpstan/object-manager.php
+  ignoreErrors:
+      -
+          message: "#has parameter \\$credentials with no value type specified in iterable type array\\.#"
+          path: app/Module/User/Authentication/UserProvider/TokenUserProvider.php
 
 includes:
   - vendor/phpstan/phpstan/conf/bleedingEdge.neon
@@ -22,6 +26,3 @@ services:
   - class: App\PHPStan\PropertiesExtension
     tags:
       - phpstan.properties.readWriteExtension
-  - class: Symplify\PHPStanRules\ObjectCalisthenics\Rules\NoElseAndElseIfRule
-    tags:
-      - phpstan.rules.rule

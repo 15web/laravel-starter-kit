@@ -8,10 +8,9 @@ use App\Infrastructure\ApiRequest\ResolveApiRequest;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Products\Model\Category;
 use Illuminate\Http\JsonResponse;
-use Spatie\RouteAttributes\Attributes\Get;
-use Spatie\RouteAttributes\Attributes\Prefix;
+use Spatie\RouteAttributes\Attributes as Router;
 
-#[Prefix('api')]
+#[Router\Prefix('api')]
 final class CategoryCreateAction
 {
     public function __construct(
@@ -20,7 +19,7 @@ final class CategoryCreateAction
     ) {
     }
 
-    #[Get('/category/create')]
+    #[Router\Post('/category/create')]
     public function __invoke(): JsonResponse
     {
         $categoryCreateData = ($this->resolveApiRequest)(CategoryCreateRequest::class);
