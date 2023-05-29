@@ -6,9 +6,7 @@ C_BLUE='\033[0;34m'
 C_END='\033[0m'
 
 init: setup
-	docker compose build backend mysql
-	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
-	docker compose up --detach --force-recreate --remove-orphans backend nginx mysql mailhog
+	make build
 	docker compose run --rm backend-cli php artisan migrate --force
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 	docker compose up --detach --force-recreate queue
@@ -21,47 +19,46 @@ down:
 	docker compose down --remove-orphans
 
 update: setup
-	docker compose pull
 	docker compose build --pull
 	docker compose run --rm backend-cli composer update
 
 build: setup
-	docker compose build
+	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
-	docker compose up -d --force-recreate --remove-orphans
+	docker compose up --detach --force-recreate --remove-orphans backend nginx mysql mailhog
 
-run:
-	@docker compose run --rm backend-cli $(Arguments)
+tinker:
+	docker compose run --rm backend-cli php artisan tinker
 
 stan:
 	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=256M
 
 fixer-check:
-	docker-compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
 
 fixer-fix:
-	docker-compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
 
 sniffer-check:
-	docker-compose run --rm backend-cli ./vendor/bin/phpcs -p
+	docker compose run --rm backend-cli ./vendor/bin/phpcs -p
 
 sniffer-fix:
-	docker-compose run --rm backend-cli ./vendor/bin/phpcbf -p
+	docker compose run --rm backend-cli ./vendor/bin/phpcbf -p
 
 test:
-	docker-compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
+	docker compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
 
 check:
 	# todo: параллельный запуск
-	docker-compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi
-	docker-compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
-	docker-compose run --rm backend-cli ./vendor/bin/phpcs -p
-	docker-compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
+	docker compose run --rm backend-cli ./vendor/bin/phpcs -p
+	docker compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
 	@echo -e ${C_GREEN}Checking is successfully completed${C_END}
 
 fix:
-	docker-compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
-	docker-compose run --rm backend-cli ./vendor/bin/phpcbf -p
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
+	docker compose run --rm backend-cli ./vendor/bin/phpcbf -p
 
 logs:
 	@docker compose logs $(Arguments)

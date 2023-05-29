@@ -1,4 +1,4 @@
-FROM php:8.1-fpm as base
+FROM php:8.1.19-fpm as base
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions pdo_mysql intl
