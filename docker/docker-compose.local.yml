@@ -6,7 +6,7 @@ services:
             context: ./backend/
             target: base
             args:
-                USER_ID: ${USER_ID:-1000}
+                USER_ID: ${USER_ID}
         volumes:
             - ../backend/:/app/
             - ./backend/local.ini:/usr/local/etc/php/conf.d/local.ini
@@ -21,7 +21,7 @@ services:
             context: ./backend/
             target: cli
             args:
-                USER_ID: ${USER_ID:-1000}
+                USER_ID: ${USER_ID}
         init: true
     queue:
         <<: *backend

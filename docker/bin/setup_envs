@@ -11,6 +11,7 @@ osDependSedInPlace() {
 }
 
 [ -f ./.env ] || cp ./docker/.env.dist .env
+rm -f ./docker/.env
 
 COMPOSE_FILE_ENV="COMPOSE_FILE='./docker/docker-compose.local.yml'"
 
@@ -18,6 +19,13 @@ if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
     osDependSedInPlace -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env
 else
     echo "$COMPOSE_FILE_ENV" >>./.env
+fi
+
+USER_ID_ENV="USER_ID=$(id -u)"
+if [ "$(grep 'USER_ID' ./.env)" != '' ]; then
+    osDependSedInPlace -E "s|^.*USER_ID=.*$|$USER_ID_ENV|" ./.env
+else
+    echo "$USER_ID_ENV" >>./.env
 fi
 
 [ -f ./docker/backend/.env ] || cp ./docker/backend/.env.dist ./docker/backend/.env
