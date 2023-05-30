@@ -24,7 +24,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install services
-        run: make init
+        run: docker context use default && make init
 
       - name: Check packages for known security vulnerabilities
         run: make composer-audit
