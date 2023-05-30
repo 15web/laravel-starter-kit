@@ -1,0 +1,36 @@
+name: Check Code Quality
+
+on: [ push ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup docker env
+        run: make setup
+
+      - name: Validate composer.json and composer.lock
+        run: make composer-validate
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install services
+        run: make init
+
+      - name: Check packages for known security vulnerabilities
+        run: make composer-audit
+
+      - name: Check code quality
+        run: make check
+
+      - name: Run functional tests
+        run: make test

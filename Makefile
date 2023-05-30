@@ -30,6 +30,12 @@ migrate:
 tinker:
 	docker compose run --rm backend-cli php artisan tinker
 
+composer-validate:
+	docker compose run -T --rm backend-cli composer validate --strict
+
+composer-audit:
+	docker compose run -T --rm backend-cli composer audit --format=plain
+
 stan:
 	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=256M
 
