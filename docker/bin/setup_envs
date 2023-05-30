@@ -11,6 +11,7 @@ osDependSedInPlace() {
 }
 
 [ -f ./.env ] || cp ./docker/.env.dist .env
+rm -f ./docker/.env
 
 COMPOSE_FILE_ENV="COMPOSE_FILE='./docker/docker-compose.local.yml'"
 

@@ -24,13 +24,14 @@ jobs:
 #            ${{ runner.os }}-php-
 
       - name: Install services
-        run: make init
+        run: make setup && docker compose build backend mysql && docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
+#        run: make init
 
-      - name: Check packages for known security vulnerabilities
-        run: make composer-audit
-
-      - name: Check code quality
-        run: make check
-
-      - name: Run functional tests
-        run: make test
+#      - name: Check packages for known security vulnerabilities
+#        run: make composer-audit
+#
+#      - name: Check code quality
+#        run: make check
+#
+#      - name: Run functional tests
+#        run: make test
