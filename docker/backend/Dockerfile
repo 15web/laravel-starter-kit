@@ -1,4 +1,4 @@
-FROM php:8.1-fpm as base
+FROM php:8.1.19-fpm as base
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions pdo_mysql intl
@@ -18,14 +18,13 @@ FROM base as cli
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip;
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.5.7 /usr/bin/composer /usr/bin/composer
 
 RUN su dev -c 'mkdir -p /home/dev/.composer/ /home/dev/app/'
 
 USER dev
 
-ENTRYPOINT ["docker-php-entrypoint"]
-CMD supervisord; php -a
+WORKDIR /app/
 
 FROM base as queue
 

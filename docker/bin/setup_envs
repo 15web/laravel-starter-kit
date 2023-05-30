@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+osDependSedInPlace() {
+    if [ "$(uname -s)" == 'Darwin' ]; then
+        sed -i '' "$@"
+    else
+        sed --in-place "$@"
+    fi
+}
+
+[ -f ./.env ] || cp ./docker/.env.dist .env
+
+COMPOSE_FILE_ENV="COMPOSE_FILE='./docker/docker-compose.local.yml'"
+
+if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
+    osDependSedInPlace -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env
+else
+    echo "$COMPOSE_FILE_ENV" >>./.env
+fi
+
+[ -f ./docker/backend/.env ] || cp ./docker/backend/.env.dist ./docker/backend/.env
+[ -f ./docker/mysql/.env ] || cp ./docker/mysql/.env.dist ./docker/mysql/.env

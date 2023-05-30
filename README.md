@@ -1,72 +1,71 @@
-# Тестовая пробная сборка для старта проекта на laravel
+# Тестовая пробная сборка для старта проекта на Laravel
 
 ## Управление проектом
 - общие операции
     ```shell
     # установка и запуск
-    ./manage.bash install # или i
+    make init
+    
+    # запуск приложения  
+    make up
+  
+    # остановка приложения  
+    make down
   
     # просмотр логов
-    ./manage.bash logs # или l
-  
-    # просмотр логов одного сервиса
-    ./manage.bash logs backend
-
-    # просмотр логов одного сервиса в реальном времени
-    ./manage.bash l -f backend
-    ./manage.bash logs --follow backend
+    make logs {service}   
+    make logs backend # например
+    make logs -f backend # в реальном времени
   
     # установка git hooks 
-    ./manage.bash hooks-install # или hi,
+    make hooks-install
     ```
 - запуск проверок качества кода
     ```shell
     # PHPStan
-    ./manage.bash stan
+    make stan
 
     # PHP CS Fixer
-    ./manage.bash fixer-check # или fc
-    ./manage.bash fixer-fix # или ff
+    make fixer-check
+    make fixer-fix
 
     # PHP_CodeSniffer
-    ./manage.bash sniffer-check # или sc
-    ./manage.bash sniffer-fix # или sf
+    make sniffer-check
+    make sniffer-fix
   
     # PHPUnit
-    ./manage.bash test-unit # или tu
+    make test
   
     # Запустить все проверки  
-    ./manage.bash check # или c
+    make check
   
     # Запустить все исправления  
-    ./manage.bash fix # или f
+    make fix
     ```
 - запуск команды в контейнере бэкенда.
     ```shell
     # базовый скрипт с аргументом
-    ./manage.bash rb
-    # или то же самое 
-    ./manage.bash run-backend
+    make run
     # по сути это шорткат для
     docker-compose run --rm backend-cli
 
     # по умолчанию в контейнере установлена команда php -a
-    ./manage.bash rb
-      Envs set up!
+    make run
+      Environment is set up
       Creating laravel-start-local_backend-cli_run ... done
       Interactive shell
       php >
 
     # выполнить php скрипт можно переопределив команду
-    ./manage.bash rb php config/auth.php
+    make run php config/auth.php
 
     # также можно указывать любой исполняемый файл
-    ./manage.bash rb cat .gitignore
+    make run cat .gitignore
   
     # файл считается исполняемым, если у него есть shebang(например #!/usr/bin/env php)
     # и права на исполнение (chmod +x executable_shebanged_script.php)
-    ./manage.bash rb composer i
-    ./manage.bash rb vendor/bin/phpstan analyse -c phpstan.neon --ansi
+    make run composer i
+    make run vendor/bin/phpstan analyse -c phpstan.neon --ansi
     ```
 
 ## Copyright and license
