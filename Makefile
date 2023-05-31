@@ -5,7 +5,8 @@ C_RED='\033[0;31m'
 C_BLUE='\033[0;34m'
 C_END='\033[0m'
 
-init: build \
+init: setup \
+	build \
 	up \
 	migrate
 	@echo -e ${C_GREEN}Done${C_END}

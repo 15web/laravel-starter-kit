@@ -8,11 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-#      - name: Setup docker env
-#        run: make setup
-#
-#      - name: Validate composer.json and composer.lock
-#        run: make composer-validate
+      - name: Setup docker env
+        run: make setup
+
+      - name: Validate composer.json and composer.lock
+        run: make composer-validate
 
       - name: Cache Composer packages
         id: composer-cache
