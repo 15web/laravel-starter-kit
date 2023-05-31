@@ -170,9 +170,15 @@ return [
         App\Infrastructure\Doctrine\DoctrineServiceProvider::class,
         App\Infrastructure\Serializer\SerializerServiceProvider::class,
         App\Infrastructure\ApiException\ServiceProvider\ApiExceptionRenderServiceProvider::class,
+
+        /*
+         * Modules Service Providers...
+         */
+        App\Module\Blog\BlogServiceProvider::class,
         App\Module\Filter\FilterServiceProvider::class,
+        App\Module\News\NewsServiceProvider::class,
         App\Module\User\Authentication\ServiceProvider\AuthenticationServiceProvider::class,
-        \App\Module\User\Authorization\ServiceProvider\AuthorizationServiceProvider::class,
+        App\Module\User\Authorization\ServiceProvider\AuthorizationServiceProvider::class,
     ])->toArray(),
 
     /*

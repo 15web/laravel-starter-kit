@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Authentication\Action;
+namespace App\Module\User\Authentication\Action\Logout;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
@@ -12,7 +12,7 @@ use App\Module\User\Authentication\Model\Tokens;
 use App\Module\User\Model\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Spatie\RouteAttributes\Attributes  as Router;
+use Spatie\RouteAttributes\Attributes as Router;
 
 #[Router\Prefix('api')]
 #[Router\Middleware('auth')]
@@ -28,9 +28,7 @@ final class LogoutAction
     #[Router\Get('/auth/logout')]
     public function __invoke(Request $request): JsonResponse
     {
-        /**
-         * @var ?User $user
-         */
+        /** @var ?User $user */
         $user = $request->user();
         if ($user === null) {
             throw new \InvalidArgumentException();

@@ -23,7 +23,10 @@ final class Tokens
     {
         $token = $this->repository->find($id);
         if ($token === null) {
-            throw new \DomainException('Токен не найден');
+            /** @var string $message */
+            $message = __('user::token.not_found');
+
+            throw new \DomainException($message);
         }
 
         return $token;

@@ -38,7 +38,10 @@ final class NewsCreateAction
 
         $isNewsExists = $this->newsCollection->isExistsByTitle($newsCreateData->getTitle());
         if ($isNewsExists) {
-            throw ApiException::createDomainException('Новость с таким заголовком уже существует.', Error::NEWS_EXISTS);
+            /** @var string $message */
+            $message = __('news::handler.exists');
+
+            throw ApiException::createDomainException($message, Error::NEWS_EXISTS);
         }
 
         $news = new News($newsCreateData->getTitle());

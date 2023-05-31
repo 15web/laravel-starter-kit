@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Filter;
 
+use App\Module\Filter\Contract\SearchFilter;
+
 final class FilterAggregator
 {
     /**

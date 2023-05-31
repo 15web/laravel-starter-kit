@@ -25,8 +25,11 @@ final class SubscribeAction
     {
         $subscribeRequest = ($this->resolveApiRequest)(SubscribeRequest::class);
 
+        /** @var string $subject */
+        $subject = __('news::subscription.subscribe_title');
+
         $mail = new Subscribe($subscribeRequest);
-        $mail->subject('Подписка на новости');
+        $mail->subject($subject);
         $mail->to($subscribeRequest->getEmail());
 
         Mail::queue($mail); // отправка через очередь
