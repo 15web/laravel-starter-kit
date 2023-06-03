@@ -29,7 +29,10 @@ final class PostCreateAction
         $isPostExist = Post::where('title', $postCreateData->getTitle())->first();
 
         if ($isPostExist !== null) {
-            throw ApiException::createDomainException('Пост с таким заголовком уже существует.', Error::POST_EXISTS);
+            /** @var string $message */
+            $message = __('blog::handler.exists');
+
+            throw ApiException::createDomainException($message, Error::POST_EXISTS);
         }
 
         $post = new Post();

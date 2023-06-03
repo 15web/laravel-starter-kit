@@ -6,6 +6,7 @@ $finder = (new PhpCsFixer\Finder())
     ->in([
         __DIR__.'/app',
     ])
+    ->notPath('#Module/.*/lang#')
     ->append([
         __FILE__,
     ]);

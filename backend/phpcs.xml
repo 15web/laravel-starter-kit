@@ -11,6 +11,7 @@
     <file>app/</file>
 
     <exclude-pattern>Kernel.php</exclude-pattern>
+    <exclude-pattern>app/Module/*/lang/*</exclude-pattern>
 
     <config name="installed_paths" value="vendor/slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
 

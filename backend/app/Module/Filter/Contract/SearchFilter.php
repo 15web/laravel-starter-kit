@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Filter;
+namespace App\Module\Filter\Contract;
+
+use App\Module\Filter\SearchRequest;
 
 interface SearchFilter
 {

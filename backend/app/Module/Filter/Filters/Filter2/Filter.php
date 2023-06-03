@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Filter\Filter2;
+namespace App\Module\Filter\Filters\Filter2;
 
-use App\Module\Filter\SearchFilter;
+use App\Module\Filter\Contract\SearchFilter;
 use App\Module\Filter\SearchRequest;
 
-final class Filter2 implements SearchFilter
+final class Filter implements SearchFilter
 {
     public function findResults(SearchRequest $searchRequest): string
     {

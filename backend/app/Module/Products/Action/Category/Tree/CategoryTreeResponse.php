@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Products\Action\Category;
+namespace App\Module\Products\Action\Category\Tree;
 
 final class CategoryTreeResponse
 {

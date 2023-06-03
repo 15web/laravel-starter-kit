@@ -30,7 +30,10 @@ final class NewsInfoAction
 
         $news = $this->newsCollection->findByTitle($newsInfoRequest->getTitle());
         if ($news === null) {
-            throw ApiException::createNotFoundException('Новость не найдена.', Error::NEWS_NOT_FOUND);
+            /** @var string $message */
+            $message = __('news::handler.not_found');
+
+            throw ApiException::createNotFoundException($message, Error::NEWS_NOT_FOUND);
         }
 
         $newsInfoResponse = new NewsInfoResponse($news);

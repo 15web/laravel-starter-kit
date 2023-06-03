@@ -6,6 +6,7 @@ parameters:
   paths:
     - app
   excludePaths:
+    - app/Module/*/lang/*
   doctrine:
       objectManagerLoader: phpstan/object-manager.php
   ignoreErrors:
