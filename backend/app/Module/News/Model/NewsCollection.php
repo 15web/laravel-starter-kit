@@ -7,7 +7,10 @@ namespace App\Module\News\Model;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-final class NewsCollection
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class NewsCollection
 {
     /**
      * @var EntityRepository<News>

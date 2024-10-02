@@ -5,24 +5,15 @@ declare(strict_types=1);
 namespace App\Infrastructure\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+#[AsCommand(name: 'make:action', description: 'Create a new action')]
 final class ActionMakeCommand extends GeneratorCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $name = 'make:action';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new action';
-
     /**
      * The type of class being generated.
      *

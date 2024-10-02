@@ -6,12 +6,14 @@ namespace App\Module\News\Action\Admin\Create;
 
 use App\Infrastructure\ApiRequest\ApiRequest;
 
-final class NewsCreateRequest implements ApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class NewsCreateRequest implements ApiRequest
 {
     public function __construct(
         private string $title,
-    ) {
-    }
+    ) {}
 
     public function getTitle(): string
     {

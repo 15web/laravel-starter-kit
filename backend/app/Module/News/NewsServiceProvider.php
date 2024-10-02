@@ -7,6 +7,9 @@ namespace App\Module\News;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class NewsServiceProvider extends ServiceProvider
 {
     public function boot(): void

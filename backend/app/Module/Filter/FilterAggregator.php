@@ -6,7 +6,10 @@ namespace App\Module\Filter;
 
 use App\Module\Filter\Contract\SearchFilter;
 
-final class FilterAggregator
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class FilterAggregator
 {
     /**
      * @var SearchFilter[]

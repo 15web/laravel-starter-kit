@@ -7,11 +7,14 @@ namespace App\Module\User\Authentication\Action\Login;
 use App\Infrastructure\ApiRequest\ApiRequest;
 use Webmozart\Assert\Assert;
 
-final class LoginRequest implements ApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class LoginRequest implements ApiRequest
 {
     public function __construct(
-        private readonly string $email,
-        private readonly string $password,
+        private string $email,
+        private string $password,
     ) {
         Assert::email($email);
         Assert::notEmpty($password);

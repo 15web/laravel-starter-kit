@@ -6,12 +6,14 @@ namespace App\Infrastructure\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 
-final class Flusher
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class Flusher
 {
     public function __construct(
         private EntityManager $entityManager,
-    ) {
-    }
+    ) {}
 
     public function flush(): void
     {

@@ -1,18 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+#[TestDox('TODO: опиши что проверяется')]
 abstract class FeatureTestCase extends BaseTestCase
 {
     /**
      * Creates the application.
      *
-     * @return \Illuminate\Foundation\Application
+     * @return Application
      */
-    public function createApplication()
+    final public function createApplication()
     {
         $app = require __DIR__.'/../../bootstrap/app.php';
 

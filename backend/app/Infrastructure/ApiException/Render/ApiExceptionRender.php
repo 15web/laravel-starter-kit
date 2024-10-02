@@ -9,11 +9,12 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
-final class ApiExceptionRender
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class ApiExceptionRender
 {
-    public function __construct(private Serializer $serializer)
-    {
-    }
+    public function __construct(private Serializer $serializer) {}
 
     public function __invoke(ApiException $apiException): JsonResponse
     {

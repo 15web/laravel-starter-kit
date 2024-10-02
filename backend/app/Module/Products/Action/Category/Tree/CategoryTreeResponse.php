@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace App\Module\Products\Action\Category\Tree;
 
-final class CategoryTreeResponse
+use DateTimeInterface;
+use Iterator;
+
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class CategoryTreeResponse
 {
     public function __construct(
         private int $id,
         private string $title,
-        private \Iterator $children,
-        private \DateTimeInterface $createdAt,
-        private \DateTimeInterface $updatedAt,
-    ) {
-    }
+        private Iterator $children,
+        private DateTimeInterface $createdAt,
+        private DateTimeInterface $updatedAt,
+    ) {}
 
     public function getId(): int
     {
@@ -25,17 +30,17 @@ final class CategoryTreeResponse
         return $this->title;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function getChildren(): \Iterator
+    public function getChildren(): Iterator
     {
         return $this->children;
     }

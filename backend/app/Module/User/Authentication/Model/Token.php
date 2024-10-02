@@ -5,27 +5,28 @@ declare(strict_types=1);
 namespace App\Module\User\Authentication\Model;
 
 use App\Module\User\Model\User;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Support\Str;
 
-#[ORM\Entity]
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+#[ORM\Entity, ORM\Table(name: 'user_tokens')]
 /** @final */
 class Token
 {
-    #[ORM\Id, ORM\Column(unique: true)]
+    #[ORM\Id, ORM\Column(unique: true, length: 36)]
     private string $id;
 
-    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'tokens'), ORM\JoinColumn(nullable: false)]
-    private User $user;
-
     #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
-    public function __construct(User $user)
+    public function __construct(#[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'tokens'), ORM\JoinColumn(nullable: false)]
+        private User $user)
     {
         $this->id = (string) Str::uuid();
-        $this->user = $user;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): string
@@ -38,7 +39,7 @@ class Token
         return $this->user;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

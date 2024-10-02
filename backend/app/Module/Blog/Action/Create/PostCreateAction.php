@@ -12,21 +12,22 @@ use App\Module\Blog\Model\Post;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
-final class PostCreateAction
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class PostCreateAction
 {
     public function __construct(
         private ResolveApiRequest $resolveApiRequest,
         private ResolveApiResponse $resolveApiResponse,
-    ) {
-    }
+    ) {}
 
     #[Router\Post('/blog/create')]
     public function __invoke(): JsonResponse
     {
         $postCreateData = ($this->resolveApiRequest)(PostCreateRequest::class);
 
-        $isPostExist = Post::where('title', $postCreateData->getTitle())->first();
+        $isPostExist = Post::query()->where('title', $postCreateData->getTitle())->first();
 
         if ($isPostExist !== null) {
             /** @var string $message */

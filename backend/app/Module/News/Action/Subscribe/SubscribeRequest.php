@@ -7,7 +7,10 @@ namespace App\Module\News\Action\Subscribe;
 use App\Infrastructure\ApiRequest\ApiRequest;
 use Webmozart\Assert\Assert;
 
-final class SubscribeRequest implements ApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class SubscribeRequest implements ApiRequest
 {
     public function __construct(
         private string $email,

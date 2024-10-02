@@ -10,20 +10,23 @@ use App\Infrastructure\ApiResponse\ResolveSuccessResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Authentication\Model\Tokens;
 use App\Module\User\Model\User;
+use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 #[Router\Middleware('auth')]
-final class LogoutAction
+final readonly class LogoutAction
 {
     public function __construct(
-        private readonly Tokens $tokens,
-        private readonly Flusher $flusher,
-        private readonly ResolveSuccessResponse $resolveSuccessResponse,
-    ) {
-    }
+        private Tokens $tokens,
+        private Flusher $flusher,
+        private ResolveSuccessResponse $resolveSuccessResponse,
+    ) {}
 
     #[Router\Get('/auth/logout')]
     public function __invoke(Request $request): JsonResponse
@@ -31,7 +34,7 @@ final class LogoutAction
         /** @var ?User $user */
         $user = $request->user();
         if ($user === null) {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
 
         /** @var string $apiToken */
@@ -42,7 +45,7 @@ final class LogoutAction
 
             $user->removeToken($token);
             $this->flusher->flush();
-        } catch (\DomainException|\InvalidArgumentException $e) {
+        } catch (DomainException|InvalidArgumentException $e) {
             throw ApiException::createBadRequestException($e->getMessage(), Error::BAD_REQUEST);
         }
 

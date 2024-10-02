@@ -6,11 +6,12 @@ namespace App\Infrastructure\ApiException\Render;
 
 use App\Infrastructure\ApiException\ApiException;
 
-final class ApiExceptionResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class ApiExceptionResponse
 {
-    public function __construct(private ApiException $apiException)
-    {
-    }
+    public function __construct(private ApiException $apiException) {}
 
     public function getErrorMessage(): string
     {

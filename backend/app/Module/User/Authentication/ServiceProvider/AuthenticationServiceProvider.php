@@ -9,6 +9,9 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class AuthenticationServiceProvider extends ServiceProvider
 {
     public function boot(): void

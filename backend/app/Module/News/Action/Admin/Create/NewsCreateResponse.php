@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Module\News\Action\Admin\Create;
 
 use App\Module\News\Model\News;
+use DateTimeImmutable;
 
-final class NewsCreateResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class NewsCreateResponse
 {
     private int $id;
     private string $title;
-    private \DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
     public function __construct(
         News $news,
@@ -30,7 +34,7 @@ final class NewsCreateResponse
         return $this->title;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
