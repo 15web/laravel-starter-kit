@@ -5,18 +5,19 @@ C_RED='\033[0;31m'
 C_BLUE='\033[0;34m'
 C_END='\033[0m'
 
-init: build \
+init: setup \
+	build \
 	up \
 	migrate
 	@echo -e ${C_GREEN}Done${C_END}
 
-up: setup
+up:
 	docker compose up --detach --force-recreate --remove-orphans
 
 down:
 	docker compose down --remove-orphans
 
-build: setup
+build:
 	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 

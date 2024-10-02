@@ -1,3 +1,5 @@
+name: laravel-starter-kit-local
+
 services:
     backend: &backend
         build:
