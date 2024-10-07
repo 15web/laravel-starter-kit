@@ -11,9 +11,9 @@ use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Базовый кейс для тестирования
  */
-#[TestDox('TODO: опиши что проверяется')]
+#[TestDox('Базовый кейс для тестирования')]
 abstract class FeatureTestCase extends BaseTestCase
 {
     /**

@@ -11,10 +11,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[TestDox('TODO: опиши что проверяется')]
+#[TestDox('Создание записи в новостях')]
 final class NewsTest extends TestCase
 {
-    #[TestDox('TODO: опиши что проверяется')]
+    #[TestDox('Успешный запрос')]
     public function testCreate(): void
     {
         $title = 'Новость дня';

@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Application;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Фабрика для создания Entity Manager
  */
 final class EntityManagerFactory
 {

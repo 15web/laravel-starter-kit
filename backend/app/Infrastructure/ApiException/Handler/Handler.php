@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Обработчик исключений
  */
 final class Handler extends ExceptionHandler
 {

@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Сериализует объект ответа в json
  */
 final readonly class ResolveApiResponse
 {

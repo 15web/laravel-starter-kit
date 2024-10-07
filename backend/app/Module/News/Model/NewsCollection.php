@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Коллекция новостей
  */
 final readonly class NewsCollection
 {

@@ -8,7 +8,7 @@ use App\Infrastructure\ApiRequest\ApiRequest;
 use Webmozart\Assert\Assert;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос на вход
  */
 final readonly class LoginRequest implements ApiRequest
 {

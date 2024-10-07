@@ -7,7 +7,7 @@ namespace App\Infrastructure\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Возвращает json-ответ "успех"
  */
 final readonly class ResolveSuccessResponse
 {

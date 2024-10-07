@@ -11,7 +11,7 @@ use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка получения списка записей в блоге
  */
 final readonly class PostListAction
 {

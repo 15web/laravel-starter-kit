@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Contract;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Код ошибки API
  */
 enum Error: string
 {

@@ -8,7 +8,7 @@ use DateTimeInterface;
 use Iterator;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Результат вывода "дерева" категорий товаров
  */
 final readonly class CategoryTreeResponse
 {

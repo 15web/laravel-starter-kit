@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Письмо с запросом на подписку
  */
 final class Subscribe extends Mailable
 {

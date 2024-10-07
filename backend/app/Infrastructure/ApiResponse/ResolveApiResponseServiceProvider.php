@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Сервис провайдер обработчика ответа
  */
 final class ResolveApiResponseServiceProvider extends ServiceProvider
 {

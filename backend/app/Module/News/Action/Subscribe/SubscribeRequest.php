@@ -8,7 +8,7 @@ use App\Infrastructure\ApiRequest\ApiRequest;
 use Webmozart\Assert\Assert;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос на подписку на новости
  */
 final readonly class SubscribeRequest implements ApiRequest
 {

@@ -7,7 +7,7 @@ namespace App\Module\Filter;
 use App\Module\Filter\Contract\SearchFilter;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Собирает отфильтрованные данные
  */
 final readonly class FilterAggregator
 {

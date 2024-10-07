@@ -8,7 +8,7 @@ use App\Module\User\Authorization\ByRole\Role;
 use Webmozart\Assert\Assert;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Результат входа
  */
 final readonly class LoginResponse
 {

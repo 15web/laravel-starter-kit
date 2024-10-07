@@ -7,7 +7,7 @@ namespace App\Infrastructure\ApiException\Render;
 use App\Infrastructure\ApiException\ApiException;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Подготовленный ответ с ошибкой
  */
 final readonly class ApiExceptionResponse
 {

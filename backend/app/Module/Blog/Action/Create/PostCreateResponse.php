@@ -8,7 +8,7 @@ use App\Module\Blog\Model\Post;
 use DateTimeInterface;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Результат создания записи в блоге
  */
 final readonly class PostCreateResponse
 {

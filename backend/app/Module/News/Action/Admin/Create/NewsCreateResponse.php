@@ -8,7 +8,7 @@ use App\Module\News\Model\News;
 use DateTimeImmutable;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Результат создания записи в новостях
  */
 final readonly class NewsCreateResponse
 {

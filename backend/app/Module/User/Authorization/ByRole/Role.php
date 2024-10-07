@@ -7,7 +7,7 @@ namespace App\Module\User\Authorization\ByRole;
 use Generator;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Роль
  */
 enum Role: string
 {

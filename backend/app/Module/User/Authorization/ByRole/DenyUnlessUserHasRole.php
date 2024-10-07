@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрещает входить без роли
  */
 final readonly class DenyUnlessUserHasRole
 {

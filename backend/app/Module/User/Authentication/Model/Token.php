@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Support\Str;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Токен авторизации
  */
 #[ORM\Entity, ORM\Table(name: 'user_tokens')]
 /** @final */

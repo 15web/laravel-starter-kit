@@ -10,10 +10,10 @@ use Tests\Feature\FeatureTestCase;
 /**
  * @internal
  */
-#[TestDox('TODO: опиши что проверяется')]
+#[TestDox('Ручка создания записи в новостях')]
 final class NewsCreateActionTest extends FeatureTestCase
 {
-    #[TestDox('TODO: опиши что проверяется')]
+    #[TestDox('Успешный запрос')]
     public function testSuccess(): void
     {
         $response = $this->json('POST', 'api/news/create', ['title' => 'test']);

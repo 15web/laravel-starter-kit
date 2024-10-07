@@ -8,7 +8,7 @@ use App\Module\Products\Model\Category;
 use DateTimeInterface;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Результат создания категории товаров
  */
 final readonly class CategoryCreateResponse
 {

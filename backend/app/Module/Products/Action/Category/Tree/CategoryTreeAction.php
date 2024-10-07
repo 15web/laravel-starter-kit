@@ -12,7 +12,7 @@ use Kalnoy\Nestedset\Collection;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка вывода "дерева" категорий товаров
  */
 final readonly class CategoryTreeAction
 {

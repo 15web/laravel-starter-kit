@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка для подписки на новости
  */
 final readonly class SubscribeAction
 {

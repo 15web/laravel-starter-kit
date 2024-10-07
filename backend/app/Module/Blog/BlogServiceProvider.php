@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Сервис провайдер модуля "Блог"
  */
 final class BlogServiceProvider extends ServiceProvider
 {

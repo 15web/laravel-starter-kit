@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Базовое API исключение
  */
 final class ApiException extends Exception
 {

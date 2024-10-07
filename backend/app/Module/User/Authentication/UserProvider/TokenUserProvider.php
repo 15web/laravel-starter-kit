@@ -12,7 +12,7 @@ use Override;
 use SensitiveParameter;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Провайдер для реализации аутентификации пользователя
  */
 final readonly class TokenUserProvider implements UserProvider
 {

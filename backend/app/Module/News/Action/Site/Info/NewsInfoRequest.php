@@ -7,7 +7,7 @@ namespace App\Module\News\Action\Site\Info;
 use App\Infrastructure\ApiRequest\ApiRequest;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос для просмотра записи в новостях
  */
 final readonly class NewsInfoRequest implements ApiRequest
 {

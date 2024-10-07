@@ -7,7 +7,7 @@ namespace App\Module\Blog\Action\Create;
 use App\Infrastructure\ApiRequest\ApiRequest;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос для создания записи в блоге
  */
 final readonly class PostCreateRequest implements ApiRequest
 {

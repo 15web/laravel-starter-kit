@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Override;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Пользователь
  */
 #[ORM\Entity, ORM\Table(name: 'users')]
 /** @final */
