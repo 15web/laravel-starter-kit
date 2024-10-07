@@ -9,7 +9,7 @@ use Doctrine\ORM\ORMSetup;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Фабрика конфигурации Doctrine
  */
 final class DoctrineConfigurationFactory
 {

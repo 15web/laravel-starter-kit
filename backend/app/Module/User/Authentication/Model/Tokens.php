@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityRepository;
 use DomainException;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Репозиторий токенов авторизации
  */
 final readonly class Tokens
 {

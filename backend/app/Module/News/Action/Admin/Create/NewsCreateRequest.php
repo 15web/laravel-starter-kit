@@ -7,7 +7,7 @@ namespace App\Module\News\Action\Admin\Create;
 use App\Infrastructure\ApiRequest\ApiRequest;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос создания записи в новостях
  */
 final readonly class NewsCreateRequest implements ApiRequest
 {

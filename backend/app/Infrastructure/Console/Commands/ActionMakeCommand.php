@@ -10,7 +10,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Команда для создания ручки CRUD модуля
  */
 #[AsCommand(name: 'make:action', description: 'Create a new action')]
 final class ActionMakeCommand extends GeneratorCommand

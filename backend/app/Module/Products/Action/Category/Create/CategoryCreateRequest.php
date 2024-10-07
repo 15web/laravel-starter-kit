@@ -7,7 +7,7 @@ namespace App\Module\Products\Action\Category\Create;
 use App\Infrastructure\ApiRequest\ApiRequest;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Запрос на создание категории товаров
  */
 final readonly class CategoryCreateRequest implements ApiRequest
 {

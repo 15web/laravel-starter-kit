@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка для поиска записей с учетом фильтров
  */
 final readonly class FilterAction
 {

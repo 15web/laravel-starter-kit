@@ -9,7 +9,7 @@ use App\Module\Filter\SearchRequest;
 use Override;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Пример фильтра 2
  */
 final class Filter implements SearchFilter
 {

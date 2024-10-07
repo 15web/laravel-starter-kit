@@ -7,7 +7,7 @@ namespace App\Infrastructure\Doctrine;
 use Doctrine\ORM\EntityManager;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Флашер
  */
 final readonly class Flusher
 {

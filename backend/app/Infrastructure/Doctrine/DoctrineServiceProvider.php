@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Сервис провайдер для работы с Doctrine
  */
 final class DoctrineServiceProvider extends ServiceProvider
 {

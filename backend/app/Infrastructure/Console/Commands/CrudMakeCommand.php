@@ -9,7 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Команда создания CRUD модуля
  */
 #[AsCommand(name: 'make:crud', description: 'Make a CRUD actions')]
 final class CrudMakeCommand extends Command

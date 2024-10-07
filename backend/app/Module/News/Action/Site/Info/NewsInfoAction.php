@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка просмотра записи в новостях
  */
 #[Router\Middleware('auth')]
 final readonly class NewsInfoAction

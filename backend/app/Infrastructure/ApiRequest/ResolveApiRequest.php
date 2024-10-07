@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Serializer;
 use Throwable;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Денормализует запрос в объект
  */
 final readonly class ResolveApiRequest
 {

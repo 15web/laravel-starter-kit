@@ -17,7 +17,7 @@ use InvalidArgumentException;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Ручка для выхода
  */
 #[Router\Middleware('auth')]
 final readonly class LogoutAction

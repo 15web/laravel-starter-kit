@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 
 /**
- * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ * Сервис провайдер аутентификации
  */
 final class AuthenticationServiceProvider extends ServiceProvider
 {
