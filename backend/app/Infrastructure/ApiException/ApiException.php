@@ -6,15 +6,20 @@ namespace App\Infrastructure\ApiException;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\Http\StatusCode;
+use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
-final class ApiException extends \Exception
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final class ApiException extends Exception
 {
     private function __construct(
         private readonly string $errorMessage,
         private readonly Error $errorEnum,
         private readonly StatusCode $statusCode,
-        ?\Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct(previous: $previous);
     }
@@ -34,7 +39,7 @@ final class ApiException extends \Exception
         return $this->statusCode;
     }
 
-    public static function createBadRequestException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createBadRequestException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -44,7 +49,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createUnauthorizedException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createUnauthorizedException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -54,7 +59,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createAccessDeniedException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createAccessDeniedException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -64,7 +69,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createNotFoundException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createNotFoundException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -74,7 +79,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createMethodNotAllowedException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createMethodNotAllowedException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -84,7 +89,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createDomainException(string $errorMessage, Error $errorEnum, ?\Throwable $previous = null): self
+    public static function createDomainException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
     {
         return new self(
             $errorMessage,
@@ -107,7 +112,7 @@ final class ApiException extends \Exception
         );
     }
 
-    public static function createUnexpectedException(\Throwable $previous): self
+    public static function createUnexpectedException(Throwable $previous): self
     {
         /** @var string $message */
         $message = __('handler.unexpected-exception');

@@ -10,23 +10,29 @@ use App\Infrastructure\ApiException\Render\ApiExceptionRender;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Override;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Throwable;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class Handler extends ExceptionHandler
 {
     protected $internalDontReport = [];
 
     // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
-    public function render($request, \Throwable $e): Response
+    #[Override]
+    public function render($request, Throwable $e): Response
     {
         $apiExceptionRender = $this->container->make(ApiExceptionRender::class);
 
-        $specificException = self::handleSpecificException($e);
+        $specificException = $this->handleSpecificException($e);
         if ($specificException !== null) {
             return ($apiExceptionRender)($specificException);
         }
@@ -47,12 +53,13 @@ final class Handler extends ExceptionHandler
     }
 
     // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
-    protected function shouldReturnJson($request, \Throwable $e): bool
+    #[Override]
+    protected function shouldReturnJson($request, Throwable $e): bool
     {
         return true;
     }
 
-    private static function handleSpecificException(\Throwable $e): ?\Throwable
+    private function handleSpecificException(Throwable $e): ?ApiException
     {
         if ($e instanceof NotFoundHttpException) {
             /** @var string $message */

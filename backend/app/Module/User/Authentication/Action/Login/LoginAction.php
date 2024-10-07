@@ -12,16 +12,17 @@ use App\Module\User\Model\Users;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
-final class LoginAction
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class LoginAction
 {
     public function __construct(
-        private readonly Users $users,
-        private readonly Flusher $flusher,
-        private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly ResolveApiRequest $resolveApiRequest,
-    ) {
-    }
+        private Users $users,
+        private Flusher $flusher,
+        private ResolveApiResponse $resolveApiResponse,
+        private ResolveApiRequest $resolveApiRequest,
+    ) {}
 
     #[Router\Post('/auth/login')]
     public function __invoke(): JsonResponse

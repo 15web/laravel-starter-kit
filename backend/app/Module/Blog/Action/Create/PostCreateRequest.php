@@ -6,14 +6,16 @@ namespace App\Module\Blog\Action\Create;
 
 use App\Infrastructure\ApiRequest\ApiRequest;
 
-final class PostCreateRequest implements ApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class PostCreateRequest implements ApiRequest
 {
     public function __construct(
         private string $title,
         private string $author,
         private string $content,
-    ) {
-    }
+    ) {}
 
     public function getTitle(): string
     {

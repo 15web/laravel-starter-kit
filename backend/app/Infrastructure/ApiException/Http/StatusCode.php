@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException\Http;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 enum StatusCode: int
 {
     case OK = 200;

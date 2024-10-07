@@ -1,4 +1,6 @@
-FROM nginx:1.23.4
+FROM nginx:1.27.1
+
+RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 COPY default.conf /etc/nginx/conf.d/default.conf
 

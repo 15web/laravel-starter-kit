@@ -5,33 +5,34 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\EntityManager;
 
 use Doctrine\ORM\Configuration;
-use Doctrine\ORM\Tools\Setup;
-use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Cache\Adapter\Psr16Adapter;
+use Doctrine\ORM\ORMSetup;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class DoctrineConfigurationFactory
 {
     public static function create(
         string $searchEntitiesPath,
         bool $isDevMode,
         string $proxyDir,
-        CacheInterface $psr16Cache,
     ): Configuration {
-        $config = Setup::createAttributeMetadataConfiguration(
+        $config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [$searchEntitiesPath],
             isDevMode: $isDevMode,
         );
 
-        $proxyNamespace = 'DoctrineProxies';
-
-        $config->setProxyNamespace($proxyNamespace);
+        $config->setProxyNamespace('DoctrineProxies');
         $config->setProxyDir($proxyDir);
 
-        $psr6Cache = new Psr16Adapter($psr16Cache);
+        $cache = new FilesystemAdapter(
+            directory: storage_path('framework/cache/doctrine'),
+        );
 
-        $config->setMetadataCache($psr6Cache);
-        $config->setQueryCache($psr6Cache);
-        $config->setResultCache($psr6Cache);
+        $config->setMetadataCache($cache);
+        $config->setQueryCache($cache);
+        $config->setResultCache($cache);
 
         return $config;
     }

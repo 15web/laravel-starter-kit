@@ -1,27 +1,29 @@
 .PHONY: all
 
-C_GREEN='\033[0;32m'
-C_RED='\033[0;31m'
-C_BLUE='\033[0;34m'
-C_END='\033[0m'
-
-init: build \
+init: setup \
+	build \
 	up \
 	migrate
-	@echo -e ${C_GREEN}Done${C_END}
+	@echo "Done"
 
-up: setup
+up:
 	docker compose up --detach --force-recreate --remove-orphans
 
 down:
 	docker compose down --remove-orphans
 
-build: setup
+build:
 	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 
 update:
 	docker compose run --rm backend-cli composer update
+
+create-migration: # Создание миграций БД
+	docker compose run --rm backend ./bin/doctrine migrations:diff
+
+migration-prev: # Откатить последнюю миграцию
+	docker compose run --rm backend ./bin/doctrine migrations:migrate prev
 
 migrate:
 	docker compose run --rm backend-cli php artisan migrate --force
@@ -30,33 +32,50 @@ migrate:
 tinker:
 	docker compose run --rm backend-cli php artisan tinker
 
-stan:
-	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=256M
+check: # Проверка проекта
+	make composer-validate
+	make composer-audit
+	make lint
+	make test
 
-fixer-check:
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --dry-run --diff --ansi -v
+composer-validate: # Валидация композера
+	docker compose run --rm backend-cli composer validate --strict
 
-fixer-fix:
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix --ansi -v
+composer-audit: # Проверка пакетов
+	docker compose run --rm backend-cli composer audit --format=plain
 
-sniffer-check:
-	docker compose run --rm backend-cli ./vendor/bin/phpcs -p
+fix: # Автоматическая правка кода
+	make fixer-fix
+	make rector-fix
 
-sniffer-fix:
-	docker compose run --rm backend-cli ./vendor/bin/phpcbf -p
+phpstan: # Запустить phpstan
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c dev/PHPStan/phpstan-config.neon --memory-limit 2G --ansi
 
-test:
-	docker compose run --rm backend-cli ./vendor/bin/phpunit --colors=always --testsuite Unit
+phpstan-update-baseline: # Обновить baseline для phpstan
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c dev/PHPStan/phpstan-config.neon --memory-limit 2G --generate-baseline
 
-check: stan \
-	fixer-check \
-	sniffer-check \
-	test
-	@echo -e ${C_GREEN}Checking is successfully completed${C_END}
+fixer-check: # Проверка стиля написания кода
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi -v
 
-fix: fixer-fix \
-	sniffer-fix
-	@echo -e ${C_GREEN}Fix is successfully completed${C_END}
+fixer-fix: # Фикс стиля написания кода
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix
+
+rector-check: # Какой код необходимо отрефакторить
+	docker compose run --rm backend-cli vendor/bin/rector process --config=dev/Rector/rector.config.php --dry-run --ansi
+
+rector-fix: # Рефакторинг кода
+	docker compose run --rm backend-cli vendor/bin/rector process --config=dev/Rector/rector.config.php --clear-cache
+
+lint: # Проверка кода
+	make fixer-check
+	make rector-check
+	make phpstan
+
+test: # Запуск тестов
+	docker compose run --rm backend-cli php artisan test
+
+test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
+	docker compose run --rm backend-cli php artisan test --filter=$(class)
 
 logs:
 	@docker compose logs $(Arguments)
@@ -68,4 +87,4 @@ hooks-install:
 setup:
 	@[ -x ./docker/bin/setup_envs ] || chmod +x ./docker/bin/setup_envs
 	@./docker/bin/setup_envs
-	@echo -e ${C_GREEN}Environment is set up${C_END}
+	@echo "Environment is set up"

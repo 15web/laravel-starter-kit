@@ -6,15 +6,19 @@ namespace App\Module\User\Authentication\Model;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use DomainException;
 
-final class Tokens
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class Tokens
 {
     /**
      * @var EntityRepository<Token>
      */
     private EntityRepository $repository;
 
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private EntityManager $entityManager)
     {
         $this->repository = $this->entityManager->getRepository(Token::class);
     }
@@ -26,7 +30,7 @@ final class Tokens
             /** @var string $message */
             $message = __('user::token.not_found');
 
-            throw new \DomainException($message);
+            throw new DomainException($message);
         }
 
         return $token;

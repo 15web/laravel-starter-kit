@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Blog\Action\Create;
 
 use App\Module\Blog\Model\Post;
+use DateTimeInterface;
 
-final class PostCreateResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class PostCreateResponse
 {
     private int $id;
     private string $title;
-    private \DateTimeInterface $createdAt;
-    private \DateTimeInterface $updatedAt;
+    private DateTimeInterface $createdAt;
+    private DateTimeInterface $updatedAt;
 
     public function __construct(Post $post)
     {
@@ -31,12 +35,12 @@ final class PostCreateResponse
         return $this->title;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }

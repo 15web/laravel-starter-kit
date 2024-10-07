@@ -10,14 +10,15 @@ use App\Module\Products\Model\Category;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
-final class CategoryCreateAction
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class CategoryCreateAction
 {
     public function __construct(
         private ResolveApiRequest $resolveApiRequest,
         private ResolveApiResponse $resolveApiResponse,
-    ) {
-    }
+    ) {}
 
     #[Router\Post('/category/create')]
     public function __invoke(): JsonResponse

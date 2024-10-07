@@ -16,18 +16,19 @@ use App\Module\User\Authorization\ByRole\Role;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 #[Router\Middleware('auth')]
-final class NewsCreateAction
+final readonly class NewsCreateAction
 {
     public function __construct(
-        private readonly NewsCollection $newsCollection,
-        private readonly Flusher $flusher,
-        private readonly ResolveApiRequest $resolveApiRequest,
-        private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly DenyUnlessUserHasRole $denyUnlessUserHasRole,
-    ) {
-    }
+        private NewsCollection $newsCollection,
+        private Flusher $flusher,
+        private ResolveApiRequest $resolveApiRequest,
+        private ResolveApiResponse $resolveApiResponse,
+        private DenyUnlessUserHasRole $denyUnlessUserHasRole,
+    ) {}
 
     #[Router\Post('/news/create')]
     public function __invoke(): JsonResponse

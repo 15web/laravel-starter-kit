@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Module\Blog\Action\Info;
 
 use App\Module\Blog\Model\Post;
+use DateTimeInterface;
 
-final class PostInfoResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class PostInfoResponse
 {
     private int $id;
     private string $title;
     private string $author;
     private string $content;
-    private \DateTimeInterface $createdAt;
-    private \DateTimeInterface $updatedAt;
+    private DateTimeInterface $createdAt;
+    private DateTimeInterface $updatedAt;
 
     public function __construct(
         Post $post,
@@ -46,12 +50,12 @@ final class PostInfoResponse
         return $this->content;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }

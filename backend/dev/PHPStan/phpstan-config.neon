@@ -1,0 +1,28 @@
+parameters:
+    level: 5
+    fileExtensions:
+        - php
+    paths:
+        - ../../app
+        - ../../bin
+        - ../../bootstrap/app.php
+        - ../../bootstrap/providers.php
+        - ../../database
+        - ../../dev
+        - ../../resources
+        - ../../tests
+    tmpDir: ../../storage/framework/cache/phpstan
+    excludePaths:
+        - ../../bootstrap/cache
+        - ../../storage
+        - ../Rector/rector.config.php
+    parallel:
+        maximumNumberOfProcesses: 4
+    checkUninitializedProperties: true
+
+includes:
+    - ../../vendor/larastan/larastan/extension.neon
+    - ../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - ../../vendor/phpstan/phpstan-doctrine/extension.neon
+    - ../../vendor/phpstan/phpstan-doctrine/rules.neon
+    - phpstan-baseline.neon

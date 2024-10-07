@@ -8,14 +8,17 @@ use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
 use Illuminate\Http\Request;
 use Symfony\Component\Serializer\Serializer;
+use Throwable;
 
-final class ResolveApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class ResolveApiRequest
 {
     public function __construct(
         private Request $request,
         private Serializer $serializer,
-    ) {
-    }
+    ) {}
 
     /**
      * @template T of ApiRequest
@@ -28,7 +31,7 @@ final class ResolveApiRequest
     {
         try {
             return $this->serializer->denormalize($this->request->all(), $className);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             /** @var string $message */
             $message = __('handler.invalid-request-format');
 

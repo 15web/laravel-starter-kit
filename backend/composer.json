@@ -1,39 +1,35 @@
 {
-    "name": "laravel/laravel",
+    "name": "15web/laravel-starter-kit",
+    "description": "Starter kit for Laravel projects",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "license": "proprietary",
     "require": {
-        "php": "^8.2",
-        "doctrine/annotations": "^2.0",
-        "doctrine/dbal": "^3.3",
+        "php": "^8.3",
+        "ext-pdo": "*",
+        "doctrine/dbal": "^4.1",
         "doctrine/migrations": "^3.4",
-        "doctrine/orm": "^2.11",
-        "guzzlehttp/guzzle": "^7.2",
+        "doctrine/orm": "^3.2",
         "kalnoy/nestedset": "^6.0",
-        "laravel/framework": "^10.0",
-        "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8",
-        "spatie/laravel-route-attributes": "^1.10",
-        "symfony/cache": "^6.2",
-        "symfony/property-access": "^6.2",
-        "symfony/serializer": "^6.2"
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10",
+        "spatie/laravel-route-attributes": "^1.23",
+        "symfony/cache": "^7.1",
+        "symfony/property-access": "^7.1",
+        "symfony/serializer": "^7.1"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.20",
-        "friendsofphp/php-cs-fixer": "^3.8",
-        "mockery/mockery": "^1.5",
-        "nunomaduro/collision": "^7.5",
-        "phpstan/phpstan": "^1.10",
-        "phpstan/phpstan-doctrine": "^1.2",
-        "phpstan/phpstan-strict-rules": "^1.1",
-        "phpunit/phpunit": "^10.0",
-        "roave/security-advisories": "dev-latest",
-        "slevomat/coding-standard": "^8.0",
-        "spatie/laravel-ignition": "^2.0",
-        "squizlabs/php_codesniffer": "^3.6",
-        "symplify/phpstan-rules": "^12.0"
+        "driftingly/rector-laravel": "^1.2",
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "larastan/larastan": "^2.9",
+        "nunomaduro/collision": "^8.1",
+        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan-doctrine": "^1.5",
+        "phpstan/phpstan-strict-rules": "^1.6",
+        "phpunit/phpunit": "^11.0",
+        "rector/rector": "^1.2",
+        "slevomat/coding-standard": "^8.15",
+        "spatie/laravel-ignition": "^2.8"
     },
     "autoload": {
         "psr-4": {
@@ -43,10 +39,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "App\\PHPStan\\": "phpstan/"
+            "Dev\\": "dev/"
         }
-    },
-    "scripts": {
     },
     "extra": {
         "laravel": {

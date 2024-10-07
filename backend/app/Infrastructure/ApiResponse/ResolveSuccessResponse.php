@@ -6,11 +6,12 @@ namespace App\Infrastructure\ApiResponse;
 
 use Illuminate\Http\JsonResponse;
 
-final class ResolveSuccessResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class ResolveSuccessResponse
 {
-    public function __construct(private ResolveApiResponse $resolveApiResponse)
-    {
-    }
+    public function __construct(private ResolveApiResponse $resolveApiResponse) {}
 
     public function __invoke(): JsonResponse
     {

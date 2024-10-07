@@ -8,7 +8,11 @@ use App\Module\User\Authentication\UserProvider\TokenUserProvider;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class AuthenticationServiceProvider extends ServiceProvider
 {
     public function boot(): void
@@ -16,6 +20,7 @@ final class AuthenticationServiceProvider extends ServiceProvider
         Lang::addNamespace('user', app_path('Module/User/lang'));
     }
 
+    #[Override]
     public function register(): void
     {
         $this->app->bind(TokenUserProvider::class);

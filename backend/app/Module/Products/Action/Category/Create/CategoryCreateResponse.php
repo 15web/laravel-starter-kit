@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Products\Action\Category\Create;
 
 use App\Module\Products\Model\Category;
+use DateTimeInterface;
 
-final class CategoryCreateResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class CategoryCreateResponse
 {
     private int $id;
     private string $title;
-    private \DateTimeInterface $createdAt;
-    private \DateTimeInterface $updatedAt;
+    private DateTimeInterface $createdAt;
+    private DateTimeInterface $updatedAt;
 
     public function __construct(Category $category)
     {
@@ -31,12 +35,12 @@ final class CategoryCreateResponse
         return $this->title;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }
