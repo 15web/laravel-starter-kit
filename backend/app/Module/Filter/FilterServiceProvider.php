@@ -8,12 +8,14 @@ use App\Module\Filter\Contract\SearchFilter;
 use App\Module\Filter\Filters\Filter1\Filter;
 use App\Module\Filter\Filters\Filter2;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 /**
  * TODO: Опиши за что отвечает данный класс, какие проблемы решает
  */
 final class FilterServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->app->bind(Filter::class);

@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Override;
 
 /**
  * TODO: Опиши за что отвечает данный класс, какие проблемы решает
@@ -88,29 +89,35 @@ class User implements Authenticatable
         $this->tokens->removeElement($token);
     }
 
+    #[Override]
     public function getAuthIdentifierName(): string
     {
         return 'id';
     }
 
+    #[Override]
     public function getAuthIdentifier(): int
     {
         return $this->getId();
     }
 
+    #[Override]
     public function getAuthPassword(): string
     {
         return $this->password;
     }
 
+    #[Override]
     public function getRememberToken(): string
     {
         return '';
     }
 
     // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
+    #[Override]
     public function setRememberToken($value): void {}
 
+    #[Override]
     public function getRememberTokenName(): string
     {
         return '';
@@ -132,6 +139,7 @@ class User implements Authenticatable
     /**
      * @return non-empty-string
      */
+    #[Override]
     public function getAuthPasswordName(): string
     {
         return 'password';

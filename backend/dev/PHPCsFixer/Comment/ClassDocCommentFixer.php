@@ -34,7 +34,7 @@ use Symfony\Component\OptionsResolver\Options;
  */
 final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
 {
-    private const EXCLUDE_KEY = 'exclude';
+    private const string EXCLUDE_KEY = 'exclude';
 
     private WhitespacesFixerConfig $whitespacesConfig;
 

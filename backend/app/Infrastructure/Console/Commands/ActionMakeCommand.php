@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -28,6 +29,7 @@ final class ActionMakeCommand extends GeneratorCommand
      *
      * @param string $name
      */
+    #[Override]
     protected function buildClass($name): string
     {
         $replace = [
@@ -45,6 +47,7 @@ final class ActionMakeCommand extends GeneratorCommand
     /**
      * Get the stub file for the generator.
      */
+    #[Override]
     protected function getStub(): string
     {
         return __DIR__.'/stubs/action.stub';
@@ -55,6 +58,7 @@ final class ActionMakeCommand extends GeneratorCommand
      *
      * @return non-empty-list<array{0: string, 1: int, 2: string}>
      */
+    #[Override]
     protected function getArguments(): array
     {
         return [

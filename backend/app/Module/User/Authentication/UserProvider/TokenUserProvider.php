@@ -8,6 +8,7 @@ use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use Override;
 use SensitiveParameter;
 
 /**
@@ -23,6 +24,7 @@ final readonly class TokenUserProvider implements UserProvider
      *
      * @param mixed $identifier
      */
+    #[Override]
     public function retrieveById($identifier): ?User
     {
         return null;
@@ -35,6 +37,7 @@ final readonly class TokenUserProvider implements UserProvider
      * @param mixed $identifier
      * @param mixed $token
      */
+    #[Override]
     public function retrieveByToken($identifier, $token): ?User
     {
         return null;
@@ -46,12 +49,14 @@ final readonly class TokenUserProvider implements UserProvider
      *
      * @param mixed $token
      */
+    #[Override]
     public function updateRememberToken(Authenticatable $user, $token): void {}
 
     /**
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      * $credentials['api_token'] @see \Illuminate\Auth\TokenGuard::user
      */
+    #[Override]
     public function retrieveByCredentials(array $credentials): ?User
     {
         return $this->users->findByToken($credentials['api_token']);
@@ -61,11 +66,13 @@ final readonly class TokenUserProvider implements UserProvider
      * Используется только в \Illuminate\Auth\SessionGuard
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      */
+    #[Override]
     public function validateCredentials(Authenticatable $user, array $credentials): bool
     {
         return false;
     }
 
+    #[Override]
     public function rehashPasswordIfRequired(Authenticatable $user, #[SensitiveParameter] array $credentials, bool $force = false): void
     {
         /*

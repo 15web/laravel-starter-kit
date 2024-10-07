@@ -7,6 +7,7 @@ namespace Tests\Feature;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Override;
 use PHPUnit\Framework\Attributes\TestDox;
 
 /**
@@ -20,6 +21,7 @@ abstract class FeatureTestCase extends BaseTestCase
      *
      * @return Application
      */
+    #[Override]
     final public function createApplication()
     {
         $app = require __DIR__.'/../../bootstrap/app.php';

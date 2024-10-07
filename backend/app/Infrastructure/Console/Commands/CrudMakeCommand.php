@@ -21,9 +21,9 @@ final class CrudMakeCommand extends Command
      *
      * В результате получим, например: App\Module\Blog\Action\Create\BlogCreateAction
      */
-    private const ACTION_TEMPLATE = 'App\Module\%1$s\Action\%2$s\%1$s%2$sAction';
+    private const string ACTION_TEMPLATE = 'App\Module\%1$s\Action\%2$s\%1$s%2$sAction';
 
-    private const ACTION_LIST = [
+    private const array ACTION_LIST = [
         'Info' => 'Get',
         'List' => 'Get',
         'Create' => 'Post',

@@ -1,15 +1,10 @@
 .PHONY: all
 
-C_GREEN='\033[0;32m'
-C_RED='\033[0;31m'
-C_BLUE='\033[0;34m'
-C_END='\033[0m'
-
 init: setup \
 	build \
 	up \
 	migrate
-	@echo -e ${C_GREEN}Done${C_END}
+	@echo "Done"
 
 up:
 	docker compose up --detach --force-recreate --remove-orphans
@@ -92,4 +87,4 @@ hooks-install:
 setup:
 	@[ -x ./docker/bin/setup_envs ] || chmod +x ./docker/bin/setup_envs
 	@./docker/bin/setup_envs
-	@echo -e ${C_GREEN}Environment is set up${C_END}
+	@echo "Environment is set up"
