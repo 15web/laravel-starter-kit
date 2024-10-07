@@ -6,6 +6,9 @@ namespace App\Infrastructure\ApiResponse;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class ResolveApiResponseServiceProvider extends ServiceProvider
 {
     public function register(): void

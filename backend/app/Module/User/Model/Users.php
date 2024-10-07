@@ -6,16 +6,20 @@ namespace App\Module\User\Model;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Webmozart\Assert\Assert;
 
-final class Users
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class Users
 {
     /**
      * @var EntityRepository<User>
      */
     private EntityRepository $repository;
 
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private EntityManager $entityManager)
     {
         $this->repository = $this->entityManager->getRepository(User::class);
     }
@@ -35,10 +39,12 @@ final class Users
         Assert::notEmpty($token);
         Assert::uuid($token);
 
-        $user = $this->repository->createQueryBuilder('user')
-            ->join('user.tokens', 'tokens', 'WITH', 'tokens.id = :tokenId')
+        $user = $this->repository
+            ->createQueryBuilder('user')
+            ->join('user.tokens', 'tokens', Join::WITH, 'tokens.id = :tokenId')
             ->setParameter('tokenId', $token)
-            ->getQuery()->getOneOrNullResult();
+            ->getQuery()
+            ->getOneOrNullResult();
 
         Assert::nullOrIsInstanceOf($user, User::class);
 

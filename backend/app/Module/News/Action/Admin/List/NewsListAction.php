@@ -9,18 +9,20 @@ use App\Module\News\Model\NewsCollection;
 use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
 use App\Module\User\Authorization\ByRole\Role;
 use Illuminate\Http\JsonResponse;
+use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 #[Router\Middleware('auth')]
-final class NewsListAction
+final readonly class NewsListAction
 {
     public function __construct(
-        private readonly NewsCollection $newsCollection,
-        private readonly ResolveApiResponse $resolveApiResponse,
-        private readonly DenyUnlessUserHasRole $denyUnlessUserHasRole,
-    ) {
-    }
+        private NewsCollection $newsCollection,
+        private ResolveApiResponse $resolveApiResponse,
+        private DenyUnlessUserHasRole $denyUnlessUserHasRole,
+    ) {}
 
     #[Router\Get('/news/list')]
     public function __invoke(): JsonResponse
@@ -31,7 +33,7 @@ final class NewsListAction
     }
 
     /**
-     * @return \Iterator
+     * @return Iterator
      */
     private function getNewsData(): iterable
     {

@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes\{{ method }};
 use Spatie\RouteAttributes\Attributes\Prefix;
 
-#[Prefix('api')]
 #[Middleware('auth')] // todo: Убрать, если не требуется аутентификация
 final class {{ class }}
 {

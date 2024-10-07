@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Default Hash Driver
@@ -48,5 +49,4 @@ return [
         'threads' => 1,
         'time' => 4,
     ],
-
 ];

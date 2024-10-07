@@ -8,12 +8,14 @@ use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use SensitiveParameter;
 
-final class TokenUserProvider implements UserProvider
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class TokenUserProvider implements UserProvider
 {
-    public function __construct(private readonly Users $users)
-    {
-    }
+    public function __construct(private Users $users) {}
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
@@ -44,9 +46,7 @@ final class TokenUserProvider implements UserProvider
      *
      * @param mixed $token
      */
-    public function updateRememberToken(Authenticatable $user, $token): void
-    {
-    }
+    public function updateRememberToken(Authenticatable $user, $token): void {}
 
     /**
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
@@ -64,5 +64,13 @@ final class TokenUserProvider implements UserProvider
     public function validateCredentials(Authenticatable $user, array $credentials): bool
     {
         return false;
+    }
+
+    public function rehashPasswordIfRequired(Authenticatable $user, #[SensitiveParameter] array $credentials, bool $force = false): void
+    {
+        /*
+         * @todo: Implement rehashPasswordIfRequired() method.
+         * @see \Illuminate\Auth\DatabaseUserProvider::rehashPasswordIfRequired
+         */
     }
 }

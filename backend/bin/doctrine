@@ -12,7 +12,6 @@ use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
 
-
 /** @var Illuminate\Foundation\Application $app */
 $app = require __DIR__.'/../bootstrap/app.php';
 
@@ -31,7 +30,7 @@ $cli = new Application('Doctrine Migrations');
 $cli->setCatchExceptions(true);
 
 // подключаем команды миграции
-$cli->addCommands(array(
+$cli->addCommands([
     new Command\DiffCommand($dependencyFactory),
     new Command\DumpSchemaCommand($dependencyFactory),
     new Command\ExecuteCommand($dependencyFactory),
@@ -43,7 +42,7 @@ $cli->addCommands(array(
     new Command\StatusCommand($dependencyFactory),
     new Command\SyncMetadataCommand($dependencyFactory),
     new Command\VersionCommand($dependencyFactory),
-    new GenerateProxiesCommand($managerProvider)
-));
+    new GenerateProxiesCommand($managerProvider),
+]);
 
 $cli->run();

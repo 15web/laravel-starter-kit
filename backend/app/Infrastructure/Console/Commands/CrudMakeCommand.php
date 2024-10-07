@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+#[AsCommand(name: 'make:crud', description: 'Make a CRUD actions')]
 final class CrudMakeCommand extends Command
 {
     /**
@@ -25,23 +31,13 @@ final class CrudMakeCommand extends Command
         'Delete' => 'Post',
     ];
 
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'make:crud {name}';
+    public function __construct()
+    {
+        parent::__construct();
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Make a CRUD actions';
+        $this->addArgument('name', InputArgument::REQUIRED);
+    }
 
-    /**
-     * Execute the console command.
-     */
     public function handle(): void
     {
         foreach (self::ACTION_LIST as $actionName => $actionMethod) {
@@ -49,8 +45,8 @@ final class CrudMakeCommand extends Command
             $name = $this->argument('name');
 
             $this->call('make:action', [
-                'name' => sprintf(self::ACTION_TEMPLATE, $name, $actionName),
-                'route' => strtolower(sprintf('/%s/%s', $name, $actionName)),
+                'name' => \sprintf(self::ACTION_TEMPLATE, $name, $actionName),
+                'route' => strtolower(\sprintf('/%s/%s', $name, $actionName)),
                 'method' => $actionMethod,
             ]);
         }

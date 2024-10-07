@@ -8,11 +8,12 @@ use App\Module\User\Model\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-final class DenyUnlessUserHasRole
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class DenyUnlessUserHasRole
 {
-    public function __construct(private readonly Request $request)
-    {
-    }
+    public function __construct(private Request $request) {}
 
     /**
      * @throws AccessDeniedHttpException

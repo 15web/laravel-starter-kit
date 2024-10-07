@@ -8,7 +8,5 @@ use App\Infrastructure\ApiRequest\ApiRequest;
 
 final class SearchRequest implements ApiRequest
 {
-    public function __construct(public ?string $query)
-    {
-    }
+    public function __construct(public ?string $query) {}
 }

@@ -7,37 +7,49 @@ namespace App\Module\Products\Action\Category\Tree;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Products\Model\Category;
 use Illuminate\Http\JsonResponse;
+use Iterator;
+use Kalnoy\Nestedset\Collection;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
-final class CategoryTreeAction
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class CategoryTreeAction
 {
     public function __construct(
         private ResolveApiResponse $resolveApiResponse,
-    ) {
-    }
+    ) {}
 
     #[Router\Get('/category/tree')]
     public function __invoke(): JsonResponse
     {
-        /** @var Category[] $categories */
-        $categories = Category::get()->toTree()->all();
+        /** @var Collection<Category> $categoriesCollection */
+        $categoriesCollection = Category::query()->get();
+
+        /** @var list<Category> $categories */
+        $categories = $categoriesCollection->toTree()->all();
 
         return ($this->resolveApiResponse)($this->getTreeData($categories));
     }
 
     /**
-     * @param Category[] $categories
+     * @param list<Category> $categories
      *
-     * @return \Iterator
+     * @return Iterator
      */
     private function getTreeData(array $categories): iterable
     {
         foreach ($categories as $category) {
+            /** @var Collection<Category> $childrenCollection */
+            $childrenCollection = $category->children()->getResults();
+
+            /** @var list<Category> $children */
+            $children = $childrenCollection->all();
+
             yield new CategoryTreeResponse(
                 $category->id,
                 $category->title,
-                $this->getTreeData($category->children()->getResults()->all()),
+                $this->getTreeData($children),
                 $category->created_at,
                 $category->updated_at,
             );

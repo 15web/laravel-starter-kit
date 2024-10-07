@@ -7,15 +7,18 @@ namespace App\Module\User\Authentication\Action\Login;
 use App\Module\User\Authorization\ByRole\Role;
 use Webmozart\Assert\Assert;
 
-final class LoginResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class LoginResponse
 {
     /**
      * @param array<Role> $roles
      */
     public function __construct(
-        private readonly string $token,
-        private readonly string $email,
-        private readonly array $roles,
+        private string $token,
+        private string $email,
+        private array $roles,
     ) {
         Assert::notEmpty($token);
         Assert::email($email);

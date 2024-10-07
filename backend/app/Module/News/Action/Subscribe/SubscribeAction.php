@@ -11,14 +11,15 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
-final class SubscribeAction
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class SubscribeAction
 {
     public function __construct(
         private ResolveApiRequest $resolveApiRequest,
         private ResolveApiResponse $resolveApiResponse,
-    ) {
-    }
+    ) {}
 
     #[Router\Post('/news/subscribe')]
     public function __invoke(): JsonResponse

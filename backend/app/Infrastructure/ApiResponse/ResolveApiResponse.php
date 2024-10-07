@@ -8,12 +8,14 @@ use Illuminate\Http\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
-final class ResolveApiResponse
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class ResolveApiResponse
 {
     public function __construct(
         private Serializer $serializer,
-    ) {
-    }
+    ) {}
 
     public function __invoke(mixed $responseData): JsonResponse
     {

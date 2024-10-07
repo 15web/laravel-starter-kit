@@ -12,16 +12,17 @@ use App\Module\News\Model\NewsCollection;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
-#[Router\Prefix('api')]
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 #[Router\Middleware('auth')]
-final class NewsInfoAction
+final readonly class NewsInfoAction
 {
     public function __construct(
-        private readonly NewsCollection $newsCollection,
-        private readonly ResolveApiRequest $resolveApiRequest,
-        private readonly ResolveApiResponse $resolveApiResponse,
-    ) {
-    }
+        private NewsCollection $newsCollection,
+        private ResolveApiRequest $resolveApiRequest,
+        private ResolveApiResponse $resolveApiResponse,
+    ) {}
 
     #[Router\Get('/news/info')]
     public function __invoke(): JsonResponse

@@ -16,3 +16,4 @@
 /docker/.env
 /docker/backend/.env
 /docker/mysql/.env
+/backend/.phpunit.result.cache

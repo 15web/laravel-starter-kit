@@ -6,13 +6,15 @@ namespace App\Module\Products\Action\Category\Create;
 
 use App\Infrastructure\ApiRequest\ApiRequest;
 
-final class CategoryCreateRequest implements ApiRequest
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
+final readonly class CategoryCreateRequest implements ApiRequest
 {
     public function __construct(
         private string $title,
         private ?int $parent = null,
-    ) {
-    }
+    ) {}
 
     public function getTitle(): string
     {

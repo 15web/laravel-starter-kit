@@ -10,11 +10,14 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+ * TODO: Опиши за что отвечает данный класс, какие проблемы решает
+ */
 final class SerializerServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(Serializer::class, static function () {
+        $this->app->bind(Serializer::class, static function (): Serializer {
             $encoders = [new JsonEncoder()];
             $normalizers = [ // порядок имеет значение
                 new DateTimeNormalizer(),
