@@ -1,5 +1,7 @@
 # Тестовая пробная сборка для старта проекта на Laravel
 
+[![Code quality status](https://github.com/15web/laravel-starter-kit/actions/workflows/check-code-quality.yml/badge.svg?branch=main)](https://github.com/15web/laravel-starter-kit/actions)
+
 ## Управление проектом
 - общие операции
     ```shell
@@ -12,10 +14,16 @@
     # остановка приложения  
     make down
   
+    # запуск миграций 
+    make migrate
+  
     # просмотр логов
     make logs {service}   
     make logs backend # например
     make logs -f backend # в реальном времени
+  
+    # запуск среды Tinker 
+    make tinker
   
     # установка git hooks 
     make hooks-install
@@ -42,32 +50,6 @@
     # Запустить все исправления  
     make fix
     ```
-- запуск команды в контейнере бэкенда.
-    ```shell
-    # базовый скрипт с аргументом
-    make run
-    # по сути это шорткат для
-    docker-compose run --rm backend-cli
-
-    # по умолчанию в контейнере установлена команда php -a
-    make run
-      Environment is set up
-      Creating laravel-start-local_backend-cli_run ... done
-      Interactive shell
-      php >
-
-    # выполнить php скрипт можно переопределив команду
-    make run php config/auth.php
-
-    # также можно указывать любой исполняемый файл
-    make run cat .gitignore
-  
-    # файл считается исполняемым, если у него есть shebang(например #!/usr/bin/env php)
-    # и права на исполнение (chmod +x executable_shebanged_script.php)
-    make run composer i
-    make run vendor/bin/phpstan analyse -c phpstan.neon --ansi
-    ```
-
 ## Copyright and license
 
 Copyright © [Studio 15](http://15web.ru), 2012 - Present.   

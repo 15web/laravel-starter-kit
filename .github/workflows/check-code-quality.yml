@@ -1,0 +1,23 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  composer:
+    name: Check composer on PHP ${{ matrix.php }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        php:
+          - "8.3"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build project
+        run: make init
+      - name: Check project
+        run: make check

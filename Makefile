@@ -13,7 +13,7 @@ down:
 	docker compose down --remove-orphans
 
 build:
-	docker compose build backend mysql
+	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 
 update:
@@ -43,6 +43,9 @@ composer-validate: # Валидация композера
 
 composer-audit: # Проверка пакетов
 	docker compose run --rm backend-cli composer audit --format=plain
+
+composer-normalize: # Проверка синтаксиса composer.json
+	docker compose run --rm backend-cli composer normalize --dry-run
 
 fix: # Автоматическая правка кода
 	make fixer-fix
