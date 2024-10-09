@@ -11,7 +11,6 @@ osDependSedInPlace() {
 }
 
 [ -f ./.env ] || cp ./docker/.env.dist .env
-rm -f ./docker/.env
 
 COMPOSE_FILE_ENV="COMPOSE_FILE='./docker/docker-compose.local.yml'"
 
@@ -28,5 +27,5 @@ else
     echo "$USER_ID_ENV" >>./.env
 fi
 
-[ -f ./docker/backend/.env ] || cp ./docker/backend/.env.dist ./docker/backend/.env
+[ -f ./backend/.env ] || cp ./backend/.env.example ./backend/.env
 [ -f ./docker/mysql/.env ] || cp ./docker/mysql/.env.dist ./docker/mysql/.env

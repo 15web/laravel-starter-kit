@@ -3,7 +3,8 @@
 init: setup \
 	build \
 	up \
-	migrate
+	migrate \
+	test-install
 	@echo "Done"
 
 up:
@@ -15,6 +16,7 @@ down:
 build:
 	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
+	docker compose run --rm backend-cli php artisan key:generate --no-interaction
 
 update:
 	docker compose run --rm backend-cli composer update
@@ -90,11 +92,18 @@ lint: # Проверка кода
 	make phpstan
 	make psalm
 
+test-install: # Подготовка тестового окружения
+	docker compose exec mysql mysql -proot -e "drop database if exists db_name_test;";
+	docker compose exec mysql mysql -proot -e "create database if not exists db_name_test;";
+	docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
+	docker compose run --rm backend-cli php artisan migrate --env=testing --force
+	#docker compose run --rm backend-cli bash -c "export $(cat './backend/.env.testing' | xargs); ./bin/doctrine migrations:migrate --no-interaction"
+
 test: # Запуск тестов
-	docker compose run --rm backend-cli php artisan test
+	docker compose run --rm backend-cli php artisan test --env=testing
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	docker compose run --rm backend-cli php artisan test --filter=$(class)
+	docker compose run --rm backend-cli php artisan test --env=testing --filter=$(class)
 
 logs:
 	@docker compose logs $(Arguments)
