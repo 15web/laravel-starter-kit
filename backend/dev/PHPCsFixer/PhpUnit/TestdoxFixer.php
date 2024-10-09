@@ -30,6 +30,8 @@ use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Добавляет всем классам тестов атрибут testdox
+ *
+ * @psalm-suppress MissingTemplateParam
  */
 final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
 {

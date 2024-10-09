@@ -37,9 +37,12 @@ final class ActionMakeCommand extends GeneratorCommand
             '{{ method }}' => $this->argument('method'),
         ];
 
+        /** @var non-empty-list<float|int|string> $values */
+        $values = array_values($replace);
+
         return str_replace(
             array_keys($replace),
-            array_values($replace),
+            $values,
             parent::buildClass($name)
         );
     }

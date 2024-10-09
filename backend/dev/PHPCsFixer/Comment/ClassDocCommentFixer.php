@@ -31,6 +31,8 @@ use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Фиксер обязательных комментариев для всех классов перед class
+ *
+ * @psalm-suppress MissingTemplateParam
  */
 final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
 {

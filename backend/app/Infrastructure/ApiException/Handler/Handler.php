@@ -30,6 +30,7 @@ final class Handler extends ExceptionHandler
     #[Override]
     public function render($request, Throwable $e): Response
     {
+        /** @var ApiExceptionRender $apiExceptionRender */
         $apiExceptionRender = $this->container->make(ApiExceptionRender::class);
 
         $specificException = $this->handleSpecificException($e);
@@ -69,8 +70,11 @@ final class Handler extends ExceptionHandler
         }
 
         if ($e instanceof MethodNotAllowedHttpException) {
+            /** @var string $method */
+            $method = $e->getHeaders()['Allow'];
+
             /** @var string $message */
-            $message = __('handler.method-not-allowed', ['methods' => $e->getHeaders()['Allow']]);
+            $message = __('handler.method-not-allowed', ['methods' => $method]);
 
             return ApiException::createMethodNotAllowedException($message, Error::METHOD_NOT_ALLOWED, $e);
         }

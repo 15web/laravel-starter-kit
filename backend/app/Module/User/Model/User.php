@@ -25,8 +25,8 @@ class User implements Authenticatable
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $password;
+    #[ORM\Column]
+    private string $password;
 
     /**
      * @var string[]

@@ -25,12 +25,9 @@ final readonly class PostListAction
         return ($this->resolveApiResponse)($this->getPostsData());
     }
 
-    /**
-     * @return Iterator
-     */
-    private function getPostsData(): iterable
+    private function getPostsData(): Iterator
     {
-        foreach (Post::all() as $post) {
+        foreach (Post::query()->get() as $post) {
             yield new PostListData($post->id, $post->title, $post->author, $post->created_at);
         }
     }

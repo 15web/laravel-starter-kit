@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
+        findUnusedBaselineEntry="true"
+        findUnusedCode="false"
+        cacheDirectory="../storage/framework/cache/psalm"
+>
+    <projectFiles>
+        <directory name="../app"/>
+        <directory name="../bootstrap"/>
+        <directory name="../database"/>
+        <directory name="../dev"/>
+        <directory name="../migrations"/>
+        <directory name="../tests"/>
+        <ignoreFiles>
+            <directory name="../bootstrap/cache"/>
+            <directory name="../vendor"/>
+            <directory name="../storage"/>
+            <file name="../tests/Feature/FeatureTestCase.php"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <forbiddenFunctions>
+        <function name="dd"/>
+        <function name="dump"/>
+        <function name="var_dump"/>
+        <function name="print_r"/>
+    </forbiddenFunctions>
+
+    <issueHandlers>
+        <PluginIssue name="IssueNameEmittedByPlugin" errorLevel="info"/>
+        <PropertyNotSetInConstructor errorLevel="suppress" />
+        <InvalidTemplateParam errorLevel="suppress" />
+    </issueHandlers>
+
+    <plugins>
+        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
+        <pluginClass class="Psalm\LaravelPlugin\Plugin"/>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
+</psalm>

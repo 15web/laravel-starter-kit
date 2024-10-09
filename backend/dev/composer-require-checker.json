@@ -1,0 +1,14 @@
+{
+  "symbol-whitelist": [
+    "Doctrine\\Common\\Collections\\Collection",
+    "Doctrine\\Common\\Collections\\ArrayCollection",
+    "Symfony\\Component\\Console\\Attribute\\AsCommand",
+    "Symfony\\Component\\Console\\Input\\InputArgument",
+    "Symfony\\Component\\HttpFoundation\\Response",
+    "Symfony\\Component\\HttpKernel\\Exception\\AccessDeniedHttpException",
+    "Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface",
+    "Symfony\\Component\\HttpKernel\\Exception\\MethodNotAllowedHttpException",
+    "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException",
+    "Symfony\\Component\\HttpKernel\\Exception\\UnauthorizedHttpException"
+  ]
+}

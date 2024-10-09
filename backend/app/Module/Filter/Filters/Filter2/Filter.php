@@ -16,6 +16,6 @@ final class Filter implements SearchFilter
     #[Override]
     public function findResults(SearchRequest $searchRequest): string
     {
-        return 'Filter2 result: '.$searchRequest->query;
+        return "Filter2 result: {$searchRequest->query}";
     }
 }

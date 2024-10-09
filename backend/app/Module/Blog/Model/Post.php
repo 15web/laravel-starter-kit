@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Blog\Model;
 
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,8 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $content
  * @property DateTimeInterface $created_at
  * @property DateTimeInterface $updated_at
- *
- * @method static Builder where($column, $operator = null, $value = null, $boolean = 'and')
  */
 final class Post extends Model
 {

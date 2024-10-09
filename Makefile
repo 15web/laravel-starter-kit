@@ -33,8 +33,7 @@ tinker:
 	docker compose run --rm backend-cli php artisan tinker
 
 check: # Проверка проекта
-	make composer-validate
-	make composer-audit
+	make composer-check
 	make lint
 	make test
 
@@ -47,6 +46,19 @@ composer-audit: # Проверка пакетов
 composer-normalize: # Проверка синтаксиса composer.json
 	docker compose run --rm backend-cli composer normalize --dry-run
 
+composer-unused: # Проверка неиспользуемых зависимостей
+	docker compose run --rm backend-cli vendor/bin/composer-unused --configuration=./dev/composer-unused.php
+
+composer-require-check: # Проверка требуемых зависимостей, не указанных в composer.json
+	docker compose run --rm backend-cli vendor/bin/composer-require-checker --config-file=./dev/composer-require-checker.json
+
+composer-check: # Проверки композера
+	make composer-validate
+	make composer-normalize
+	make composer-audit
+	make composer-unused
+	make composer-require-check
+
 fix: # Автоматическая правка кода
 	make fixer-fix
 	make rector-fix
@@ -56,6 +68,9 @@ phpstan: # Запустить phpstan
 
 phpstan-update-baseline: # Обновить baseline для phpstan
 	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c dev/PHPStan/phpstan-config.neon --memory-limit 2G --generate-baseline
+
+psalm:
+	docker compose run --rm backend-cli vendor/bin/psalm --config=./dev/psalm.xml
 
 fixer-check: # Проверка стиля написания кода
 	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi -v
@@ -73,6 +88,7 @@ lint: # Проверка кода
 	make fixer-check
 	make rector-check
 	make phpstan
+	make psalm
 
 test: # Запуск тестов
 	docker compose run --rm backend-cli php artisan test

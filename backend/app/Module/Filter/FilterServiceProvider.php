@@ -7,6 +7,7 @@ namespace App\Module\Filter;
 use App\Module\Filter\Contract\SearchFilter;
 use App\Module\Filter\Filters\Filter1\Filter;
 use App\Module\Filter\Filters\Filter2;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -23,7 +24,7 @@ final class FilterServiceProvider extends ServiceProvider
 
         $this->app->when(FilterAggregator::class)
             ->needs(SearchFilter::class)
-            ->give(static fn ($app): array => [
+            ->give(static fn (Container $app): array => [
                 $app->make(Filter::class),
                 $app->make(Filter2\Filter::class),
             ]);

@@ -59,7 +59,10 @@ final readonly class TokenUserProvider implements UserProvider
     #[Override]
     public function retrieveByCredentials(array $credentials): ?User
     {
-        return $this->users->findByToken($credentials['api_token']);
+        /** @var non-empty-string $token */
+        $token = $credentials['api_token'];
+
+        return $this->users->findByToken($token);
     }
 
     /**

@@ -23,7 +23,7 @@ final readonly class CategoryTreeAction
     #[Router\Get('/category/tree')]
     public function __invoke(): JsonResponse
     {
-        /** @var Collection<Category> $categoriesCollection */
+        /** @var Collection $categoriesCollection */
         $categoriesCollection = Category::query()->get();
 
         /** @var list<Category> $categories */
@@ -40,7 +40,7 @@ final readonly class CategoryTreeAction
     private function getTreeData(array $categories): iterable
     {
         foreach ($categories as $category) {
-            /** @var Collection<Category> $childrenCollection */
+            /** @var Collection $childrenCollection */
             $childrenCollection = $category->children()->getResults();
 
             /** @var list<Category> $children */
