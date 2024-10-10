@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\Products\Http\Category\Store;
 
-use App\Infrastructure\ApiRequest\ApiRequest;
+use App\Infrastructure\Request\Request;
 
 /**
  * Запрос на создание категории товаров
  */
-final readonly class StoreCategoryRequest implements ApiRequest
+final readonly class StoreCategoryRequest implements Request
 {
     /**
      * @param non-empty-string $title

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Blog\Http\Index;
 
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Iterator;
@@ -17,13 +17,13 @@ final readonly class IndexPostAction
 {
     public function __construct(
         private PostRepository $repository,
-        private ResolveApiResponse $resolveApiResponse,
+        private ResolveResponse $resolveResponse,
     ) {}
 
     #[Router\Get('/blog')]
     public function __invoke(): JsonResponse
     {
-        return ($this->resolveApiResponse)($this->getPostsData());
+        return ($this->resolveResponse)($this->getPostsData());
     }
 
     private function getPostsData(): Iterator

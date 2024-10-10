@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\Blog;
 
-use App\Contract\Error;
+use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
 use Dev\Tests\Feature\TestCase;

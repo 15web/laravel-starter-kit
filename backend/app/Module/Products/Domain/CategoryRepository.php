@@ -40,7 +40,7 @@ final readonly class CategoryRepository
      * @param non-empty-string $title
      * @param positive-int|null $parentId
      */
-    public function isExistsByTitle(string $title, ?int $parentId = null): bool
+    public function existsByTitle(string $title, ?int $parentId = null): bool
     {
         $count = $this->repository->count([
             'title' => $title,

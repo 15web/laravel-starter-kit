@@ -20,7 +20,7 @@ final class SubscribeNewsActionTest extends TestCase
     public function testSuccess(): void
     {
         $response = $this
-            ->postJson('api/news/subscribe', [
+            ->postJson('api/subscribe', [
                 'email' => 'user@example.com',
             ])
             ->assertOk();
@@ -45,7 +45,7 @@ final class SubscribeNewsActionTest extends TestCase
         $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
 
         $this
-            ->postJson('api/news/subscribe', $body)
+            ->postJson('api/subscribe', $body)
             ->assertBadRequest();
     }
 
