@@ -7,7 +7,6 @@ use App\Infrastructure\ApiRequest\ResolveApiRequestServiceProvider;
 use App\Infrastructure\ApiResponse\ResolveApiResponseServiceProvider;
 use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Serializer\SerializerServiceProvider;
-use App\Module\Blog\BlogServiceProvider;
 use App\Module\Filter\FilterServiceProvider;
 use App\Module\News\NewsServiceProvider;
 use App\Module\User\Authentication\ServiceProvider\AuthenticationServiceProvider;
@@ -27,7 +26,6 @@ return [
     ApiExceptionRenderServiceProvider::class,
 
     // Modules Service Providers...
-    BlogServiceProvider::class,
     FilterServiceProvider::class,
     NewsServiceProvider::class,
     AuthenticationServiceProvider::class,

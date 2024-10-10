@@ -149,7 +149,6 @@ final class Sample
         }
 
         try {
-            /** @var array<string, mixed> $configuration */
             $this->configuration = $this->getConfigurationDefinition()->resolve($configuration);
         } catch (MissingOptionsException $exception) {
             /**

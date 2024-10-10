@@ -7,7 +7,6 @@ parameters:
         - ../../bin
         - ../../bootstrap/app.php
         - ../../bootstrap/providers.php
-        - ../../database
         - ../../dev
         - ../../resources
         - ../../tests

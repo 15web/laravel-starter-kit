@@ -5,13 +5,11 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
         findUnusedBaselineEntry="true"
-        findUnusedCode="false"
         cacheDirectory="../storage/framework/cache/psalm"
 >
     <projectFiles>
         <directory name="../app"/>
         <directory name="../bootstrap"/>
-        <directory name="../database"/>
         <directory name="../dev"/>
         <directory name="../migrations"/>
         <directory name="../tests"/>
@@ -24,6 +22,7 @@
     </projectFiles>
 
     <forbiddenFunctions>
+        <function name="die"/>
         <function name="dd"/>
         <function name="dump"/>
         <function name="var_dump"/>

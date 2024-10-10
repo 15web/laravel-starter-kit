@@ -9,7 +9,6 @@
         "doctrine/dbal": "^4.1",
         "doctrine/migrations": "^3.8",
         "doctrine/orm": "^3.2",
-        "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^11.26",
         "laravel/tinker": "^2.10",
         "spatie/laravel-route-attributes": "^1.23",

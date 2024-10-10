@@ -9,7 +9,6 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiResponse\ResolveSuccessResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Authentication\Model\Tokens;
-use App\Module\User\Model\User;
 use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,7 +30,6 @@ final readonly class LogoutAction
     #[Router\Get('/auth/logout')]
     public function __invoke(Request $request): JsonResponse
     {
-        /** @var ?User $user */
         $user = $request->user();
         if ($user === null) {
             throw new InvalidArgumentException();
