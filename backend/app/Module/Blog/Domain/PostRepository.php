@@ -52,7 +52,7 @@ final readonly class PostRepository
     /**
      * @param non-empty-string $title
      */
-    public function isExistsByTitle(string $title): bool
+    public function existsByTitle(string $title): bool
     {
         $count = $this->repository->count(['title' => $title]);
 

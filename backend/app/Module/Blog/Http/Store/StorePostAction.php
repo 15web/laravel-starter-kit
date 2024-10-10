@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Blog\Http\Store;
 
-use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiRequest\ResolveApiRequest;
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
+use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\Post;
 use App\Module\Blog\Domain\PostRepository;
 use Illuminate\Http\JsonResponse;
@@ -20,8 +20,8 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class StorePostAction
 {
     public function __construct(
-        private ResolveApiRequest $resolveApiRequest,
-        private ResolveApiResponse $resolveApiResponse,
+        private ResolveRequest $resolveRequest,
+        private ResolveResponse $resolveResponse,
         private PostRepository $repository,
         private Flusher $flusher,
     ) {}
@@ -29,10 +29,10 @@ final readonly class StorePostAction
     #[Router\Post('/blog')]
     public function __invoke(): JsonResponse
     {
-        $request = ($this->resolveApiRequest)(StorePostRequest::class);
-        //        dump($request, $r->all());
-        $isPostExists = $this->repository->isExistsByTitle($request->title);
-        if ($isPostExists) {
+        $request = ($this->resolveRequest)(StorePostRequest::class);
+
+        $postExists = $this->repository->existsByTitle($request->title);
+        if ($postExists) {
             throw ApiException::createDomainException('Запись с таким заголовком уже существует', Error::EXISTS);
         }
         $post = new Post(
@@ -40,6 +40,7 @@ final readonly class StorePostAction
             author: $request->author,
             content: $request->content,
         );
+
         $this->repository->add($post);
         $this->flusher->flush();
 
@@ -55,6 +56,6 @@ final readonly class StorePostAction
             updatedAt: $post->getUpdatedAt(),
         );
 
-        return ($this->resolveApiResponse)($response);
+        return ($this->resolveResponse)($response);
     }
 }

@@ -4,24 +4,40 @@ declare(strict_types=1);
 
 namespace App\Module\News\Notification;
 
-use App\Module\News\Action\Subscribe\SubscribeRequest;
+use App\Module\News\Http\Site\Subscribe\SubscribeRequest;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 /**
  * Письмо с запросом на подписку
  */
-final class Subscribe extends Mailable
+final class Subscribe extends Mailable implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
 
-    public function __construct(private SubscribeRequest $subscribeRequest) {}
+    public function __construct(
+        private SubscribeRequest $subscribeRequest,
+    ) {}
 
-    public function build(): self
+    public function envelope(): Envelope
     {
-        return $this->view('emails.subscribe')
-            ->with(['subscribeRequest' => $this->subscribeRequest]);
+        return new Envelope(
+            subject: 'Подписка на новости',
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'mail.news.subscribe',
+            with: [
+                'subscribeRequest' => $this->subscribeRequest,
+            ],
+        );
     }
 }

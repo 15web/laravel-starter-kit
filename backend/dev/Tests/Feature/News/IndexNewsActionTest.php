@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 /**
  * @internal
  */
-#[TestDox('Ручка получения списка новостей')]
+#[TestDox('Получение списка новостей')]
 final class IndexNewsActionTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
@@ -22,17 +22,17 @@ final class IndexNewsActionTest extends TestCase
 
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', ['title' => 'Title1'])
+            ->postJson('api/news', ['title' => 'Title1'])
             ->assertOk();
 
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', ['title' => 'Title2'])
+            ->postJson('api/news', ['title' => 'Title2'])
             ->assertOk();
 
         $response = $this
             ->withToken($auth['token'])
-            ->getJson('api/news/list')
+            ->getJson('api/news')
             ->assertOk();
 
         /**
@@ -68,7 +68,7 @@ final class IndexNewsActionTest extends TestCase
 
         $this
             ->withToken($auth['token'])
-            ->getJson('api/news/list')
+            ->getJson('api/news')
             ->assertOk()
             ->assertJson([]);
     }
@@ -77,7 +77,7 @@ final class IndexNewsActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->getJson(\sprintf('api/news/list?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
+            ->getJson(\sprintf('api/news?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
             ->assertUnauthorized();
     }
 }

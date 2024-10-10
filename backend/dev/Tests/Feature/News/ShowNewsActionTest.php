@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 /**
  * @internal
  */
-#[TestDox('Ручка просмотра новости')]
+#[TestDox('Просмотр новости')]
 final class ShowNewsActionTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
@@ -22,12 +22,12 @@ final class ShowNewsActionTest extends TestCase
 
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', ['title' => 'Title'])
+            ->postJson('api/news', ['title' => 'Title'])
             ->assertOk();
 
         $response = $this
             ->withToken($auth['token'])
-            ->getJson('api/news/info?title=Title')
+            ->getJson('api/news/Title')
             ->assertOk();
 
         /**
@@ -35,6 +35,7 @@ final class ShowNewsActionTest extends TestCase
          *     id: mixed,
          *     title: non-empty-string,
          *     createdAt: non-empty-string,
+         *     updatedAt: non-empty-string|null
          * } $data
          */
         $data = $response->json();
@@ -45,16 +46,17 @@ final class ShowNewsActionTest extends TestCase
             DateTimeImmutable::class,
             DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']),
         );
+        self::assertNull($data['updatedAt']);
     }
 
     #[TestDox('Запись не найдена')]
-    public function testExists(): void
+    public function testNotFound(): void
     {
         $auth = $this->auth();
 
         $this
             ->withToken($auth['token'])
-            ->getJson('api/news/info?title=Title')
+            ->getJson('api/news/Title')
             ->assertNotFound();
     }
 
@@ -62,7 +64,7 @@ final class ShowNewsActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->getJson(\sprintf('api/news/info?title=Title&%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
+            ->getJson(\sprintf('api/news/Title?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
             ->assertUnauthorized();
     }
 }

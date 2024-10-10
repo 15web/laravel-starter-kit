@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Filter\Action;
 
-use App\Infrastructure\ApiRequest\ResolveApiRequest;
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Filter\FilterAggregator;
 use App\Module\Filter\SearchRequest;
 use Illuminate\Http\JsonResponse;
@@ -18,8 +18,8 @@ final readonly class FilterAction
 {
     public function __construct(
         private FilterAggregator $aggregator,
-        private ResolveApiRequest $resolveApiRequest,
-        private ResolveApiResponse $resolveApiResponse,
+        private ResolveRequest $resolveApiRequest,
+        private ResolveResponse $resolveApiResponse,
     ) {}
 
     #[Router\Get('/filter')]
