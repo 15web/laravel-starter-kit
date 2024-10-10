@@ -30,7 +30,10 @@ final readonly class ResolveApiRequest
     public function __invoke(string $className): ApiRequest
     {
         try {
-            return $this->serializer->denormalize($this->request->all(), $className);
+            /** @var T $apiRequest */
+            $apiRequest = $this->serializer->denormalize($this->request->all(), $className);
+
+            return $apiRequest;
         } catch (Throwable $e) {
             /** @var string $message */
             $message = __('handler.invalid-request-format');

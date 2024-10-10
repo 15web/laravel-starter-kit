@@ -23,13 +23,13 @@ final class EntityManagerFactory
          */
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',
-            'host' => config("database.connections.{$connectionName}.host"),
-            'port' => config("database.connections.{$connectionName}.port"),
-            'user' => config("database.connections.{$connectionName}.username"),
-            'password' => config("database.connections.{$connectionName}.password"),
-            'dbname' => config("database.connections.{$connectionName}.database"),
-            'unix_socket' => config("database.connections.{$connectionName}.unix_socket"),
-            'charset' => config("database.connections.{$connectionName}.charset"),
+            'host' => (string) config("database.connections.{$connectionName}.host"),
+            'port' => (int) config("database.connections.{$connectionName}.port"),
+            'user' => (string) config("database.connections.{$connectionName}.username"),
+            'password' => (string) config("database.connections.{$connectionName}.password"),
+            'dbname' => (string) config("database.connections.{$connectionName}.database"),
+            'unix_socket' => (string) config("database.connections.{$connectionName}.unix_socket"),
+            'charset' => (string) config("database.connections.{$connectionName}.charset"),
         ]);
 
         $configuration = DoctrineConfigurationFactory::create(

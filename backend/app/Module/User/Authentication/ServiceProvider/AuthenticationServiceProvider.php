@@ -6,6 +6,7 @@ namespace App\Module\User\Authentication\ServiceProvider;
 
 use App\Module\User\Authentication\UserProvider\TokenUserProvider;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -25,11 +26,14 @@ final class AuthenticationServiceProvider extends ServiceProvider
     {
         $this->app->bind(TokenUserProvider::class);
 
+        /** @var TokenUserProvider $userProvider */
+        $userProvider = $this->app->make(TokenUserProvider::class);
+
         /** @var AuthManager $authManager */
         $authManager = $this->app->make(AuthManager::class);
         $authManager->provider(
             'doctrine',
-            static fn ($app) => $app->make(TokenUserProvider::class)
+            static fn (Container $app): TokenUserProvider => $userProvider,
         );
     }
 }
