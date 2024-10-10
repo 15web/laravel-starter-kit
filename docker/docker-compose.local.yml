@@ -11,7 +11,7 @@ services:
             - ../backend/:/app/
             - ./backend/local.ini:/usr/local/etc/php/conf.d/local.ini
             - backend_cache:/home/dev/.composer
-        env_file: backend/.env
+        env_file: ../backend/.env
         depends_on:
             mysql:
                 condition: service_healthy
