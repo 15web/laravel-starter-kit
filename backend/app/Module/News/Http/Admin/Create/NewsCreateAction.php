@@ -6,9 +6,9 @@ namespace App\Module\News\Http\Admin\Create;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
+use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveResponse;
-use App\Infrastructure\Doctrine\Flusher;
 use App\Module\News\Domain\News;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;

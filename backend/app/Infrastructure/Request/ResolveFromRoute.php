@@ -24,12 +24,12 @@ final readonly class ResolveFromRoute
      *
      * @param class-string<T> $className
      *
-     * @return Request
+     * @return T
      */
     public function __invoke(string $className): Request
     {
         try {
-            /** @var Request $request */
+            /** @var T $request */
             $request = $this->serializer->denormalize(
                 data: Route::current()?->parameters() ?? [],
                 type: $className,

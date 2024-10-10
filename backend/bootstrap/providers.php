@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Infrastructure\ApiException\ServiceProvider\ApiExceptionRenderServiceProvider;
+use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Request\RequestServiceProvider;
 use App\Infrastructure\Response\ResponseServiceProvider;
-use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Serializer\SerializerServiceProvider;
 use App\Module\Filter\FilterServiceProvider;
 use App\Module\User\Authentication\ServiceProvider\AuthenticationServiceProvider;

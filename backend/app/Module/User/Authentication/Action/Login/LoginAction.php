@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\User\Authentication\Action\Login;
 
+use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveResponse;
-use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
 use Illuminate\Http\JsonResponse;

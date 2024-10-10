@@ -6,8 +6,8 @@ namespace App\Module\User\Authentication\Action\Logout;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Infrastructure\Doctrine\Flusher;
+use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Module\User\Authentication\Model\Tokens;
 use DomainException;
 use Illuminate\Http\JsonResponse;

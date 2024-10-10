@@ -17,18 +17,22 @@ final readonly class NewsRepository
      */
     private EntityRepository $repository;
 
-    public function __construct(private EntityManager $entityManager)
-    {
+    public function __construct(
+        private EntityManager $entityManager,
+    ) {
         $this->repository = $entityManager->getRepository(News::class);
     }
 
+    /**
+     * @param positive-int $id
+     */
     public function find(int $id): ?News
     {
         return $this->repository->find($id);
     }
 
     /**
-     * @return News[]
+     * @return list<News>
      */
     public function findAll(): array
     {
@@ -40,11 +44,21 @@ final readonly class NewsRepository
         $this->entityManager->persist($news);
     }
 
+    /**
+     * @param non-empty-string $title
+     */
     public function isExistsByTitle(string $title): bool
     {
-        return (bool) $this->repository->count(['title' => $title]);
+        $newsCount = $this->repository->count([
+            'title' => $title,
+        ]);
+
+        return $newsCount > 0;
     }
 
+    /**
+     * @param non-empty-string $title
+     */
     public function findByTitle(string $title): ?News
     {
         return $this->repository->findOneBy([

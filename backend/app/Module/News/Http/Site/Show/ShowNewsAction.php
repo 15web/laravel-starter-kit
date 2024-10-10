@@ -38,9 +38,15 @@ final readonly class ShowNewsAction
             throw ApiException::createNotFoundException('Запись не найдена', Error::NEWS_NOT_FOUND);
         }
 
+        /** @var positive-int $id */
+        $id = $news->getId();
+
+        /** @var non-empty-string $title */
+        $title = $news->getTitle();
+
         $newsInfoResponse = new ShowNewsResponse(
-            id: $news->getId(),
-            title: $news->getTitle(),
+            id: $id,
+            title: $title,
             createdAt: $news->getCreatedAt(),
         );
 
