@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\News\Http\Site\Subscribe;
 
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Module\News\Notification\Subscribe;
 use Illuminate\Http\JsonResponse;
@@ -13,11 +13,13 @@ use Spatie\RouteAttributes\Attributes as Router;
 
 /**
  * Ручка для подписки на новости
+ *
+ * @todo тест на 400 (не передали емейл, передали невалидный емейл)
  */
 final readonly class SubscribeAction
 {
     public function __construct(
-        private ResolveRequest $resolveApiRequest,
+        private ResolveFromRequest $resolveApiRequest,
         private ResolveSuccessResponse $successResponse,
     ) {}
 

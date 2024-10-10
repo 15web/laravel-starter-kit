@@ -6,7 +6,7 @@ namespace App\Module\News\Http\Admin\Create;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\News\Domain\News;
@@ -25,7 +25,7 @@ final readonly class NewsCreateAction
     public function __construct(
         private NewsRepository $newsCollection,
         private Flusher $flusher,
-        private ResolveRequest $resolveApiRequest,
+        private ResolveFromRequest $resolveApiRequest,
         private ResolveResponse $resolveApiResponse,
         private DenyUnlessUserHasRole $denyUnlessUserHasRole,
     ) {}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\User\Authentication\Action\Login;
 
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Model\User;
@@ -21,7 +21,7 @@ final readonly class LoginAction
         private Users $users,
         private Flusher $flusher,
         private ResolveResponse $resolveApiResponse,
-        private ResolveRequest $resolveApiRequest,
+        private ResolveFromRequest $resolveApiRequest,
     ) {}
 
     #[Router\Post('/auth/login')]

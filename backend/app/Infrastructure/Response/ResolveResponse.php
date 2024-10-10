@@ -19,8 +19,12 @@ final readonly class ResolveResponse
 
     public function __invoke(mixed $responseData): JsonResponse
     {
+        $wrappedData = [
+            'data' => $responseData,
+        ];
+
         $normalizedResponseData = $this->serializer->serialize(
-            data: $responseData,
+            data: $wrappedData,
             format: JsonEncoder::FORMAT,
         );
 

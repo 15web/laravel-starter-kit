@@ -15,6 +15,6 @@ final class RequestServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->bind(ResolveRequest::class);
+        $this->app->bind(ResolveFromRequest::class);
     }
 }

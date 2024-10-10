@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Filter\Action;
 
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveFromRequest;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Filter\FilterAggregator;
 use App\Module\Filter\SearchRequest;
@@ -18,7 +18,7 @@ final readonly class FilterAction
 {
     public function __construct(
         private FilterAggregator $aggregator,
-        private ResolveRequest $resolveApiRequest,
+        private ResolveFromRequest $resolveApiRequest,
         private ResolveResponse $resolveApiResponse,
     ) {}
 

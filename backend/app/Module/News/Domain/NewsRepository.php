@@ -47,6 +47,8 @@ final readonly class NewsRepository
 
     public function findByTitle(string $title): ?News
     {
-        return $this->repository->findOneBy(['title' => $title]);
+        return $this->repository->findOneBy([
+            'title' => $title,
+        ]);
     }
 }

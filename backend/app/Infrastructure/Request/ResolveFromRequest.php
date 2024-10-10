@@ -6,18 +6,16 @@ namespace App\Infrastructure\Request;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\Request\Request as ApiRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as CurrentRequest;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
 
 /**
  * Денормализует запрос в объект
  */
-final readonly class ResolveRequest
+final readonly class ResolveFromRequest
 {
     public function __construct(
-        private Request $request,
         private Serializer $serializer,
     ) {}
 
@@ -28,12 +26,12 @@ final readonly class ResolveRequest
      *
      * @return T
      */
-    public function __invoke(string $className): ApiRequest
+    public function __invoke(string $className): Request
     {
         try {
             /** @var T $apiRequest */
             $apiRequest = $this->serializer->denormalize(
-                data: $this->request->all(),
+                data: CurrentRequest::all(),
                 type: $className,
             );
 
