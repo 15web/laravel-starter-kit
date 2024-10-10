@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\News\Model;
 
-use App\Module\News\Model\News;
+use App\Module\News\Domain\News;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 

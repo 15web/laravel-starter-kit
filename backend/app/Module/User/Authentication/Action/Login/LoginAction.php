@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\User\Authentication\Action\Login;
 
-use App\Infrastructure\ApiRequest\ResolveApiRequest;
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Module\User\Model\User;
 use App\Module\User\Model\Users;
@@ -20,8 +20,8 @@ final readonly class LoginAction
     public function __construct(
         private Users $users,
         private Flusher $flusher,
-        private ResolveApiResponse $resolveApiResponse,
-        private ResolveApiRequest $resolveApiRequest,
+        private ResolveResponse $resolveApiResponse,
+        private ResolveRequest $resolveApiRequest,
     ) {}
 
     #[Router\Post('/auth/login')]

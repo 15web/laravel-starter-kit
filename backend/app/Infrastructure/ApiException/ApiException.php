@@ -39,11 +39,11 @@ final class ApiException extends Exception
         return $this->statusCode;
     }
 
-    public static function createBadRequestException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
+    public static function createBadRequestException(string $message, Error $type, ?Throwable $previous = null): self
     {
         return new self(
-            $errorMessage,
-            $errorEnum,
+            $message,
+            $type,
             StatusCode::BAD_REQUEST,
             $previous
         );
