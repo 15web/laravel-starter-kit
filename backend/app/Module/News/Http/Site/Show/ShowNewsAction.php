@@ -28,10 +28,10 @@ final readonly class ShowNewsAction
     #[Router\Get('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        $newsInfoRequest = ($this->resolveRequest)(ShowNewsRequest::class);
+        $request = ($this->resolveRequest)(ShowNewsRequest::class);
 
         $news = $this->newsCollection->findByTitle(
-            $newsInfoRequest->title
+            $request->title
         );
 
         if ($news === null) {
@@ -44,12 +44,12 @@ final readonly class ShowNewsAction
         /** @var non-empty-string $title */
         $title = $news->getTitle();
 
-        $newsInfoResponse = new ShowNewsResponse(
+        $response = new ShowNewsResponse(
             id: $id,
             title: $title,
             createdAt: $news->getCreatedAt(),
         );
 
-        return ($this->resolveApiResponse)($newsInfoResponse);
+        return ($this->resolveApiResponse)($response);
     }
 }

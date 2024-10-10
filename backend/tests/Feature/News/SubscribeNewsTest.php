@@ -13,7 +13,7 @@ use Tests\Feature\TestCase;
  * @internal
  */
 #[TestDox('Ручка подписки на новости')]
-final class SubscribeTest extends TestCase
+final class SubscribeNewsTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
     public function testSucceed(): void

@@ -26,10 +26,10 @@ final readonly class SubscribeAction
     #[Router\Post('/news/subscribe')]
     public function __invoke(): JsonResponse
     {
-        $subscribeRequest = ($this->resolveApiRequest)(SubscribeRequest::class);
-        $mail = new Subscribe($subscribeRequest);
+        $request = ($this->resolveApiRequest)(SubscribeRequest::class);
+        $mail = new Subscribe($request);
 
-        Mail::to($subscribeRequest->email)->send($mail);
+        Mail::to($request->email)->send($mail);
 
         return ($this->successResponse)();
     }
