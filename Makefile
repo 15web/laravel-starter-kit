@@ -19,12 +19,15 @@ build: # Сборка приложения
 	docker compose run --rm backend-cli php artisan key:generate --no-interaction
 
 create-migration: # Создание миграций БД
+	make doctrine-clear-cache;
 	docker compose run --rm backend ./bin/doctrine migrations:diff
 
 migration-prev: # Откатить последнюю миграцию
+	make doctrine-clear-cache;
 	docker compose run --rm backend ./bin/doctrine migrations:migrate prev
 
 migrate: # Запуск миграций
+	make doctrine-clear-cache;
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 
 tinker: # Запуск консольного интерпретатора
@@ -32,6 +35,9 @@ tinker: # Запуск консольного интерпретатора
 
 clear: # Удаление кэша контейнера
 	docker compose run --rm backend-cli php artisan clear-compiled
+
+doctrine-clear-cache:
+	rm -rf backend/storage/framework/cache/doctrine
 
 check: # Проверка приложения
 	make clear
@@ -99,6 +105,7 @@ test-install: # Подготовка тестового окружения
 	#docker compose run --rm backend-cli bash -c "export $(cat './backend/.env.testing' | xargs); ./bin/doctrine migrations:migrate --no-interaction"
 
 test: # Запуск тестов
+	make doctrine-clear-cache;
 	docker compose run --rm backend-cli php artisan test --env=testing
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
