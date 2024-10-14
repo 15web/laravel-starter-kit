@@ -1,40 +1,46 @@
 .PHONY: all
 
-init: setup \
-	build \
-	up \
-	migrate \
-	test-install
-	@echo "Done"
+init: # Инициализация приложения
+	make setup
+	make build
+	make up
+	make migrate
+	make test-install
 
-up:
+up: # Запуск приложения
 	docker compose up --detach --force-recreate --remove-orphans
 
-down:
+down: # Остановка контейнеров
 	docker compose down --remove-orphans
 
-build:
+build: # Сборка приложения
 	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 	docker compose run --rm backend-cli php artisan key:generate --no-interaction
 
-update:
-	docker compose run --rm backend-cli composer update
-
 create-migration: # Создание миграций БД
+	make doctrine-clear-cache;
 	docker compose run --rm backend ./bin/doctrine migrations:diff
 
 migration-prev: # Откатить последнюю миграцию
+	make doctrine-clear-cache;
 	docker compose run --rm backend ./bin/doctrine migrations:migrate prev
 
-migrate:
-	docker compose run --rm backend-cli php artisan migrate --force
+migrate: # Запуск миграций
+	make doctrine-clear-cache;
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 
-tinker:
+tinker: # Запуск консольного интерпретатора
 	docker compose run --rm backend-cli php artisan tinker
 
-check: # Проверка проекта
+clear: # Удаление кэша контейнера
+	docker compose run --rm backend-cli php artisan clear-compiled
+
+doctrine-clear-cache:
+	rm -rf backend/storage/framework/cache/doctrine
+
+check: # Проверка приложения
+	make clear
 	make composer-check
 	make lint
 	make test
@@ -71,7 +77,7 @@ phpstan: # Запустить phpstan
 phpstan-update-baseline: # Обновить baseline для phpstan
 	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c dev/PHPStan/phpstan-config.neon --memory-limit 2G --generate-baseline
 
-psalm:
+psalm: # Запуск psalm
 	docker compose run --rm backend-cli vendor/bin/psalm --config=./dev/psalm.xml
 
 fixer-check: # Проверка стиля написания кода
@@ -96,21 +102,14 @@ test-install: # Подготовка тестового окружения
 	docker compose exec mysql mysql -proot -e "drop database if exists db_name_test;";
 	docker compose exec mysql mysql -proot -e "create database if not exists db_name_test;";
 	docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
-	docker compose run --rm backend-cli php artisan migrate --env=testing --force
-	#docker compose run --rm backend-cli bash -c "export $(cat './backend/.env.testing' | xargs); ./bin/doctrine migrations:migrate --no-interaction"
+	docker compose run --rm backend-cli ./bin/doctrine --env=testing migrations:migrate --no-interaction
 
 test: # Запуск тестов
+	make doctrine-clear-cache;
 	docker compose run --rm backend-cli php artisan test --env=testing
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
 	docker compose run --rm backend-cli php artisan test --env=testing --filter=$(class)
-
-logs:
-	@docker compose logs $(Arguments)
-
-hooks-install:
-	printf '#!/usr/bin/env sh\n\n./manage.bash check;\n' > .git/hooks/pre-commit
-	chmod +x .git/hooks/pre-commit
 
 setup:
 	@[ -x ./docker/bin/setup_envs ] || chmod +x ./docker/bin/setup_envs

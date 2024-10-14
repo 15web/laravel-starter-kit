@@ -6,14 +6,14 @@ namespace App\Infrastructure\ApiRequest;
 
 use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
 
 /**
- * Денормализует запрос в объект
+ * Денормализует параметры роутера в объект
  */
-final readonly class ResolveApiRequest
+final readonly class ResolveFromRoute
 {
     public function __construct(
         private Serializer $serializer,
@@ -29,18 +29,15 @@ final readonly class ResolveApiRequest
     public function __invoke(string $className): ApiRequest
     {
         try {
-            /** @var T $apiRequest */
-            $apiRequest = $this->serializer->denormalize(
-                data: Request::all(),
-                type: $className
+            /** @var T $request */
+            $request = $this->serializer->denormalize(
+                data: Route::current()?->parameters() ?? [],
+                type: $className,
             );
 
-            return $apiRequest;
+            return $request;
         } catch (Throwable $e) {
-            /** @var string $message */
-            $message = __('handler.invalid-request-format');
-
-            throw ApiException::createBadRequestException($message, Error::BAD_REQUEST, $e);
+            throw ApiException::createBadRequestException('Неверный формат запроса', Error::BAD_REQUEST, $e);
         }
     }
 }

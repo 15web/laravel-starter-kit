@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputOption;
 
 /** @var Illuminate\Foundation\Application $app */
 $app = require __DIR__.'/../bootstrap/app.php';
@@ -29,6 +30,14 @@ $managerProvider = new SingleManagerProvider($em);
 $cli = new Application('Doctrine Migrations');
 $cli->setCatchExceptions(true);
 
+/**
+ * @see https://github.com/symfony/framework-bundle/blob/7.1/Console/Application.php
+ */
+$inputDefinition = $cli->getDefinition();
+$inputDefinition->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $app->environment()));
+$inputDefinition->addOption(new InputOption('--no-debug', null, InputOption::VALUE_NONE, 'Switch off debug mode.'));
+$inputDefinition->addOption(new InputOption('--profile', null, InputOption::VALUE_NONE, 'Enables profiling (requires debug).'));
+
 // подключаем команды миграции
 $cli->addCommands([
     new Command\DiffCommand($dependencyFactory),
@@ -45,4 +54,6 @@ $cli->addCommands([
     new GenerateProxiesCommand($managerProvider),
 ]);
 
-$cli->run();
+$status = $cli->run();
+
+exit($status);

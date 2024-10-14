@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\EntityManager;
 
+use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Application;
@@ -41,6 +42,7 @@ final class EntityManagerFactory
         return new EntityManager(
             conn: $connection,
             config: $configuration,
+            eventManager: $app->make(EventManager::class),
         );
     }
 }

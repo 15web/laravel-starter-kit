@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature\News\Action\List;
 
 use PHPUnit\Framework\Attributes\TestDox;
-use Tests\Feature\FeatureTestCase;
+use Tests\Feature\TestCase;
 
 /**
  * @internal
  */
 #[TestDox('Ручка получения списка новостей')]
-final class NewsListActionTest extends FeatureTestCase
+final class NewsListActionTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
     public function testSuccess(): void

@@ -2,6 +2,7 @@
   "symbol-whitelist": [
     "Doctrine\\Common\\Collections\\Collection",
     "Doctrine\\Common\\Collections\\ArrayCollection",
+    "Doctrine\\Common\\EventManager",
     "Symfony\\Component\\Console\\Attribute\\AsCommand",
     "Symfony\\Component\\Console\\Input\\InputArgument",
     "Symfony\\Component\\HttpFoundation\\Response",
