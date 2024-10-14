@@ -21,9 +21,9 @@ enum Error: string
 
     case UNEXPECTED = 'general_unexpected';
 
+    case EXISTS = 'entity_exists';
+
     case NEWS_NOT_FOUND = 'news_not_found';
 
     case NEWS_EXISTS = 'news_exists';
-
-    case POST_EXISTS = 'post_exists';
 }

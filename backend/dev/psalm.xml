@@ -17,7 +17,6 @@
             <directory name="../bootstrap/cache"/>
             <directory name="../vendor"/>
             <directory name="../storage"/>
-            <file name="../tests/Feature/FeatureTestCase.php"/>
         </ignoreFiles>
     </projectFiles>
 

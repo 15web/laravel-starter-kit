@@ -30,19 +30,17 @@ final readonly class StorePostAction
     public function __invoke(): JsonResponse
     {
         $request = ($this->resolveApiRequest)(StorePostRequest::class);
-
+        //        dump($request, $r->all());
         $isPostExists = $this->repository->isExistsByTitle($request->title);
         if ($isPostExists) {
-            throw ApiException::createDomainException('Запись с таким заголовком уже существует', Error::NEWS_EXISTS);
+            throw ApiException::createDomainException('Запись с таким заголовком уже существует', Error::EXISTS);
         }
-
         $post = new Post(
             title: $request->title,
             author: $request->author,
             content: $request->content,
         );
         $this->repository->add($post);
-
         $this->flusher->flush();
 
         /** @var positive-int $id */
@@ -50,7 +48,6 @@ final readonly class StorePostAction
 
         /** @var non-empty-string $title */
         $title = $post->getTitle();
-
         $response = new StorePostResponse(
             id: $id,
             title: $title,
