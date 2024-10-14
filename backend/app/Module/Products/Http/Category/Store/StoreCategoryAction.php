@@ -33,7 +33,7 @@ final readonly class StoreCategoryAction
 
         $isCategoryExists = $this->repository->isExistsByTitle($request->title, $request->parent);
         if ($isCategoryExists) {
-            throw ApiException::createDomainException('Категория с таким заголовком уже существует', Error::NEWS_EXISTS);
+            throw ApiException::createDomainException('Категория с таким заголовком уже существует', Error::EXISTS);
         }
 
         $parent = null;

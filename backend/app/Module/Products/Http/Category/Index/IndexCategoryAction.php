@@ -7,7 +7,7 @@ namespace App\Module\Products\Http\Category\Index;
 use App\Infrastructure\ApiResponse\ResolveApiResponse;
 use App\Module\Products\Domain\Category;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -16,21 +16,23 @@ use Spatie\RouteAttributes\Attributes as Router;
  */
 final readonly class IndexCategoryAction
 {
+    private NestedTreeRepository $repository;
+
     public function __construct(
         private EntityManager $entityManager,
         private ResolveApiResponse $resolveApiResponse,
-    ) {}
+    ) {
+        /** @var NestedTreeRepository $repository */
+        $repository = $this->entityManager->getRepository(Category::class);
+
+        $this->repository = $repository;
+    }
 
     #[Router\Get('/products/category')]
     public function __invoke(): JsonResponse
     {
-        $repository = $this->entityManager->getRepository(Category::class);
-
-        /** @var QueryBuilder $query */
-        $query = $repository->getRootNodesQueryBuilder();
-
         /** @var iterable<Category> $categories */
-        $categories = $query->getQuery()->toIterable();
+        $categories = $this->repository->getRootNodesQuery()->toIterable();
 
         return ($this->resolveApiResponse)($this->getTreeData($categories));
     }
@@ -43,10 +45,13 @@ final readonly class IndexCategoryAction
     private function getTreeData(iterable $categories): iterable
     {
         foreach ($categories as $category) {
+            /** @var iterable<Category> $children */
+            $children = $this->repository->getChildrenQuery($category)->toIterable();
+
             yield new IndexCategoryResponse(
                 id: $category->getId(),
                 title: $category->getTitle(),
-                children: $this->getTreeData($category->getChildren()),
+                children: $this->getTreeData($children),
                 createdAt: $category->getCreatedAt(),
                 updatedAt: $category->getUpdatedAt(),
             );

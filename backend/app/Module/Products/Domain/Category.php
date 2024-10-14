@@ -45,7 +45,7 @@ class Category
     /**
      * @var Collection<int, Category>|null
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', fetch: 'EAGER')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     private ?Collection $children = null;
 
@@ -75,16 +75,6 @@ class Category
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    /**
-     * @return iterable<self>
-     */
-    public function getChildren(): iterable
-    {
-        foreach ($this->children ?? [] as $child) {
-            yield $child;
-        }
     }
 
     public function getCreatedAt(): DateTimeImmutable
