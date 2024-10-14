@@ -102,7 +102,7 @@ test-install: # Подготовка тестового окружения
 	docker compose exec mysql mysql -proot -e "drop database if exists db_name_test;";
 	docker compose exec mysql mysql -proot -e "create database if not exists db_name_test;";
 	docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
-	#docker compose run --rm backend-cli bash -c "export $(cat './backend/.env.testing' | xargs); ./bin/doctrine migrations:migrate --no-interaction"
+	docker compose run --rm backend-cli ./bin/doctrine --env=testing migrations:migrate --no-interaction
 
 test: # Запуск тестов
 	make doctrine-clear-cache;
