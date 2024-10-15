@@ -27,12 +27,12 @@ final readonly class LogoutAction
         private ResolveSuccessResponse $resolveSuccessResponse,
     ) {}
 
-    #[Router\Get('/auth/logout')]
+    #[Router\Post('/auth/logout')]
     public function __invoke(Request $request): JsonResponse
     {
         $user = $request->user();
         if ($user === null) {
-            throw new InvalidArgumentException();
+            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', Error::UNAUTHORIZED);
         }
 
         /** @var string $apiToken */
@@ -44,7 +44,7 @@ final readonly class LogoutAction
             $user->removeToken($token);
             $this->flusher->flush();
         } catch (DomainException|InvalidArgumentException $e) {
-            throw ApiException::createBadRequestException($e->getMessage(), Error::BAD_REQUEST);
+            throw ApiException::createUnexpectedException($e);
         }
 
         return ($this->resolveSuccessResponse)();

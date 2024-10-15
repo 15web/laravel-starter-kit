@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Products;
 
 use App\Contract\Error;
+use App\Infrastructure\Middleware\ValidateOpenApiSchemaMiddleware;
 use Carbon\Carbon;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,8 +22,9 @@ final class StoreCategoryActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $response = $this
-            ->post('api/products/category', [
+            ->postJson('api/products/category', [
                 'title' => 'Title',
+                'parent' => null,
             ])
             ->assertOk();
 
@@ -46,16 +48,16 @@ final class StoreCategoryActionTest extends TestCase
     public function testChildRequest(): void
     {
         $response = $this
-            ->post('api/products/category', ['title' => 'Parent'])
+            ->postJson('api/products/category', ['title' => 'Parent', 'parent' => null])
             ->assertOk();
 
         /** @var positive-int $parentId */
         $parentId = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', [
+            ->postJson('api/products/category', [
                 'title' => 'Child',
-                'parentId' => $parentId,
+                'parent' => $parentId,
             ])
             ->assertOk();
 
@@ -79,11 +81,11 @@ final class StoreCategoryActionTest extends TestCase
     public function testExists(): void
     {
         $this
-            ->post('api/products/category', ['title' => 'Title'])
+            ->postJson('api/products/category', ['title' => 'Title', 'parent' => null])
             ->assertOk();
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Title'])
+            ->postJson('api/products/category', ['title' => 'Title', 'parent' => null])
             ->assertOk();
 
         $this->assertApiError($response, Error::EXISTS->value);
@@ -93,14 +95,14 @@ final class StoreCategoryActionTest extends TestCase
     public function testSameTitles(): void
     {
         $response = $this
-            ->post('api/products/category', ['title' => 'Title'])
+            ->postJson('api/products/category', ['title' => 'Title', 'parent' => null])
             ->assertOk();
 
         /** @var positive-int $parentId */
         $parentId = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Title', 'parent' => $parentId])
+            ->postJson('api/products/category', ['title' => 'Title', 'parent' => $parentId])
             ->assertOk();
 
         /**
@@ -126,8 +128,10 @@ final class StoreCategoryActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
+        $body[ValidateOpenApiSchemaMiddleware::VALIDATE_REQUEST_KEY] = false;
+
         $this
-            ->post('api/products/category', $body)
+            ->postJson('api/products/category', $body)
             ->assertBadRequest();
     }
 

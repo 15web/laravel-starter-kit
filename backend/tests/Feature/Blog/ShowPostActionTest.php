@@ -18,11 +18,11 @@ final class ShowPostActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $this
-            ->post('api/blog', ['title' => 'Title', 'author' => 'Author', 'content' => 'Content'])
+            ->postJson('api/blog', ['title' => 'Title', 'author' => 'Author', 'content' => 'Content'])
             ->assertOk();
 
         $response = $this
-            ->get('api/blog/Title')
+            ->getJson('api/blog/Title')
             ->assertOk();
 
         /**
@@ -49,7 +49,7 @@ final class ShowPostActionTest extends TestCase
     public function testExists(): void
     {
         $this
-            ->get('api/blog/Title')
+            ->getJson('api/blog/Title')
             ->assertNotFound();
     }
 }

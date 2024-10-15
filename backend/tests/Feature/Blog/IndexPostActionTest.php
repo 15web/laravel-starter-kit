@@ -18,14 +18,14 @@ final class IndexPostActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $this
-            ->post('api/blog', ['title' => 'Title1', 'author' => 'Author1', 'content' => 'Content1'])
+            ->postJson('api/blog', ['title' => 'Title1', 'author' => 'Author1', 'content' => 'Content1'])
             ->assertOk();
 
         $this
-            ->post('api/blog', ['title' => 'Title2', 'author' => 'Author2', 'content' => 'Content2'])
+            ->postJson('api/blog', ['title' => 'Title2', 'author' => 'Author2', 'content' => 'Content2'])
             ->assertOk();
 
-        $response = $this->get('api/blog')->assertOk();
+        $response = $this->getJson('api/blog')->assertOk();
 
         /**
          * @var list<array{
@@ -52,7 +52,7 @@ final class IndexPostActionTest extends TestCase
     public function testEmptyCollection(): void
     {
         $this
-            ->get('api/blog')
+            ->getJson('api/blog')
             ->assertOk()
             ->assertJson([]);
     }

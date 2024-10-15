@@ -43,6 +43,8 @@ check: # Проверка приложения
 	make clear
 	make composer-check
 	make lint
+	make check-openapi-schema
+	make check-openapi-diff
 	make test
 
 composer-validate: # Валидация композера
@@ -54,18 +56,10 @@ composer-audit: # Проверка пакетов
 composer-normalize: # Проверка синтаксиса composer.json
 	docker compose run --rm backend-cli composer normalize --dry-run
 
-composer-unused: # Проверка неиспользуемых зависимостей
-	docker compose run --rm backend-cli vendor/bin/composer-unused --configuration=./dev/composer-unused.php
-
-composer-require-check: # Проверка требуемых зависимостей, не указанных в composer.json
-	docker compose run --rm backend-cli vendor/bin/composer-require-checker --config-file=./dev/composer-require-checker.json
-
 composer-check: # Проверки композера
 	make composer-validate
 	make composer-normalize
 	make composer-audit
-	make composer-unused
-	make composer-require-check
 
 fix: # Автоматическая правка кода
 	make fixer-fix
@@ -110,6 +104,14 @@ test: # Запуск тестов
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
 	docker compose run --rm backend-cli php artisan test --env=testing --filter=$(class)
+
+spectral: # Валидация openapi.yaml с помощью spectral
+	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/openapi.yaml -F warn --ruleset=/app/dev/.spectral.yaml
+
+check-openapi-schema: spectral # Валидация openapi.yaml
+
+check-openapi-diff: # Валидация соответствия роутов и схемы openapi
+	docker compose run --rm backend-cli php artisan openapi-routes-diff
 
 setup:
 	@[ -x ./docker/bin/setup_envs ] || chmod +x ./docker/bin/setup_envs

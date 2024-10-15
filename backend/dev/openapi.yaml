@@ -1,0 +1,766 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+  description: Заготовка для проектов на Laravel с использованием Doctrine ORM, примеры модулей
+  contact:
+    name: Студия 15
+    url: https://www.15web.ru
+    email: info@15web.ru
+tags:
+  - name: auth
+    description: Аутентификация
+  - name: blog
+    description: Блог
+  - name: products
+    description: Товары
+  - name: news
+    description: Новости
+  - name: filter
+    description: Поиск
+servers:
+  - url: http://localhost:8088/api
+    description: Локальный сервер для разработки
+security:
+  - bearerHttpAuth: [ ]
+paths:
+  /auth/login:
+    post:
+      operationId: login
+      summary: Аутентификация пользователя
+      description: Аутентификация пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        '200':
+          $ref: '#/components/responses/login'
+        '400':
+          $ref: '#/components/responses/badRequest'
+  /auth/logout:
+    post:
+      operationId: logout
+      summary: Выйти из приложения
+      description: Выполняет выход пользователя из приложения
+      tags:
+        - auth
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '500':
+          $ref: '#/components/responses/badRequest'
+  /blog:
+    get:
+      operationId: indexBlog
+      summary: Список записей блога
+      description: Список записей блога
+      tags:
+        - blog
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/indexBlog'
+    post:
+      operationId: storeBlog
+      summary: Создать запись в блоге
+      description: Создать запись в блоге
+      tags:
+        - blog
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeBlog'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeBlog'
+        '400':
+          $ref: '#/components/responses/badRequest'
+  /news/create:
+    post:
+      operationId: storeNews
+      summary: Создать запись в новостях
+      description: Создать запись в новостях
+      tags:
+        - news
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeNews'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeNews'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /news/info:
+    get:
+      operationId: showNews
+      summary: Просмотр новости
+      description: Просмотр новости
+      tags:
+        - news
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/newsTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/showNews'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /news/list:
+    get:
+      operationId: indexNews
+      summary: Список новостей
+      description: Список новостей
+      tags:
+        - news
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/indexNews'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /news/subscribe:
+    post:
+      operationId: subscribeNews
+      summary: Подписаться на рассылку новостей
+      description: Подписаться на рассылку новостей
+      tags:
+        - news
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/subscribeNews'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+  /blog/{title}:
+    get:
+      operationId: showBlog
+      summary: Просмотр записи блога
+      description: Просмотр записи блога
+      tags:
+        - blog
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/blogTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/showBlog'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /products/category:
+    get:
+      operationId: indexCategory
+      summary: Дерево категорий товаров
+      description: Дерево категорий товаров
+      tags:
+        - products
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/indexCategory'
+    post:
+      operationId: storeCategory
+      summary: Создать категорию товаров
+      description: Создать категорию товаров
+      tags:
+        - products
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeCategory'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeCategory'
+        '400':
+          $ref: '#/components/responses/badRequest'
+  /filter:
+    get:
+      operationId: filter
+      summary: Просмотр новости
+      description: Просмотр новости
+      tags:
+        - filter
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/filterQuery'
+      responses:
+        '200':
+          $ref: '#/components/responses/filterResult'
+components:
+  securitySchemes:
+    bearerHttpAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Укажите токен без префикса `Bearer `, \
+        например '01928fb2-4147-7a36-a67b-88deaaee45b9'
+  parameters:
+    blogTitle:
+      name: title
+      in: path
+      schema:
+        type: string
+      required: true
+      description: Заголовок записи
+      example: Введение
+    newsTitle:
+      name: title
+      in: query
+      schema:
+        type: string
+      required: true
+      description: Заголовок новости
+      example: Новость
+    filterQuery:
+      name: query
+      in: query
+      schema:
+        type: string
+      required: true
+      description: Поисковый запрос
+      example: Новость
+  requestBodies:
+    login:
+      description: Запрос на аутентификацию
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+              - password
+            additionalProperties: false
+            properties:
+              email:
+                $ref: '#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+    storeBlog:
+      description: Запрос на создание записи в блоге
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+              - author
+              - content
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок записи в блоге
+                minLength: 1
+                example: Введение
+              author:
+                type: string
+                description: Автор блога
+                minLength: 1
+                example: Иван
+              content:
+                type: string
+                description: Текст записи
+                minLength: 1
+                example: Начало рассказа...
+    storeNews:
+      description: Запрос на создание новости
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок новости
+                minLength: 1
+                example: Новость
+    subscribeNews:
+      description: Запрос на получение рассылки новостей
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+            additionalProperties: false
+            properties:
+              email:
+                $ref: '#/components/schemas/email'
+    storeCategory:
+      description: Запрос на создание категории товаров
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+              - parent
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок категории
+                minLength: 1
+                example: Диваны
+              parent:
+                type: number
+                description: Id родительской категории
+                minimum: 1
+                example: 11
+                nullable: true
+  responses:
+    login:
+      description: Аутентификация прошла успешно
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - token
+              - roles
+              - email
+            additionalProperties: false
+            properties:
+              token:
+                $ref: '#/components/schemas/authToken'
+              roles:
+                type: array
+                description: Список ролей пользователя
+                items:
+                  $ref: '#/components/schemas/role'
+              email:
+                $ref: '#/components/schemas/email'
+          example:
+            token: 0192901d-f418-7bf4-bf12-868a311f5a91
+            roles:
+              - name: Пользователь
+                value: user
+            email: user@example.com
+    indexBlog:
+      description: Возвращает список записей в блоге
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - title
+                - author
+                - createdAt
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: '#/components/schemas/id'
+                title:
+                  type: string
+                  description: Заголовок записи в блоге
+                  minLength: 1
+                  example: Введение
+                author:
+                  type: string
+                  description: Автор блога
+                  minLength: 1
+                  example: Иван
+                createdAt:
+                  $ref: '#/components/schemas/createdAt'
+          example:
+            - id: 11
+              title: Введение
+              author: Иван
+              createdAt: 2021-10-28T16:19:44+00:00
+            - id: 12
+              title: Заключение
+              author: Потап
+              createdAt: 2021-11-28T16:19:44+00:00
+    storeBlog:
+      description: Запись в блоге создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - id
+                  - title
+                  - createdAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  title:
+                    type: string
+                    description: Заголовок записи
+                    minLength: 1
+                    example: Введение
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+              - $ref: '#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                id: 11
+                title: Введение
+                createdAt: 2024-10-15T10:59:14+00:00
+                updatedAt: null
+            Запись с таким заголовком уже существует:
+              value:
+                errorMessage: Запись с таким заголовком уже существует
+                errorEnum: entity_exists
+                error: true
+    showBlog:
+      description: Возвращает информацию о записи в блоге
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+              - title
+              - author
+              - content
+              - createdAt
+              - updatedAt
+            additionalProperties: false
+            properties:
+              id:
+                $ref: '#/components/schemas/id'
+              title:
+                type: string
+                description: Заголовок записи в блоге
+                minLength: 1
+              author:
+                type: string
+                description: Автор блог
+                minLength: 1
+              content:
+                type: string
+                description: Текст записи
+                minLength: 1
+              createdAt:
+                $ref: '#/components/schemas/createdAt'
+              updatedAt:
+                $ref: '#/components/schemas/updatedAt'
+          example:
+            id: 11
+            title: Введение
+            author: Иван
+            content: Начало рассказа...
+            createdAt: 2021-10-28T16:19:44+00:00
+            updatedAt: null
+    indexNews:
+      description: Возвращает список новостей
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - title
+                - createdAt
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: '#/components/schemas/id'
+                title:
+                  type: string
+                  description: Заголовок новости
+                  minLength: 1
+                  example: Новость
+                createdAt:
+                  $ref: '#/components/schemas/createdAt'
+          example:
+            - id: 11
+              title: Новость
+              createdAt: 2021-10-28T16:19:44+00:00
+            - id: 12
+              title: Объявление
+              createdAt: 2021-11-28T16:19:44+00:00
+    storeNews:
+      description: Запись в новостях создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - id
+                  - title
+                  - createdAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  title:
+                    type: string
+                    description: Заголовок новости
+                    minLength: 1
+                    example: Новость
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+              - $ref: '#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                id: 11
+                title: Введение
+                createdAt: 2024-10-15T10:59:14+00:00
+            Новость с таким заголовком уже существует:
+              value:
+                errorMessage: Новость с таким заголовком уже существует
+                errorEnum: news_exists
+                error: true
+    showNews:
+      description: Возвращает информацию о новости
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+              - title
+              - createdAt
+            additionalProperties: false
+            properties:
+              id:
+                $ref: '#/components/schemas/id'
+              title:
+                type: string
+                description: Заголовок новости
+                minLength: 1
+              createdAt:
+                $ref: '#/components/schemas/createdAt'
+          example:
+            id: 11
+            title: Новость
+            createdAt: 2021-10-28T16:19:44+00:00
+    indexCategory:
+      description: Возвращает дерево категорий товаров
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/productCategory'
+          example:
+            - id: 11
+              title: Мебель
+              children:
+                - id: 13
+                  title: Диваны
+                  createdAt: 2021-11-28T16:19:44+00:00
+                  updatedAt: null
+                - id: 14
+                  title: Кровати
+                  createdAt: 2021-11-28T16:19:44+00:00
+                  updatedAt: null
+              createdAt: 2021-10-28T16:19:44+00:00
+              updatedAt: null
+            - id: 12
+              title: Посуда
+              children: []
+              createdAt: 2021-11-28T16:19:44+00:00
+              updatedAt: null
+    storeCategory:
+      description: Категория создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - id
+                  - title
+                  - createdAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  title:
+                    type: string
+                    description: Заголовок категории
+                    minLength: 1
+                    example: Диваны
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+              - $ref: '#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                id: 11
+                title: Введение
+                createdAt: 2024-10-15T10:59:14+00:00
+                updatedAt: null
+            Запись с таким заголовком уже существует:
+              value:
+                errorMessage: Запись с таким заголовком уже существует
+                errorEnum: entity_exists
+                error: true
+            Не найдена родительская категория:
+              value:
+                errorMessage: Не найдена родительская категория
+                errorEnum: general_bad_request
+                error: true
+    filterResult:
+      description: Категория создана
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+              description: Результат поиска
+              example: "Filter1 result: Новость"
+    success:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/success'
+          example:
+            success: true
+    badRequest:
+      description: Ошибка запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            errorEnum: general_bad_request
+            errorMessage: Неверный формат запроса
+            error: true
+    authRequired:
+      description: Доступ запрещен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            errorEnum: general_unauthorized
+            errorMessage: Для доступ к ресурсу требуется аутентификация.
+            error: true
+    notFound:
+      description: Запись не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            errorEnum: general_not_found
+            errorMessage: Запись не найдена
+            error: true
+  schemas:
+    id:
+      type: number
+      minimum: 1
+      description: Id записи
+      example: 11
+    email:
+      type: string
+      format: ^\\S+@\\S+\\.\\S+$
+      description: Адрес электронной почты
+      example: customer@kabosh.ru
+    success:
+      type: object
+      required:
+        - success
+      additionalProperties: false
+      properties:
+        success:
+          type: boolean
+          description: Статус запроса
+          example: true
+    error:
+      type: object
+      required:
+        - errorEnum
+        - errorMessage
+        - error
+      additionalProperties: false
+      properties:
+        errorEnum:
+          type: string
+          enum:
+            - general_bad_request
+            - general_unauthorized
+            - general_access_denied
+            - general_not_found
+            - general_method_not_allowed
+            - general_unexpected
+            - entity_exists
+            - news_not_found
+            - news_exists
+        errorMessage:
+          type: string
+        error:
+          type: boolean
+    role:
+      type: object
+      description: Роль пользователя
+      required:
+        - name
+        - value
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Название роли
+          example: Пользователь
+        value:
+          type: string
+          enum:
+            - user
+            - admin
+          description: Обозначение роли
+          example: user
+    password:
+      type: string
+      description: Пароль пользователя
+      minLength: 6
+      example: '123456'
+    createdAt:
+      type: string
+      description: Дата создания
+      example: '2021-10-28T16:19:44+00:00'
+    updatedAt:
+      type: string
+      description: Дата обновления
+      example: '2021-10-28T16:19:44+00:00'
+      nullable: true
+    authToken:
+      type: string
+      example: 01928fdc-9091-777b-9155-1dc6bee8843f
+    productCategory:
+      type: object
+      required:
+        - id
+        - title
+        - children
+        - createdAt
+        - updatedAt
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        title:
+          type: string
+          description: Заголовок категории
+          minLength: 1
+          example: Диваны
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/productCategory'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/updatedAt'

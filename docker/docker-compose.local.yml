@@ -11,7 +11,6 @@ services:
             - ../backend/:/app/
             - ./backend/local.ini:/usr/local/etc/php/conf.d/local.ini
             - backend_cache:/home/dev/.composer
-        env_file: ../backend/.env
         depends_on:
             mysql:
                 condition: service_healthy
@@ -52,6 +51,13 @@ services:
             - ${MAILHOG_HTTP_PORT}:8025
         logging:
             driver: 'none'
+    docs:
+        image: swaggerapi/swagger-ui:v5.17.14
+        environment:
+            SWAGGER_JSON_URL: /docs/openapi.yaml
+            BASE_URL: /docs
+        volumes:
+            - ../backend/dev/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
 volumes:
     mysql:
     backend_cache:

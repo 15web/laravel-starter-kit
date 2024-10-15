@@ -16,8 +16,8 @@ final class NewsCreateActionTest extends TestCase
     #[TestDox('Успешный запрос')]
     public function testSuccess(): void
     {
-        $response = $this->json('POST', 'api/news/create', ['title' => 'test']);
+        $response = $this->postJson('api/news/create', ['title' => 'test']);
 
-        $response->assertStatus(401);
+        $response->assertUnauthorized();
     }
 }
