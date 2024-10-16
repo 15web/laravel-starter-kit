@@ -18,12 +18,17 @@ services:
         <<: *backend
         build:
             context: ./backend/
-            target: cli
+            target: base
             args:
                 USER_ID: ${USER_ID}
         init: true
     queue:
         <<: *backend
+        build:
+            context: ./backend/
+            target: queue
+            args:
+                USER_ID: ${USER_ID}
     nginx:
         build:
             context: ./nginx/
