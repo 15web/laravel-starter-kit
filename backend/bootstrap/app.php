@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Infrastructure\ApiException\Handler\Handler;
-use App\Infrastructure\Middleware\ValidateOpenApiSchemaMiddleware;
+use App\Infrastructure\OpenApiSchemaValidator\Middleware\ValidateOpenApiSchemaMiddleware;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;

@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Middleware;
+namespace App\Infrastructure\OpenApiSchemaValidator;
 
-use Closure;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\RequestValidator;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Проверяет Request и Response на соответствие документации OpenApi
  */
-final readonly class ValidateOpenApiSchemaMiddleware
+final readonly class ValidateOpenApiSchema
 {
     public const string VALIDATE_REQUEST_KEY = 'validate_request';
 
@@ -29,7 +28,7 @@ final readonly class ValidateOpenApiSchemaMiddleware
 
     private ResponseValidator $responseValidator;
 
-    public function __construct(private Application $app)
+    public function __construct()
     {
         $openApiPath = (string) config('openapi.path');
         $validatorBuilder = (new ValidatorBuilder())->fromYamlFile(
@@ -40,24 +39,7 @@ final readonly class ValidateOpenApiSchemaMiddleware
         $this->responseValidator = $validatorBuilder->getResponseValidator();
     }
 
-    /**
-     * @param Closure(Request): (Response) $next
-     */
-    public function handle(Request $request, Closure $next): Response
-    {
-        $response = $next($request);
-
-        if (!$this->app->isProduction()) {
-            $this->validateOpenApiSchema(
-                request: $request,
-                response: $response,
-            );
-        }
-
-        return $response;
-    }
-
-    private function validateOpenApiSchema(Request $request, Response $response): void
+    public function __invoke(Request $request, Response $response): void
     {
         if (!$this->needValidate($request->path())) {
             return;
@@ -116,7 +98,7 @@ final readonly class ValidateOpenApiSchemaMiddleware
     {
         $parameterValue = (bool) $request->get($requestParameterName, true);
 
-        return $this->app->runningUnitTests() && $parameterValue === true;
+        return App::runningUnitTests() && $parameterValue === true;
     }
 
     private function buildPsrHttpFactory(): PsrHttpFactory

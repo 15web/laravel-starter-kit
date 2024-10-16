@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Blog;
 
 use App\Contract\Error;
-use App\Infrastructure\Middleware\ValidateOpenApiSchemaMiddleware;
+use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use Carbon\Carbon;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -72,7 +72,7 @@ final class StorePostActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $body[ValidateOpenApiSchemaMiddleware::VALIDATE_REQUEST_KEY] = false;
+        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
 
         $this
             ->postJson('api/blog', $body)

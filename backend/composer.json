@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.10",
         "spatie/laravel-route-attributes": "^1.23",
         "symfony/cache": "^7.1",
+        "symfony/property-access": "^7.1",
         "symfony/serializer": "^7.1",
         "webmozart/assert": "^1.11"
     },
@@ -34,7 +35,6 @@
         "rector/rector": "^1.2",
         "slevomat/coding-standard": "^8.15",
         "spatie/laravel-ignition": "^2.8",
-        "symfony/property-access": "^7.1",
         "symfony/psr-http-message-bridge": "^7.1",
         "symfony/yaml": "^7.1",
         "vimeo/psalm": "^5.26",
