@@ -21,8 +21,6 @@ tags:
 servers:
   - url: http://localhost:8088/api
     description: Локальный сервер для разработки
-security:
-  - bearerHttpAuth: [ ]
 paths:
   /auth/login:
     post:
@@ -31,7 +29,6 @@ paths:
       description: Аутентификация пользователя
       tags:
         - auth
-      security: [ ]
       requestBody:
         $ref: '#/components/requestBodies/login'
       responses:
@@ -46,6 +43,8 @@ paths:
       description: Выполняет выход пользователя из приложения
       tags:
         - auth
+      security:
+        - bearerHttpAuth: [ ]
       responses:
         '200':
           $ref: '#/components/responses/success'
@@ -60,7 +59,6 @@ paths:
       description: Список записей блога
       tags:
         - blog
-      security: [ ]
       responses:
         '200':
           $ref: '#/components/responses/indexBlog'
@@ -70,7 +68,6 @@ paths:
       description: Создать запись в блоге
       tags:
         - blog
-      security: [ ]
       requestBody:
         $ref: '#/components/requestBodies/storeBlog'
       responses:
@@ -85,14 +82,19 @@ paths:
       description: Создать запись в новостях
       tags:
         - news
-      security: [ ]
+      security:
+        - bearerHttpAuth: [ ]
       requestBody:
         $ref: '#/components/requestBodies/storeNews'
       responses:
         '200':
           $ref: '#/components/responses/storeNews'
+        '400':
+          $ref: '#/components/responses/badRequest'
         '401':
           $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
   /news/info:
     get:
       operationId: showNews
@@ -100,7 +102,8 @@ paths:
       description: Просмотр новости
       tags:
         - news
-      security: [ ]
+      security:
+        - bearerHttpAuth: [ ]
       parameters:
         - $ref: '#/components/parameters/newsTitle'
       responses:
@@ -108,6 +111,10 @@ paths:
           $ref: '#/components/responses/showNews'
         '401':
           $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
   /news/list:
     get:
       operationId: indexNews
@@ -115,12 +122,15 @@ paths:
       description: Список новостей
       tags:
         - news
-      security: [ ]
+      security:
+        - bearerHttpAuth: [ ]
       responses:
         '200':
           $ref: '#/components/responses/indexNews'
         '401':
           $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
   /news/subscribe:
     post:
       operationId: subscribeNews
@@ -128,12 +138,13 @@ paths:
       description: Подписаться на рассылку новостей
       tags:
         - news
-      security: [ ]
       requestBody:
         $ref: '#/components/requestBodies/subscribeNews'
       responses:
         '200':
           $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/badRequest'
   /blog/{title}:
     get:
       operationId: showBlog
@@ -141,7 +152,6 @@ paths:
       description: Просмотр записи блога
       tags:
         - blog
-      security: [ ]
       parameters:
         - $ref: '#/components/parameters/blogTitle'
       responses:
@@ -156,7 +166,6 @@ paths:
       description: Дерево категорий товаров
       tags:
         - products
-      security: [ ]
       responses:
         '200':
           $ref: '#/components/responses/indexCategory'
@@ -166,7 +175,6 @@ paths:
       description: Создать категорию товаров
       tags:
         - products
-      security: [ ]
       requestBody:
         $ref: '#/components/requestBodies/storeCategory'
       responses:
@@ -181,7 +189,6 @@ paths:
       description: Просмотр новости
       tags:
         - filter
-      security: [ ]
       parameters:
         - $ref: '#/components/parameters/filterQuery'
       responses:
@@ -638,14 +645,24 @@ components:
             errorMessage: Неверный формат запроса
             error: true
     authRequired:
-      description: Доступ запрещен
+      description: Для доступ к ресурсу требуется аутентификация
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
           example:
             errorEnum: general_unauthorized
-            errorMessage: Для доступ к ресурсу требуется аутентификация.
+            errorMessage: Для доступ к ресурсу требуется аутентификация
+            error: true
+    forbidden:
+      description: Доступ к ресурсу ограничен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            errorEnum: general_access_denied
+            errorMessage: Доступ к ресурсу ограничен
             error: true
     notFound:
       description: Запись не найдена

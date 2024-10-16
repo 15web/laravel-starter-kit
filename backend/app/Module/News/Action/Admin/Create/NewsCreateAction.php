@@ -33,7 +33,7 @@ final readonly class NewsCreateAction
     #[Router\Post('/news/create')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::Admin);
+        ($this->denyUnlessUserHasRole)(Role::User);
 
         $newsCreateData = ($this->resolveApiRequest)(NewsCreateRequest::class);
 

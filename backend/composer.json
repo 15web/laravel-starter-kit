@@ -49,8 +49,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dev\\": "dev/",
-            "Tests\\": "tests/"
+            "Dev\\": "dev/"
         }
     },
     "config": {

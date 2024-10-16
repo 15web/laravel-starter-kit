@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Products;
+namespace Dev\Tests\Feature\Products;
 
-use Illuminate\Support\Carbon;
+use DateTimeImmutable;
+use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
-use Tests\Feature\TestCase;
 
 /**
  * @internal
@@ -74,7 +74,7 @@ final class IndexCategoryActionTest extends TestCase
         self::assertCount(2, $data);
         self::assertSame($data[0]['id'], $parentId1);
         self::assertSame($data[0]['title'], 'Parent1');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']));
         self::assertNull($data[0]['updatedAt']);
 
         self::assertCount(1, $data[0]['children']);
@@ -82,12 +82,12 @@ final class IndexCategoryActionTest extends TestCase
         self::assertSame($data[0]['children'][0]['id'], $childId1);
         self::assertSame($data[0]['children'][0]['title'], 'Child1');
         self::assertSame($data[0]['children'][0]['children'], []);
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[0]['children'][0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['children'][0]['createdAt']));
         self::assertNull($data[0]['children'][0]['updatedAt']);
 
         self::assertSame($data[1]['id'], $parentId2);
         self::assertSame($data[1]['title'], 'Parent2');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[1]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']));
         self::assertNull($data[1]['updatedAt']);
 
         self::assertCount(2, $data[1]['children']);
@@ -95,13 +95,13 @@ final class IndexCategoryActionTest extends TestCase
         self::assertSame($data[1]['children'][0]['id'], $childId2);
         self::assertSame($data[1]['children'][0]['title'], 'Child2');
         self::assertSame($data[1]['children'][0]['children'], []);
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[1]['children'][0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['children'][0]['createdAt']));
         self::assertNull($data[1]['children'][0]['updatedAt']);
 
         self::assertSame($data[1]['children'][1]['id'], $childId3);
         self::assertSame($data[1]['children'][1]['title'], 'Child3');
         self::assertSame($data[1]['children'][1]['children'], []);
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[1]['children'][1]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['children'][1]['createdAt']));
         self::assertNull($data[1]['children'][1]['updatedAt']);
     }
 

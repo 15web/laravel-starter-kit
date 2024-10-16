@@ -12,7 +12,6 @@
         <directory name="../bootstrap"/>
         <directory name="../dev"/>
         <directory name="../migrations"/>
-        <directory name="../tests"/>
         <ignoreFiles>
             <directory name="../bootstrap/cache"/>
             <directory name="../vendor"/>

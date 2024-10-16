@@ -20,7 +20,6 @@ return RectorConfig::configure()
         __DIR__.'/../../config',
         __DIR__.'/../../dev',
         __DIR__.'/../../resources',
-        __DIR__.'/../../tests',
     ])
     ->withParallel()
     ->withPhpSets(php83: true)

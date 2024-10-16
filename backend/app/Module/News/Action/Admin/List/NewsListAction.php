@@ -27,7 +27,7 @@ final readonly class NewsListAction
     #[Router\Get('/news/list')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::Admin);
+        ($this->denyUnlessUserHasRole)(Role::User);
 
         return ($this->resolveApiResponse)($this->getNewsData());
     }

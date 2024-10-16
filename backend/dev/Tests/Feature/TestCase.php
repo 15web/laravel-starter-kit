@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Dev\Tests\Feature;
 
 use App\Contract\Error;
 use Doctrine\ORM\EntityManager;
@@ -18,6 +18,38 @@ use PHPUnit\Framework\Attributes\TestDox;
 abstract class TestCase extends BaseTestCase
 {
     use DatabaseTransactions;
+
+    /**
+     * @param non-empty-string $email
+     * @param non-empty-string $password
+     *
+     * @return array{
+     *     token: non-empty-string,
+     *     roles: list<array{name: string, value: non-empty-string}>,
+     *     email: non-empty-string
+     * }
+     */
+    final protected function auth(
+        string $email = 'user@example.com',
+        string $password = '123456',
+    ): array {
+        /**
+         * @var array{
+         *     token: non-empty-string,
+         *     roles: list<array{name: string, value: non-empty-string}>,
+         *     email: non-empty-string
+         * } $response
+         */
+        $response = $this
+            ->postJson('api/auth/login', [
+                'email' => $email,
+                'password' => $password,
+            ])
+            ->assertOk()
+            ->json();
+
+        return $response;
+    }
 
     final protected function beginDatabaseTransaction(): void
     {
