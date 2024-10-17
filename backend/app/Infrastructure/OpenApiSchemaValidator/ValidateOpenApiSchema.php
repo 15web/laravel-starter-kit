@@ -96,7 +96,8 @@ final readonly class ValidateOpenApiSchema
 
     private function needValidateTest(Request $request, string $requestParameterName): bool
     {
-        $parameterValue = (bool) $request->get($requestParameterName, true);
+        /** @var bool $parameterValue */
+        $parameterValue = $request->get($requestParameterName, true);
 
         return App::runningUnitTests() && $parameterValue === true;
     }

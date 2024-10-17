@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
+         bootstrap="../vendor/autoload.php"
          colors="true"
-         cacheDirectory="storage/framework/cache">
+         cacheDirectory="../storage/framework/cache">
   <testsuites>
     <testsuite name="Unit">
-      <directory suffix="Test.php">./tests/Unit</directory>
+      <directory suffix="Test.php">./Tests/Unit</directory>
     </testsuite>
     <testsuite name="Feature">
-      <directory suffix="Test.php">./tests/Feature</directory>
+      <directory suffix="Test.php">./Tests/Feature</directory>
     </testsuite>
   </testsuites>
   <coverage/>
@@ -24,7 +24,7 @@
   </php>
   <source>
     <include>
-      <directory suffix=".php">./app</directory>
+      <directory suffix=".php">../app</directory>
     </include>
   </source>
 </phpunit>

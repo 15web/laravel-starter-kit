@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Blog;
+namespace Dev\Tests\Feature\Blog;
 
-use Illuminate\Support\Carbon;
+use DateTimeImmutable;
+use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
-use Tests\Feature\TestCase;
 
 /**
  * @internal
@@ -37,15 +37,17 @@ final class IndexPostActionTest extends TestCase
          */
         $data = $response->json();
 
+        self::assertCount(2, $data);
+
         self::assertIsNumeric($data[0]['id']);
         self::assertSame($data[0]['title'], 'Title1');
         self::assertSame($data[0]['author'], 'Author1');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']));
 
         self::assertIsNumeric($data[1]['id']);
         self::assertSame($data[1]['title'], 'Title2');
         self::assertSame($data[1]['author'], 'Author2');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data[1]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']));
     }
 
     #[TestDox('Нет записей')]

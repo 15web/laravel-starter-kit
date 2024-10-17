@@ -9,6 +9,7 @@ init: # Инициализация приложения
 
 up: # Запуск приложения
 	docker compose up --detach --force-recreate --remove-orphans
+	make clear-cache
 
 down: # Остановка контейнеров
 	docker compose down --remove-orphans
@@ -19,28 +20,27 @@ build: # Сборка приложения
 	docker compose run --rm backend-cli php artisan key:generate --no-interaction
 
 create-migration: # Создание миграций БД
-	make doctrine-clear-cache;
-	docker compose run --rm backend ./bin/doctrine migrations:diff
+	make clear-cache
+	docker compose run --rm backend-cli ./bin/doctrine migrations:diff
 
 migration-prev: # Откатить последнюю миграцию
-	make doctrine-clear-cache;
-	docker compose run --rm backend ./bin/doctrine migrations:migrate prev
+	make clear-cache
+	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate prev
 
 migrate: # Запуск миграций
-	make doctrine-clear-cache;
+	make clear-cache
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 
 tinker: # Запуск консольного интерпретатора
 	docker compose run --rm backend-cli php artisan tinker
 
-clear: # Удаление кэша контейнера
+clear-cache: # Удаление кэша
 	docker compose run --rm backend-cli php artisan clear-compiled
-
-doctrine-clear-cache:
+	docker compose run --rm backend-cli php artisan cache:clear
 	rm -rf backend/storage/framework/cache/doctrine
 
 check: # Проверка приложения
-	make clear
+	make clear-cache
 	make composer-check
 	make lint
 	make check-openapi-schema
@@ -99,11 +99,11 @@ test-install: # Подготовка тестового окружения
 	docker compose run --rm backend-cli ./bin/doctrine --env=testing migrations:migrate --no-interaction
 
 test: # Запуск тестов
-	make doctrine-clear-cache;
-	docker compose run --rm backend-cli php artisan test --env=testing
+	make clear-cache
+	docker compose run --rm backend-cli php artisan test -c ./dev/phpunit.xml
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	docker compose run --rm backend-cli php artisan test --env=testing --filter=$(class)
+	docker compose run --rm backend-cli php artisan test -c ./dev/phpunit.xml --filter=$(class)
 
 spectral: # Валидация openapi.yaml с помощью spectral
 	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/openapi.yaml -F warn --ruleset=/app/dev/.spectral.yaml

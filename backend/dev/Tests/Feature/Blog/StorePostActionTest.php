@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Blog;
+namespace Dev\Tests\Feature\Blog;
 
 use App\Contract\Error;
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
-use Carbon\Carbon;
+use DateTimeImmutable;
+use Dev\Tests\Feature\TestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use Tests\Feature\TestCase;
 
 /**
  * @internal
@@ -41,7 +41,7 @@ final class StorePostActionTest extends TestCase
 
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Title');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
 

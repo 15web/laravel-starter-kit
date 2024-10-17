@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Blog;
+namespace Dev\Tests\Feature\Blog;
 
-use Illuminate\Support\Carbon;
+use DateTimeImmutable;
+use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
-use Tests\Feature\TestCase;
 
 /**
  * @internal
@@ -41,7 +41,7 @@ final class ShowPostActionTest extends TestCase
         self::assertSame($data['title'], 'Title');
         self::assertSame($data['author'], 'Author');
         self::assertSame($data['content'], 'Content');
-        self::assertInstanceOf(Carbon::class, Carbon::createFromFormat('c', $data['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
 

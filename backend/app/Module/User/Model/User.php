@@ -9,6 +9,7 @@ use App\Module\User\Authorization\ByRole\Role;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -31,11 +32,11 @@ class User implements Authenticatable
     /**
      * @var string[]
      */
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles;
 
     #[ORM\Column]
-    private DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
     /**
      * @var Collection<int, Token>

@@ -9,7 +9,6 @@ parameters:
         - ../../bootstrap/providers.php
         - ../../dev
         - ../../resources
-        - ../../tests
     tmpDir: ../../storage/framework/cache/phpstan
     excludePaths:
         - ../../bootstrap/cache

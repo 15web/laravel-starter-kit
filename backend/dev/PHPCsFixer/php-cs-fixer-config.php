@@ -16,7 +16,6 @@ $finder = (new Finder())
         __DIR__.'/../../config',
         __DIR__.'/../../dev',
         __DIR__.'/../../resources',
-        __DIR__.'/../../tests',
     ])
     ->exclude('cache')
     ->append([
