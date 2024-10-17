@@ -16,8 +16,6 @@ tags:
     description: Товары
   - name: news
     description: Новости
-  - name: filter
-    description: Поиск
 servers:
   - url: http://localhost:8088/api
     description: Локальный сервер для разработки
@@ -223,18 +221,6 @@ paths:
           $ref: '#/components/responses/storeCategory'
         '400':
           $ref: '#/components/responses/badRequest'
-  /filter:
-    get:
-      operationId: filter
-      summary: Просмотр новости
-      description: Просмотр новости
-      tags:
-        - filter
-      parameters:
-        - $ref: '#/components/parameters/filterQuery'
-      responses:
-        '200':
-          $ref: '#/components/responses/filterResult'
 components:
   securitySchemes:
     bearerHttpAuth:
@@ -259,14 +245,6 @@ components:
         type: string
       required: true
       description: Заголовок новости
-      example: Новость
-    filterQuery:
-      name: query
-      in: query
-      schema:
-        type: string
-      required: true
-      description: Поисковый запрос
       example: Новость
   requestBodies:
     login:
@@ -677,16 +655,6 @@ components:
                 errorMessage: Не найдена родительская категория
                 errorEnum: bad_request
                 error: true
-    filterResult:
-      description: Категория создана
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
-              description: Результат поиска
-              example: "Filter1 result: Новость"
     success:
       description: Успешный ответ
       content:
