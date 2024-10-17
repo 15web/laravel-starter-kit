@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException\Handler;
 
-use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Render\ApiExceptionRender;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * Обработчик исключений
@@ -40,6 +40,12 @@ final class Handler extends ExceptionHandler
 
         if ($e instanceof HttpExceptionInterface) {
             $apiException = ApiException::createUnexpectedHttpException($e);
+
+            return ($apiExceptionRender)($apiException);
+        }
+
+        if ($e instanceof InvalidArgumentException) {
+            $apiException = ApiException::createBadRequestException($e->getMessage(), Error::BAD_REQUEST, $e);
 
             return ($apiExceptionRender)($apiException);
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Products\Http\Category\Index;
 
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Products\Domain\Category;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
@@ -20,7 +20,7 @@ final readonly class IndexCategoryAction
 
     public function __construct(
         private EntityManager $entityManager,
-        private ResolveApiResponse $resolveApiResponse,
+        private ResolveResponse $resolveResponse,
     ) {
         /** @var NestedTreeRepository $repository */
         $repository = $this->entityManager->getRepository(Category::class);
@@ -34,7 +34,7 @@ final readonly class IndexCategoryAction
         /** @var iterable<Category> $categories */
         $categories = $this->repository->getRootNodesQuery()->toIterable();
 
-        return ($this->resolveApiResponse)($this->getTreeData($categories));
+        return ($this->resolveResponse)($this->getTreeData($categories));
     }
 
     /**

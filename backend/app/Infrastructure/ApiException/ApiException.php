@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
-use App\Contract\Error;
+use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\ApiException\Http\StatusCode;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -39,11 +39,11 @@ final class ApiException extends Exception
         return $this->statusCode;
     }
 
-    public static function createBadRequestException(string $errorMessage, Error $errorEnum, ?Throwable $previous = null): self
+    public static function createBadRequestException(string $message, Error $type, ?Throwable $previous = null): self
     {
         return new self(
-            $errorMessage,
-            $errorEnum,
+            $message,
+            $type,
             StatusCode::BAD_REQUEST,
             $previous
         );

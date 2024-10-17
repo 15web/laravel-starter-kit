@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Unit\Product\Domain;
 
 use App\Module\Products\Domain\Category;
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,7 @@ final class CategoryTest extends TestCase
             title: $title,
         );
 
+        self::assertSame((new DateTimeImmutable())->format(DateTimeImmutable::ATOM), $entity->getCreatedAt()->format(DateTimeImmutable::ATOM));
         self::assertSame($title, $entity->getTitle());
     }
 }

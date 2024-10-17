@@ -46,7 +46,7 @@ final class ShowPostActionTest extends TestCase
     }
 
     #[TestDox('Запись с не найдена')]
-    public function testExists(): void
+    public function testNotFound(): void
     {
         $this
             ->getJson('api/blog/Title')

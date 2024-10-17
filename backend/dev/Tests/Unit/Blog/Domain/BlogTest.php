@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Unit\Blog\Domain;
 
 use App\Module\Blog\Domain\Post;
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +28,7 @@ final class BlogTest extends TestCase
             content: $content,
         );
 
+        self::assertSame((new DateTimeImmutable())->format(DateTimeImmutable::ATOM), $entity->getCreatedAt()->format(DateTimeImmutable::ATOM));
         self::assertSame($title, $entity->getTitle());
         self::assertSame($author, $entity->getAuthor());
         self::assertSame($content, $entity->getContent());

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Blog\Http\Store;
 
-use App\Infrastructure\ApiRequest\ApiRequest;
+use App\Infrastructure\Request\Request;
 use Webmozart\Assert\Assert;
 
 /**
  * Запрос для создания записи в блоге
  */
-final readonly class StorePostRequest implements ApiRequest
+final readonly class StorePostRequest implements Request
 {
     /**
      * @param non-empty-string $title Заголовок записи
