@@ -18,41 +18,41 @@ final class IndexCategoryActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $response = $this
-            ->post('api/products/category', ['title' => 'Parent1'])
+            ->postJson('api/products/category', ['title' => 'Parent1', 'parent' => null])
             ->assertOk();
 
         /** @var positive-int $parentId1 */
         $parentId1 = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Parent2'])
+            ->postJson('api/products/category', ['title' => 'Parent2', 'parent' => null])
             ->assertOk();
 
         /** @var positive-int $parentId2 */
         $parentId2 = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Child1', 'parent' => $parentId1])
+            ->postJson('api/products/category', ['title' => 'Child1', 'parent' => $parentId1])
             ->assertOk();
 
         /** @var positive-int $childId1 */
         $childId1 = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Child2', 'parent' => $parentId2])
+            ->postJson('api/products/category', ['title' => 'Child2', 'parent' => $parentId2])
             ->assertOk();
 
         /** @var positive-int $childId2 */
         $childId2 = $response->json('id');
 
         $response = $this
-            ->post('api/products/category', ['title' => 'Child3', 'parent' => $parentId2])
+            ->postJson('api/products/category', ['title' => 'Child3', 'parent' => $parentId2])
             ->assertOk();
 
         /** @var positive-int $childId3 */
         $childId3 = $response->json('id');
 
-        $response = $this->get('api/products/category')->assertOk();
+        $response = $this->getJson('api/products/category')->assertOk();
 
         /**
          * @var list<array{
@@ -109,7 +109,7 @@ final class IndexCategoryActionTest extends TestCase
     public function testEmptyCollection(): void
     {
         $this
-            ->get('api/products/category')
+            ->getJson('api/products/category')
             ->assertOk()
             ->assertJson([]);
     }

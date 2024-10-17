@@ -9,7 +9,7 @@ use DateTimeImmutable;
 /**
  * Результат вывода "дерева" категорий товаров
  */
-final readonly class IndexCategoryResponse
+final readonly class IndexCategoryData
 {
     /**
      * @param int $id Id категории

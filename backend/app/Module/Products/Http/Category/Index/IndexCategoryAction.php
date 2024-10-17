@@ -40,7 +40,7 @@ final readonly class IndexCategoryAction
     /**
      * @param iterable<Category> $categories
      *
-     * @return iterable<IndexCategoryResponse>
+     * @return iterable<IndexCategoryData>
      */
     private function getTreeData(iterable $categories): iterable
     {
@@ -48,7 +48,7 @@ final readonly class IndexCategoryAction
             /** @var iterable<Category> $children */
             $children = $this->repository->getChildrenQuery($category)->toIterable();
 
-            yield new IndexCategoryResponse(
+            yield new IndexCategoryData(
                 id: $category->getId(),
                 title: $category->getTitle(),
                 children: $this->getTreeData($children),

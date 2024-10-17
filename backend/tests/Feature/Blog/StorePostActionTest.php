@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Blog;
 
 use App\Contract\Error;
+use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use Carbon\Carbon;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,7 +22,7 @@ final class StorePostActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $response = $this
-            ->post('api/blog', [
+            ->postJson('api/blog', [
                 'title' => 'Title',
                 'author' => 'Author',
                 'content' => 'Content',
@@ -54,11 +55,11 @@ final class StorePostActionTest extends TestCase
         ];
 
         $this
-            ->post('api/blog', $body)
+            ->postJson('api/blog', $body)
             ->assertOk();
 
         $response = $this
-            ->post('api/blog', $body)
+            ->postJson('api/blog', $body)
             ->assertOk();
 
         $this->assertApiError($response, Error::EXISTS->value);
@@ -71,8 +72,10 @@ final class StorePostActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
+        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
+
         $this
-            ->post('api/blog', $body)
+            ->postJson('api/blog', $body)
             ->assertBadRequest();
     }
 
