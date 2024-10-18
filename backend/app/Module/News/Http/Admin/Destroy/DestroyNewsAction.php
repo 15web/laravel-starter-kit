@@ -12,7 +12,7 @@ use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\News\Http\Site\Show\ShowNewsRequest;
 use App\Module\User\Authorization\Domain\Role;
-use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\Authorization\Http\IsGranted;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
@@ -21,13 +21,13 @@ use Spatie\RouteAttributes\Attributes as Router;
  * Ручка удаления новости
  */
 #[Router\Middleware('auth')]
+#[IsGranted(Role::User)]
 final readonly class DestroyNewsAction
 {
     public function __construct(
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRouteParameters,
         private ResolveSuccessResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
         private EntityManager $entityManager,
         private Flusher $flusher,
     ) {}
@@ -35,8 +35,6 @@ final readonly class DestroyNewsAction
     #[Router\Delete('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
-
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
 
         $news = $this->repository->findByTitle(

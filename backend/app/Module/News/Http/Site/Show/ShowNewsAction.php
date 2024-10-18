@@ -10,7 +10,7 @@ use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
-use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\Authorization\Http\IsGranted;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -18,20 +18,18 @@ use Spatie\RouteAttributes\Attributes as Router;
  * Ручка просмотра новости
  */
 #[Router\Middleware('auth')]
+#[IsGranted(Role::User)]
 final readonly class ShowNewsAction
 {
     public function __construct(
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRequest,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Get('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
-
         $request = ($this->resolveRequest)(ShowNewsRequest::class);
 
         $news = $this->repository->findByTitle(

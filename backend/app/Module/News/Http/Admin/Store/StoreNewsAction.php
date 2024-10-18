@@ -12,7 +12,7 @@ use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\News;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
-use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\Authorization\Http\IsGranted;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -20,6 +20,7 @@ use Spatie\RouteAttributes\Attributes as Router;
  * Ручка создания новости
  */
 #[Router\Middleware('auth')]
+#[IsGranted(Role::User)]
 final readonly class StoreNewsAction
 {
     public function __construct(
@@ -27,14 +28,11 @@ final readonly class StoreNewsAction
         private Flusher $flusher,
         private ResolveRequest $resolveRequest,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Post('/news')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
-
         $request = ($this->resolveRequest)(StoreNewsRequest::class);
 
         $newsExists = $this->repository->existsByTitle($request->title);

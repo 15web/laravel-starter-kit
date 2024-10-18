@@ -7,7 +7,7 @@ namespace App\Module\News\Http\Site\Index;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
-use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\Authorization\Http\IsGranted;
 use Illuminate\Http\JsonResponse;
 use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
@@ -16,19 +16,17 @@ use Spatie\RouteAttributes\Attributes as Router;
  * Ручка просмотра новостей
  */
 #[Router\Middleware('auth')]
+#[IsGranted(Role::User)]
 final readonly class IndexNewsAction
 {
     public function __construct(
         private NewsRepository $repository,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Get('/news')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
-
         return ($this->resolveResponse)($this->getNewsData());
     }
 

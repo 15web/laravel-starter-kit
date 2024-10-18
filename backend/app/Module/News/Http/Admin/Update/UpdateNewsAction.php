@@ -14,7 +14,7 @@ use App\Module\News\Domain\NewsRepository;
 use App\Module\News\Http\Site\Show\ShowNewsRequest;
 use App\Module\News\Http\Site\Show\ShowNewsResponse;
 use App\Module\User\Authorization\Domain\Role;
-use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\Authorization\Http\IsGranted;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -22,6 +22,7 @@ use Spatie\RouteAttributes\Attributes as Router;
  * Ручка обновления новости
  */
 #[Router\Middleware('auth')]
+#[IsGranted(Role::User)]
 final readonly class UpdateNewsAction
 {
     public function __construct(
@@ -29,15 +30,12 @@ final readonly class UpdateNewsAction
         private ResolveRouteParameters $resolveRouteParameters,
         private ResolveRequest $resolveRequest,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
         private Flusher $flusher,
     ) {}
 
     #[Router\Post('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
-
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
         $updateRequest = ($this->resolveRequest)(UpdateNewsRequest::class);
 
