@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature;
 
-use App\Contract\Error;
+use App\Infrastructure\ApiException\Handler\Error;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;

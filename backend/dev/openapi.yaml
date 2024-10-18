@@ -75,11 +75,26 @@ paths:
           $ref: '#/components/responses/storeBlog'
         '400':
           $ref: '#/components/responses/badRequest'
-  /news/create:
+  /news:
+    get:
+      operationId: indexNews
+      summary: Список новостей
+      description: Список новостей
+      tags:
+        - news
+      security:
+        - bearerHttpAuth: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/indexNews'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
     post:
       operationId: storeNews
-      summary: Создать запись в новостях
-      description: Создать запись в новостях
+      summary: Создать новость
+      description: Создать новость
       tags:
         - news
       security:
@@ -95,7 +110,7 @@ paths:
           $ref: '#/components/responses/authRequired'
         '403':
           $ref: '#/components/responses/forbidden'
-  /news/info:
+  /news/{title}:
     get:
       operationId: showNews
       summary: Просмотр новости
@@ -115,23 +130,49 @@ paths:
           $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/notFound'
-  /news/list:
-    get:
-      operationId: indexNews
-      summary: Список новостей
-      description: Список новостей
+    post:
+      operationId: updateNews
+      summary: Обновление новости
+      description: Обновление новости
       tags:
         - news
       security:
         - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/newsTitle'
+      requestBody:
+        $ref: '#/components/requestBodies/updateNews'
       responses:
         '200':
-          $ref: '#/components/responses/indexNews'
+          $ref: '#/components/responses/showNews'
+        '400':
+          $ref: '#/components/responses/badRequest'
         '401':
           $ref: '#/components/responses/authRequired'
         '403':
           $ref: '#/components/responses/forbidden'
-  /news/subscribe:
+        '404':
+          $ref: '#/components/responses/notFound'
+    delete:
+      operationId: destroyNews
+      summary: Удаление новости
+      description: Удаление новости
+      tags:
+        - news
+      security:
+        - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/newsTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /subscribe:
     post:
       operationId: subscribeNews
       summary: Подписаться на рассылку новостей
@@ -213,7 +254,7 @@ components:
       example: Введение
     newsTitle:
       name: title
-      in: query
+      in: path
       schema:
         type: string
       required: true
@@ -270,6 +311,20 @@ components:
                 example: Начало рассказа...
     storeNews:
       description: Запрос на создание новости
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок новости
+                minLength: 1
+                example: Новость
+    updateNews:
+      description: Запрос на обновление новости
       content:
         application/json:
           schema:
@@ -489,7 +544,7 @@ components:
               title: Объявление
               createdAt: 2021-11-28T16:19:44+00:00
     storeNews:
-      description: Запись в новостях создана
+      description: Новость создана
       content:
         application/json:
           schema:
@@ -510,6 +565,8 @@ components:
                     example: Новость
                   createdAt:
                     $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
               - $ref: '#/components/schemas/error'
           examples:
             Успешный запрос:
@@ -517,10 +574,11 @@ components:
                 id: 11
                 title: Введение
                 createdAt: 2024-10-15T10:59:14+00:00
+                updatedAt: null
             Новость с таким заголовком уже существует:
               value:
                 errorMessage: Новость с таким заголовком уже существует
-                errorEnum: news_exists
+                errorEnum: entity_exists
                 error: true
     showNews:
       description: Возвращает информацию о новости
@@ -542,10 +600,13 @@ components:
                 minLength: 1
               createdAt:
                 $ref: '#/components/schemas/createdAt'
+              updatedAt:
+                $ref: '#/components/schemas/updatedAt'
           example:
             id: 11
             title: Новость
             createdAt: 2021-10-28T16:19:44+00:00
+            updatedAt: null
     indexCategory:
       description: Возвращает дерево категорий товаров
       content:
@@ -614,7 +675,7 @@ components:
             Не найдена родительская категория:
               value:
                 errorMessage: Не найдена родительская категория
-                errorEnum: general_bad_request
+                errorEnum: bad_request
                 error: true
     filterResult:
       description: Категория создана
@@ -641,7 +702,7 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: general_bad_request
+            errorEnum: bad_request
             errorMessage: Неверный формат запроса
             error: true
     authRequired:
@@ -651,7 +712,7 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: general_unauthorized
+            errorEnum: unauthorized
             errorMessage: Для доступ к ресурсу требуется аутентификация
             error: true
     forbidden:
@@ -661,7 +722,7 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: general_access_denied
+            errorEnum: access_denied
             errorMessage: Доступ к ресурсу ограничен
             error: true
     notFound:
@@ -671,7 +732,7 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: general_not_found
+            errorEnum: not_found
             errorMessage: Запись не найдена
             error: true
   schemas:
@@ -706,15 +767,13 @@ components:
         errorEnum:
           type: string
           enum:
-            - general_bad_request
-            - general_unauthorized
-            - general_access_denied
-            - general_not_found
-            - general_method_not_allowed
-            - general_unexpected
+            - bad_request
+            - unauthorized
+            - access_denied
+            - not_found
+            - method_not_allowed
+            - unexpected
             - entity_exists
-            - news_not_found
-            - news_exists
         errorMessage:
           type: string
         error:

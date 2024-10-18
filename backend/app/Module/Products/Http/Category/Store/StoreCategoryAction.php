@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Products\Http\Category\Store;
 
-use App\Contract\Error;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiRequest\ResolveApiRequest;
-use App\Infrastructure\ApiResponse\ResolveApiResponse;
+use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
+use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Products\Domain\Category;
 use App\Module\Products\Domain\CategoryRepository;
 use Illuminate\Http\JsonResponse;
@@ -20,8 +20,8 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class StoreCategoryAction
 {
     public function __construct(
-        private ResolveApiRequest $resolveApiRequest,
-        private ResolveApiResponse $resolveApiResponse,
+        private ResolveRequest $resolveRequest,
+        private ResolveResponse $resolveResponse,
         private CategoryRepository $repository,
         private Flusher $flusher,
     ) {}
@@ -29,10 +29,10 @@ final readonly class StoreCategoryAction
     #[Router\Post('/products/category')]
     public function __invoke(): JsonResponse
     {
-        $request = ($this->resolveApiRequest)(StoreCategoryRequest::class);
+        $request = ($this->resolveRequest)(StoreCategoryRequest::class);
 
-        $isCategoryExists = $this->repository->isExistsByTitle($request->title, $request->parent);
-        if ($isCategoryExists) {
+        $categoryExists = $this->repository->existsByTitle($request->title, $request->parent);
+        if ($categoryExists) {
             throw ApiException::createDomainException('Категория с таким заголовком уже существует', Error::EXISTS);
         }
 
@@ -66,6 +66,6 @@ final readonly class StoreCategoryAction
             updatedAt: $category->getUpdatedAt(),
         );
 
-        return ($this->resolveApiResponse)($response);
+        return ($this->resolveResponse)($response);
     }
 }

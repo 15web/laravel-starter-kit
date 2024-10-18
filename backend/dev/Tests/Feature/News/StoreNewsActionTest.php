@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Contract\Error;
+use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
 use Dev\Tests\Feature\TestCase;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 /**
  * @internal
  */
-#[TestDox('Ручка создания записи в новостях')]
+#[TestDox('Создание новости')]
 final class StoreNewsActionTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
@@ -25,7 +25,7 @@ final class StoreNewsActionTest extends TestCase
 
         $response = $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', [
+            ->postJson('api/news', [
                 'title' => 'Title',
             ])
             ->assertOk();
@@ -35,6 +35,7 @@ final class StoreNewsActionTest extends TestCase
          *     id: mixed,
          *     title: non-empty-string,
          *     createdAt: non-empty-string,
+         *     updatedAt: non-empty-string|null
          * } $data
          */
         $data = $response->json();
@@ -42,6 +43,7 @@ final class StoreNewsActionTest extends TestCase
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Title');
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
+        self::assertNull($data['updatedAt']);
     }
 
     #[TestDox('Запись с таким заголовком уже существует')]
@@ -55,14 +57,14 @@ final class StoreNewsActionTest extends TestCase
 
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', $body)
+            ->postJson('api/news', $body)
             ->assertOk();
 
         $response = $this
-            ->postJson('api/news/create', $body)
+            ->postJson('api/news', $body)
             ->assertOk();
 
-        $this->assertApiError($response, Error::NEWS_EXISTS->value);
+        $this->assertApiError($response, Error::EXISTS->value);
     }
 
     /**
@@ -78,7 +80,7 @@ final class StoreNewsActionTest extends TestCase
 
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/create', $body)
+            ->postJson('api/news', $body)
             ->assertBadRequest();
     }
 
@@ -98,7 +100,7 @@ final class StoreNewsActionTest extends TestCase
         ];
 
         $this
-            ->postJson('api/news/create', $body)
+            ->postJson('api/news', $body)
             ->assertUnauthorized();
     }
 }
