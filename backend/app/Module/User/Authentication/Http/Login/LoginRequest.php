@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Authentication\Action\Login;
+namespace App\Module\User\Authentication\Http\Login;
 
 use App\Infrastructure\Request\Request;
 use Webmozart\Assert\Assert;
@@ -12,21 +12,15 @@ use Webmozart\Assert\Assert;
  */
 final readonly class LoginRequest implements Request
 {
+    /**
+     * @param non-empty-string $email Email
+     * @param non-empty-string $password Пароль
+     */
     public function __construct(
-        private string $email,
-        private string $password,
+        public string $email,
+        public string $password,
     ) {
         Assert::email($email);
         Assert::notEmpty($password);
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
     }
 }

@@ -6,8 +6,8 @@ namespace App\Module\News\Http\Site\Index;
 
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
-use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
-use App\Module\User\Authorization\ByRole\Role;
+use App\Module\User\Authorization\Domain\Role;
+use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Illuminate\Http\JsonResponse;
 use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
@@ -21,7 +21,7 @@ final readonly class IndexNewsAction
     public function __construct(
         private NewsRepository $repository,
         private ResolveResponse $resolveResponse,
-        private DenyUnlessUserHasRole $denyUnlessUserHasRole,
+        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Get('/news')]

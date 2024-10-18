@@ -11,8 +11,8 @@ use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\News\Http\Site\Show\ShowNewsRequest;
-use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
-use App\Module\User\Authorization\ByRole\Role;
+use App\Module\User\Authorization\Domain\Role;
+use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
@@ -27,7 +27,7 @@ final readonly class DestroyNewsAction
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRouteParameters,
         private ResolveSuccessResponse $resolveResponse,
-        private DenyUnlessUserHasRole $denyUnlessUserHasRole,
+        private CheckRoleGranted $denyUnlessUserHasRole,
         private EntityManager $entityManager,
         private Flusher $flusher,
     ) {}

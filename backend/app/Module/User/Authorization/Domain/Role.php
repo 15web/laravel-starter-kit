@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Authorization\ByRole;
+namespace App\Module\User\Authorization\Domain;
 
 use Generator;
 

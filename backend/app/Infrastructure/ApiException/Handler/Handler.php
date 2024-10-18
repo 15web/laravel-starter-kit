@@ -26,7 +26,6 @@ final class Handler extends ExceptionHandler
 {
     protected $internalDontReport = [];
 
-    // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
     #[Override]
     public function render($request, Throwable $e): Response
     {
@@ -59,7 +58,6 @@ final class Handler extends ExceptionHandler
         return ($apiExceptionRender)($unexpectedException);
     }
 
-    // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
     #[Override]
     protected function shouldReturnJson($request, Throwable $e): bool
     {

@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Authentication\Action\Logout;
+namespace App\Module\User\Authentication\Http\Logout;
 
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Response\ResolveSuccessResponse;
-use App\Module\User\Authentication\Model\Tokens;
-use DomainException;
+use App\Module\User\Authentication\Domain\TokenRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
@@ -22,7 +21,7 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class LogoutAction
 {
     public function __construct(
-        private Tokens $tokens,
+        private TokenRepository $tokens,
         private Flusher $flusher,
         private ResolveSuccessResponse $resolveSuccessResponse,
     ) {}
@@ -35,15 +34,17 @@ final readonly class LogoutAction
             throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', Error::UNAUTHORIZED);
         }
 
-        /** @var string $apiToken */
-        $apiToken = $request->bearerToken();
+        $tokenValue = (string) $request->bearerToken();
+        $token = $this->tokens->find($tokenValue);
+
+        if ($token === null) {
+            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', Error::UNAUTHORIZED);
+        }
 
         try {
-            $token = $this->tokens->get($apiToken);
-
             $user->removeToken($token);
             $this->flusher->flush();
-        } catch (DomainException|InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw ApiException::createUnexpectedException($e);
         }
 

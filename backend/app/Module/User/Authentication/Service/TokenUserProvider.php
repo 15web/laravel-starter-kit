@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Authentication\UserProvider;
+namespace App\Module\User\Authentication\Service;
 
-use App\Module\User\Model\User;
-use App\Module\User\Model\Users;
+use App\Module\User\User\Domain\User;
+use App\Module\User\User\Query\FindUser;
+use App\Module\User\User\Query\FindUserQuery;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Override;
@@ -16,11 +17,18 @@ use SensitiveParameter;
  */
 final readonly class TokenUserProvider implements UserProvider
 {
-    public function __construct(private Users $users) {}
+    /**
+     * @see \Illuminate\Auth\TokenGuard::$storageKey
+     * @see \Illuminate\Auth\TokenGuard::user
+     */
+    private const string CREDENTIALS_TOKEN_KEY = 'api_token';
+
+    public function __construct(
+        private FindUser $findUser,
+    ) {}
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      *
      * @param mixed $identifier
      */
@@ -32,7 +40,6 @@ final readonly class TokenUserProvider implements UserProvider
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      *
      * @param mixed $identifier
      * @param mixed $token
@@ -45,29 +52,27 @@ final readonly class TokenUserProvider implements UserProvider
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      *
      * @param mixed $token
      */
     #[Override]
     public function updateRememberToken(Authenticatable $user, $token): void {}
 
-    /**
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
-     * $credentials['api_token'] @see \Illuminate\Auth\TokenGuard::user
-     */
     #[Override]
     public function retrieveByCredentials(array $credentials): ?User
     {
-        /** @var non-empty-string $token */
-        $token = $credentials['api_token'];
+        /** @var string $token */
+        $token = $credentials[self::CREDENTIALS_TOKEN_KEY];
 
-        return $this->users->findByToken($token);
+        $query = new FindUserQuery(
+            authTokenId: $token,
+        );
+
+        return ($this->findUser)($query);
     }
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
      */
     #[Override]
     public function validateCredentials(Authenticatable $user, array $credentials): bool

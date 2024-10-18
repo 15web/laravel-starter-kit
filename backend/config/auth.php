@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Module\User\Model\User;
+use App\Module\User\User\Domain\User;
 
 return [
     /*

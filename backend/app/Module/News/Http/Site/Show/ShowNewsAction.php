@@ -9,8 +9,8 @@ use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
-use App\Module\User\Authorization\ByRole\DenyUnlessUserHasRole;
-use App\Module\User\Authorization\ByRole\Role;
+use App\Module\User\Authorization\Domain\Role;
+use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -24,7 +24,7 @@ final readonly class ShowNewsAction
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRequest,
         private ResolveResponse $resolveResponse,
-        private DenyUnlessUserHasRole $denyUnlessUserHasRole,
+        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Get('/news/{title}')]

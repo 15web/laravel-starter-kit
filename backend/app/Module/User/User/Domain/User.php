@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Module\User\Model;
+namespace App\Module\User\User\Domain;
 
-use App\Module\User\Authentication\Model\Token;
-use App\Module\User\Authorization\ByRole\Role;
+use App\Infrastructure\ValueObject\Email;
+use App\Module\User\Authentication\Domain\Token;
+use App\Module\User\Authorization\Domain\Role;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,6 +16,8 @@ use DomainException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Override;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * Пользователь
@@ -23,8 +26,11 @@ use Override;
 /** @final */
 class User implements Authenticatable
 {
-    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
-    private int $id;
+    #[ORM\Id, ORM\Column(type: Types::STRING, length: 36, unique: true)]
+    private readonly string $id;
+
+    #[ORM\Column]
+    private string $email;
 
     #[ORM\Column]
     private string $password;
@@ -44,18 +50,25 @@ class User implements Authenticatable
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Token::class, cascade: ['all'], orphanRemoval: true)]
     private Collection $tokens;
 
-    public function __construct(#[ORM\Column]
-        private string $email, string $password)
-    {
+    /**
+     * @param non-empty-string $password
+     */
+    public function __construct(
+        Uuid $id,
+        Email $email,
+        string $password,
+    ) {
+        $this->id = (string) $id;
+        $this->email = $email->value;
         $this->password = Hash::make($password);
         $this->roles = [Role::User->value];
         $this->createdAt = new DateTimeImmutable();
         $this->tokens = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
+        return UuidV7::fromString($this->id);
     }
 
     public function getCreatedAt(): DateTimeImmutable
@@ -97,7 +110,7 @@ class User implements Authenticatable
     }
 
     #[Override]
-    public function getAuthIdentifier(): int
+    public function getAuthIdentifier(): Uuid
     {
         return $this->getId();
     }
@@ -114,7 +127,6 @@ class User implements Authenticatable
         return '';
     }
 
-    // phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter
     #[Override]
     public function setRememberToken($value): void {}
 
