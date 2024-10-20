@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Serializer\SerializerServiceProvider;
 use App\Module\User\Authentication\Service\AuthenticationServiceProvider;
+use App\Module\User\Authorization\Service\AuthorizationServiceProvider;
 use Spatie\RouteAttributes\RouteAttributesServiceProvider;
 
 return [
@@ -18,4 +19,5 @@ return [
 
     // Modules Service Providers...
     AuthenticationServiceProvider::class,
+    AuthorizationServiceProvider::class,
 ];
