@@ -15,6 +15,7 @@ use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
@@ -27,7 +28,6 @@ final readonly class DestroyNewsAction
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRouteParameters,
         private ResolveSuccessResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
         private EntityManager $entityManager,
         private Flusher $flusher,
     ) {}
@@ -35,7 +35,7 @@ final readonly class DestroyNewsAction
     #[Router\Delete('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
+        Gate::authorize(CheckRoleGranted::class, Role::User);
 
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
 

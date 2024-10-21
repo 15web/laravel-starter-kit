@@ -9,6 +9,7 @@ use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -21,13 +22,12 @@ final readonly class IndexNewsAction
     public function __construct(
         private NewsRepository $repository,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
     ) {}
 
     #[Router\Get('/news')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
+        Gate::authorize(CheckRoleGranted::class, Role::User);
 
         return ($this->resolveResponse)($this->getNewsData());
     }

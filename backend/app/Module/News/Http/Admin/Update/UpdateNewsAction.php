@@ -16,6 +16,7 @@ use App\Module\News\Http\Site\Show\ShowNewsResponse;
 use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
@@ -29,14 +30,13 @@ final readonly class UpdateNewsAction
         private ResolveRouteParameters $resolveRouteParameters,
         private ResolveRequest $resolveRequest,
         private ResolveResponse $resolveResponse,
-        private CheckRoleGranted $denyUnlessUserHasRole,
         private Flusher $flusher,
     ) {}
 
     #[Router\Post('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        ($this->denyUnlessUserHasRole)(Role::User);
+        Gate::authorize(CheckRoleGranted::class, Role::User);
 
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
         $updateRequest = ($this->resolveRequest)(UpdateNewsRequest::class);
