@@ -23,7 +23,7 @@ final class EntityManagerFactory
          * @see https://www.doctrine-project.org/projects/doctrine-migrations/en/3.8/reference/configuration.html#connection-configuration
          */
         $connection = DriverManager::getConnection([
-            'driver' => 'pdo_mysql',
+            'driver' => 'pdo_pgsql',
             'host' => (string) config("database.connections.{$connectionName}.host"),
             'port' => (int) config("database.connections.{$connectionName}.port"),
             'user' => (string) config("database.connections.{$connectionName}.username"),

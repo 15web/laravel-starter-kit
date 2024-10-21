@@ -17,7 +17,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Override;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * Пользователь
@@ -26,9 +25,6 @@ use Symfony\Component\Uid\UuidV7;
 /** @final */
 class User implements Authenticatable
 {
-    #[ORM\Id, ORM\Column(type: Types::STRING, length: 36, unique: true)]
-    private readonly string $id;
-
     #[ORM\Column]
     private string $email;
 
@@ -54,11 +50,11 @@ class User implements Authenticatable
      * @param non-empty-string $password
      */
     public function __construct(
-        Uuid $id,
+        #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
+        private readonly Uuid $id,
         Email $email,
         string $password,
     ) {
-        $this->id = (string) $id;
         $this->email = $email->value;
         $this->password = Hash::make($password);
         $this->roles = [Role::User->value];
@@ -68,7 +64,7 @@ class User implements Authenticatable
 
     public function getId(): Uuid
     {
-        return UuidV7::fromString($this->id);
+        return $this->id;
     }
 
     public function getCreatedAt(): DateTimeImmutable

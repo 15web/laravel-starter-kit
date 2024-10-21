@@ -28,4 +28,4 @@ else
 fi
 
 [ -f ./backend/.env ] || cp ./backend/.env.example ./backend/.env
-[ -f ./docker/mysql/.env ] || cp ./docker/mysql/.env.dist ./docker/mysql/.env
+[ -f ./docker/pgsql/.env ] || cp ./docker/pgsql/.env.dist ./docker/pgsql/.env

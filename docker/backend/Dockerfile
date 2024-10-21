@@ -1,7 +1,7 @@
 FROM php:8.3.12-fpm AS base
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions pdo_mysql intl
+RUN install-php-extensions pdo_pgsql intl
 
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
@@ -18,7 +18,7 @@ FROM base AS cli
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip;
 
-COPY --from=composer:2.7.9 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer
 
 RUN su dev -c 'mkdir -p /home/dev/.composer/ /home/dev/app/'
 

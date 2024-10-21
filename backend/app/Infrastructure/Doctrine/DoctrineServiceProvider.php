@@ -7,10 +7,12 @@ namespace App\Infrastructure\Doctrine;
 use App\Infrastructure\Doctrine\EntityManager\EntityManagerFactory;
 use App\Infrastructure\Doctrine\EntityManager\EventManagerFactory;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * Сервис провайдер для работы с Doctrine
@@ -31,5 +33,9 @@ final class DoctrineServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(Flusher::class);
+
+        if (!\array_key_exists('uuid', Type::getTypesMap())) {
+            Type::addType('uuid', UuidType::class);
+        }
     }
 }
