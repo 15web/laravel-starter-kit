@@ -14,6 +14,4 @@
 /backend/.env
 
 /docker/.env
-/docker/backend/.env
-/docker/mysql/.env
-/backend/.phpunit.result.cache
+/docker/pgsql/.env

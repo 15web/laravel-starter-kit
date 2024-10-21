@@ -19,44 +19,48 @@ final class Version20241004064228 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('create table jobs
+        $this->addSql('create table public.jobs
             (
-                id           bigint unsigned auto_increment primary key,
-                queue        varchar(255)     not null,
-                payload      longtext         not null,
-                attempts     tinyint unsigned not null,
-                reserved_at  int unsigned     null,
-                available_at int unsigned     not null,
-                created_at   int unsigned     not null
-            ) collate = utf8mb4_unicode_ci;');
+                id           bigserial primary key,
+                queue        varchar(255) not null,
+                payload      text         not null,
+                attempts     smallint     not null,
+                reserved_at  integer,
+                available_at integer      not null,
+                created_at   integer      not null
+            );');
 
-        $this->addSql('create index jobs_queue_index on jobs (queue);');
+        $this->addSql('alter table public.jobs owner to postgres');
+        $this->addSql('create index jobs_queue_index on public.jobs (queue);');
 
-        $this->addSql('create table job_batches
+        $this->addSql('create table public.job_batches
             (
                 id             varchar(255) not null primary key,
                 name           varchar(255) not null,
-                total_jobs     int          not null,
-                pending_jobs   int          not null,
-                failed_jobs    int          not null,
-                failed_job_ids longtext     not null,
-                options        mediumtext   null,
-                cancelled_at   int          null,
-                created_at     int          not null,
-                finished_at    int          null
-            ) collate = utf8mb4_unicode_ci;');
+                total_jobs     integer      not null,
+                pending_jobs   integer      not null,
+                failed_jobs    integer      not null,
+                failed_job_ids text         not null,
+                options        text,
+                cancelled_at   integer,
+                created_at     integer      not null,
+                finished_at    integer
+            );');
 
-        $this->addSql('create table failed_jobs
+        $this->addSql('alter table public.job_batches owner to postgres;');
+
+        $this->addSql('create table public.failed_jobs
             (
-                id         bigint unsigned auto_increment primary key,
-                uuid       varchar(255)                        not null,
-                connection text                                not null,
-                queue      text                                not null,
-                payload    longtext                            not null,
-                exception  longtext                            not null,
-                failed_at  timestamp default CURRENT_TIMESTAMP not null,
-                constraint failed_jobs_uuid_unique unique (uuid)
-            ) collate = utf8mb4_unicode_ci;');
+                id         bigserial primary key,
+                uuid       varchar(255) constraint failed_jobs_uuid_unique unique,
+                connection text                                   not null,
+                queue      text                                   not null,
+                payload    text                                   not null,
+                exception  text                                   not null,
+                failed_at  timestamp(0) default CURRENT_TIMESTAMP not null
+            );');
+
+        $this->addSql('alter table public.failed_jobs owner to postgres;');
     }
 
     public function down(Schema $schema): void
