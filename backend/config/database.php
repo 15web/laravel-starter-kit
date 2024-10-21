@@ -120,4 +120,6 @@ return [
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
     ],
+
+    'test_token' => env('TEST_TOKEN'),
 ];

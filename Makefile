@@ -93,16 +93,18 @@ lint: # Проверка кода
 	make psalm
 
 test-install: # Подготовка тестового окружения
-	docker compose exec pgsql dropdb -f --if-exists db_name_test
-	docker compose exec pgsql createdb -O postgres db_name_test
-	docker compose run --rm backend-cli ./bin/doctrine --env=testing migrations:migrate --no-interaction
+	@for i in 1 2 3 4 ; do \
+		docker compose exec pgsql dropdb -f --if-exists db_name_test_$$i; \
+		docker compose exec pgsql createdb -O postgres db_name_test_$$i; \
+		docker compose run --rm backend bash -c "TEST_TOKEN=$$i ./bin/doctrine --env=testing migrations:migrate --no-interaction"; \
+	done
 
 test: # Запуск тестов
 	make clear-cache
-	docker compose run --rm backend-cli php artisan test -c ./dev/phpunit.xml
+	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --testdox'
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	docker compose run --rm backend-cli php artisan test -c ./dev/phpunit.xml --filter=$(class)
+	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --testdox --filter=$(class)'
 
 spectral: # Валидация openapi.yaml с помощью spectral
 	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/openapi.yaml -F warn --ruleset=/app/dev/.spectral.yaml
