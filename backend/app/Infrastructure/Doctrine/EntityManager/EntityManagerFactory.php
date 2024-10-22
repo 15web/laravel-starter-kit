@@ -19,6 +19,12 @@ final class EntityManagerFactory
         /** @var non-empty-string $connectionName */
         $connectionName = config('database.default');
 
+        $dbname = (string) config("database.connections.{$connectionName}.database");
+        if ($app->runningUnitTests() && config('database.test_token') !== null) {
+            $test_token = (string) config('database.test_token');
+            $dbname .= "_{$test_token}";
+        }
+
         /**
          * @see https://www.doctrine-project.org/projects/doctrine-migrations/en/3.8/reference/configuration.html#connection-configuration
          */
@@ -28,7 +34,7 @@ final class EntityManagerFactory
             'port' => (int) config("database.connections.{$connectionName}.port"),
             'user' => (string) config("database.connections.{$connectionName}.username"),
             'password' => (string) config("database.connections.{$connectionName}.password"),
-            'dbname' => (string) config("database.connections.{$connectionName}.database"),
+            'dbname' => $dbname,
             'unix_socket' => (string) config("database.connections.{$connectionName}.unix_socket"),
             'charset' => (string) config("database.connections.{$connectionName}.charset"),
         ]);
