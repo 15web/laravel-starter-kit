@@ -14,6 +14,7 @@ final readonly class ApiListObjectResponse implements ApiResponse
      */
     public function __construct(
         public iterable $data,
+        public ?PaginationResponse $pagination = null,
         public ResponseStatus $status = ResponseStatus::Success,
     ) {}
 }

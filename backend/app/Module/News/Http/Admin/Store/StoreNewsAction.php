@@ -7,7 +7,7 @@ namespace App\Module\News\Http\Admin\Store;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\News;
@@ -27,7 +27,7 @@ final readonly class StoreNewsAction
     public function __construct(
         private NewsRepository $repository,
         private Flusher $flusher,
-        private ResolveRequest $resolveRequest,
+        private ResolveRequestBody $resolveRequest,
         private ResolveResponse $resolveResponse,
     ) {}
 

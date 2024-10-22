@@ -11,9 +11,9 @@ use Symfony\Component\Serializer\Serializer;
 use Throwable;
 
 /**
- * Денормализует запрос в объект
+ * Денормализует запрос (query) в объект
  */
-final readonly class ResolveRequest
+final readonly class ResolveRequestQuery
 {
     public function __construct(
         private Serializer $serializer,
@@ -28,10 +28,13 @@ final readonly class ResolveRequest
      */
     public function __invoke(string $className): Request
     {
+        /** @var array<array-key, mixed> $data */
+        $data = CurrentRequest::query(default: []);
+
         try {
             /** @var T $apiRequest */
             $apiRequest = $this->serializer->denormalize(
-                data: CurrentRequest::all(),
+                data: $data,
                 type: $className,
             );
 

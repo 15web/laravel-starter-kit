@@ -7,7 +7,7 @@ namespace App\Module\News\Http\Admin\Update;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
@@ -29,7 +29,7 @@ final readonly class UpdateNewsAction
     public function __construct(
         private NewsRepository $repository,
         private ResolveRouteParameters $resolveRouteParameters,
-        private ResolveRequest $resolveRequest,
+        private ResolveRequestBody $resolveRequest,
         private ResolveResponse $resolveResponse,
         private Flusher $flusher,
     ) {}

@@ -57,6 +57,9 @@ paths:
       description: Список записей блога
       tags:
         - blog
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           $ref: '#/components/responses/indexBlog'
@@ -82,6 +85,9 @@ paths:
         - news
       security:
         - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
       responses:
         '200':
           $ref: '#/components/responses/indexNews'
@@ -230,6 +236,22 @@ components:
         Укажите токен без префикса `Bearer `, \
         например '01928fb2-4147-7a36-a67b-88deaaee45b9'
   parameters:
+    limit:
+      in: query
+      name: limit
+      required: false
+      description: Лимит
+      example: 10
+      schema:
+        type: integer
+    offset:
+      in: query
+      name: offset
+      required: false
+      description: Смещение
+      example: 1
+      schema:
+        type: integer
     blogTitle:
       name: title
       in: path
@@ -393,6 +415,7 @@ components:
             type: object
             required:
               - data
+              - pagination
               - status
             additionalProperties: false
             properties:
@@ -421,6 +444,8 @@ components:
                       example: Иван
                     createdAt:
                       $ref: '#/components/schemas/createdAt'
+              pagination:
+                $ref: '#/components/schemas/pagination'
               status:
                 $ref: '#/components/schemas/status'
           example:
@@ -433,6 +458,8 @@ components:
                 title: Заключение
                 author: Потап
                 createdAt: 2021-11-28T16:19:44+00:00
+            pagination:
+              total: 10
             status: success
     storeBlog:
       description: Запись в блоге создана
@@ -542,6 +569,7 @@ components:
             type: object
             required:
               - data
+              - pagination
               - status
             additionalProperties: false
             properties:
@@ -564,6 +592,8 @@ components:
                       example: Новость
                     createdAt:
                       $ref: '#/components/schemas/createdAt'
+              pagination:
+                $ref: '#/components/schemas/pagination'
               status:
                 $ref: '#/components/schemas/status'
           example:
@@ -574,6 +604,8 @@ components:
               - id: 12
                 title: Объявление
                 createdAt: 2021-11-28T16:19:44+00:00
+            pagination:
+              total: 10
             status: success
     storeNews:
       description: Новость создана
@@ -669,6 +701,7 @@ components:
             type: object
             required:
               - data
+              - pagination
               - status
             additionalProperties: false
             properties:
@@ -676,6 +709,8 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/productCategory'
+              pagination:
+                $ref: '#/components/schemas/pagination'
               status:
                 $ref: '#/components/schemas/status'
           example:
@@ -698,6 +733,7 @@ components:
                 children: [ ]
                 createdAt: 2021-11-28T16:19:44+00:00
                 updatedAt: null
+            pagination: null
             status: success
     storeCategory:
       description: Категория создана
@@ -858,6 +894,14 @@ components:
           type: string
         error:
           type: boolean
+    pagination:
+      type: object
+      nullable: true
+      properties:
+        total:
+          type: integer
+          description: Количество всех данных
+          example: 2
     role:
       type: string
       description: Роль пользователя

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Blog\Http\Index;
 
+use App\Infrastructure\Request\PaginationRequest;
+use App\Infrastructure\Request\ResolveRequestQuery;
 use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\PostRepository;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +19,7 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class IndexPostAction
 {
     public function __construct(
+        private ResolveRequestQuery $resolveQuery,
         private PostRepository $repository,
         private ResolveResponse $resolveResponse,
     ) {}
@@ -23,17 +27,29 @@ final readonly class IndexPostAction
     #[Router\Get('/blog')]
     public function __invoke(): JsonResponse
     {
+        $pagination = ($this->resolveQuery)(PaginationRequest::class);
+
+        $total = $this->repository->countTotal();
+
         return ($this->resolveResponse)(
-            new ApiListObjectResponse($this->getPostsData()),
+            new ApiListObjectResponse(
+                data: $this->getPostsData($pagination),
+                pagination: new PaginationResponse(
+                    total: $total,
+                ),
+            ),
         );
     }
 
     /**
      * @return iterable<IndexPostData>
      */
-    private function getPostsData(): iterable
+    private function getPostsData(PaginationRequest $pagination): iterable
     {
-        $postList = $this->repository->findAll();
+        $postList = $this->repository->findAll(
+            offset: $pagination->offset,
+            limit: $pagination->limit,
+        );
 
         foreach ($postList as $post) {
             /** @var positive-int $id */
