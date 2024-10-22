@@ -8,7 +8,6 @@ use App\Module\User\User\Domain\User;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * Токен авторизации
@@ -17,8 +16,8 @@ use Symfony\Component\Uid\UuidV7;
 /** @final */
 class Token
 {
-    #[ORM\Id, ORM\Column(length: 36, unique: true)]
-    private readonly string $id;
+    #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
+    private readonly Uuid $id;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
@@ -27,13 +26,13 @@ class Token
         #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'tokens'), ORM\JoinColumn(nullable: false)]
         private User $user,
     ) {
-        $this->id = (string) Uuid::v7();
+        $this->id = Uuid::v7();
         $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): Uuid
     {
-        return UuidV7::fromString($this->id);
+        return $this->id;
     }
 
     public function getUser(): User

@@ -17,33 +17,11 @@
     # запуск миграций 
     make migrate
   
-    # просмотр логов
-    make logs {service}   
-    make logs backend # например
-    make logs -f backend # в реальном времени
-  
     # запуск среды Tinker 
     make tinker
-  
-    # установка git hooks 
-    make hooks-install
     ```
 - запуск проверок качества кода
-    ```shell
-    # PHPStan
-    make stan
-
-    # PHP CS Fixer
-    make fixer-check
-    make fixer-fix
-
-    # PHP_CodeSniffer
-    make sniffer-check
-    make sniffer-fix
-  
-    # PHPUnit
-    make test
-  
+    ```shell 
     # Запустить все проверки  
     make check
   
