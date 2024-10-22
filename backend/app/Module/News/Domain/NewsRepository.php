@@ -32,11 +32,23 @@ final readonly class NewsRepository
     }
 
     /**
+     * @param non-negative-int $offset
+     * @param positive-int $limit
+     *
      * @return list<News>
      */
-    public function findAll(): array
+    public function findAll(int $offset, int $limit): array
     {
-        return $this->repository->findAll();
+        $query = $this->repository
+            ->createQueryBuilder('news')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        /** @var list<News> $result */
+        $result = $query->getResult();
+
+        return $result;
     }
 
     public function add(News $news): void
@@ -64,5 +76,13 @@ final readonly class NewsRepository
         return $this->repository->findOneBy([
             'title' => $title,
         ]);
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function countTotal(): int
+    {
+        return $this->repository->count();
     }
 }

@@ -7,7 +7,7 @@ namespace App\Module\Products\Http\Category\Store;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Products\Domain\Category;
@@ -21,7 +21,7 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class StoreCategoryAction
 {
     public function __construct(
-        private ResolveRequest $resolveRequest,
+        private ResolveRequestBody $resolveRequest,
         private ResolveResponse $resolveResponse,
         private CategoryRepository $repository,
         private Flusher $flusher,

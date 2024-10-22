@@ -6,7 +6,7 @@ namespace App\Module\User\Authentication\Http\Login;
 
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\Doctrine\Flusher;
-use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\ValueObject\Email;
@@ -30,7 +30,7 @@ final readonly class LoginAction
         private CreateUser $createUser,
         private Flusher $flusher,
         private ResolveResponse $resolveResponse,
-        private ResolveRequest $resolveRequest,
+        private ResolveRequestBody $resolveRequest,
     ) {}
 
     #[Router\Post('/auth/login')]

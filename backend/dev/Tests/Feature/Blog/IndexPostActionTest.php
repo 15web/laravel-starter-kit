@@ -25,7 +25,16 @@ final class IndexPostActionTest extends TestCase
             ->postJson('api/blog', ['title' => 'Title2', 'author' => 'Author2', 'content' => 'Content2'])
             ->assertOk();
 
-        $response = $this->getJson('api/blog')->assertOk();
+        $this
+            ->postJson('api/blog', ['title' => 'Title3', 'author' => 'Author3', 'content' => 'Content3'])
+            ->assertOk();
+
+        /**
+         * Первая страница
+         */
+        $response = $this
+            ->getJson('api/blog?offset=0&limit=2')
+            ->assertOk();
 
         /**
          * @var list<array{
@@ -36,6 +45,9 @@ final class IndexPostActionTest extends TestCase
          * }> $data
          */
         $data = $response->json('data');
+
+        /** @var non-negative-int $total */
+        $total = $response->json('pagination.total');
 
         self::assertCount(2, $data);
 
@@ -48,6 +60,61 @@ final class IndexPostActionTest extends TestCase
         self::assertSame($data[1]['title'], 'Title2');
         self::assertSame($data[1]['author'], 'Author2');
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']));
+
+        self::assertSame(3, $total);
+
+        /**
+         * Вторая страница
+         */
+        $response = $this
+            ->getJson('api/blog?offset=2&limit=2')
+            ->assertOk();
+
+        /**
+         * @var list<array{
+         *     id: mixed,
+         *     title: non-empty-string,
+         *     author: non-empty-string,
+         *     createdAt: non-empty-string,
+         * }> $data
+         */
+        $data = $response->json('data');
+
+        /** @var non-negative-int $total */
+        $total = $response->json('pagination.total');
+
+        self::assertCount(1, $data);
+
+        self::assertIsNumeric($data[0]['id']);
+        self::assertSame($data[0]['title'], 'Title3');
+        self::assertSame($data[0]['author'], 'Author3');
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']));
+
+        self::assertSame(3, $total);
+
+        /**
+         * Третья страница
+         */
+        $response = $this
+            ->getJson('api/blog?offset=4&limit=2')
+            ->assertOk();
+
+        /**
+         * @var list<array{
+         *     id: mixed,
+         *     title: non-empty-string,
+         *     author: non-empty-string,
+         *     createdAt: non-empty-string,
+         * }> $data
+         */
+        $data = $response->json('data');
+
+        /** @var non-negative-int $total */
+        $total = $response->json('pagination.total');
+
+        self::assertSame([], $data);
+
+        self::assertSame(3, $total);
     }
 
     #[TestDox('Нет записей')]

@@ -36,7 +36,9 @@ final readonly class IndexCategoryAction
         $categories = $this->repository->getRootNodesQuery()->toIterable();
 
         return ($this->resolveResponse)(
-            new ApiListObjectResponse($this->getTreeData($categories)),
+            new ApiListObjectResponse(
+                data: $this->getTreeData($categories),
+            ),
         );
     }
 

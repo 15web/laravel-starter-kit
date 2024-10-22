@@ -42,11 +42,23 @@ final readonly class PostRepository
     }
 
     /**
+     * @param non-negative-int $offset
+     * @param positive-int $limit
+     *
      * @return list<Post>
      */
-    public function findAll(): array
+    public function findAll(int $offset, int $limit): array
     {
-        return $this->repository->findAll();
+        $query = $this->repository
+            ->createQueryBuilder('post')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        /** @var list<Post> $result */
+        $result = $query->getResult();
+
+        return $result;
     }
 
     /**
@@ -57,5 +69,13 @@ final readonly class PostRepository
         $count = $this->repository->count(['title' => $title]);
 
         return $count > 0;
+    }
+
+    /**
+     * @return non-negative-int
+     */
+    public function countTotal(): int
+    {
+        return $this->repository->count();
     }
 }

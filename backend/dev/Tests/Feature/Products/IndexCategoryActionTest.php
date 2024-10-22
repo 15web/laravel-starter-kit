@@ -71,6 +71,10 @@ final class IndexCategoryActionTest extends TestCase
          */
         $data = $response->json('data');
 
+        $pagination = $response->json('pagination');
+
+        self::assertNull($pagination);
+
         self::assertCount(2, $data);
         self::assertSame($data[0]['id'], $parentId1);
         self::assertSame($data[0]['title'], 'Parent1');

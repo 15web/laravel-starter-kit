@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\News\Http\Site\Index;
 
+use App\Infrastructure\Request\PaginationRequest;
+use App\Infrastructure\Request\ResolveRequestQuery;
 use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
@@ -20,6 +23,7 @@ use Spatie\RouteAttributes\Attributes as Router;
 final readonly class IndexNewsAction
 {
     public function __construct(
+        private ResolveRequestQuery $resolveQuery,
         private NewsRepository $repository,
         private ResolveResponse $resolveResponse,
     ) {}
@@ -29,17 +33,29 @@ final readonly class IndexNewsAction
     {
         Gate::authorize(CheckRoleGranted::class, Role::User);
 
+        $pagination = ($this->resolveQuery)(PaginationRequest::class);
+
+        $total = $this->repository->countTotal();
+
         return ($this->resolveResponse)(
-            new ApiListObjectResponse($this->getNewsData()),
+            new ApiListObjectResponse(
+                data: $this->getNewsData($pagination),
+                pagination: new PaginationResponse(
+                    total: $total,
+                ),
+            ),
         );
     }
 
     /**
      * @return iterable<IndexNewsData>
      */
-    private function getNewsData(): iterable
+    private function getNewsData(PaginationRequest $pagination): iterable
     {
-        $newsList = $this->repository->findAll();
+        $newsList = $this->repository->findAll(
+            offset: $pagination->offset,
+            limit: $pagination->limit,
+        );
 
         foreach ($newsList as $news) {
             /** @var positive-int $id */
