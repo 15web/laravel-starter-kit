@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Blog\Http\Store;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
@@ -34,7 +34,7 @@ final readonly class StorePostAction
 
         $postExists = $this->repository->existsByTitle($request->title);
         if ($postExists) {
-            throw ApiException::createDomainException('Запись с таким заголовком уже существует', Error::EXISTS);
+            throw ApiException::createDomainException('Запись с таким заголовком уже существует', ErrorCode::EXISTS);
         }
         $post = new Post(
             title: $request->title,

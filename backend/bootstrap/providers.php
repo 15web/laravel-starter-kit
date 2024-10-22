@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Infrastructure\ApiException\ApiExceptionServiceProvider;
 use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Serializer\SerializerServiceProvider;
 use App\Module\User\Authentication\Service\AuthenticationServiceProvider;
@@ -16,6 +17,7 @@ return [
     // Application Service Providers...
     DoctrineServiceProvider::class,
     SerializerServiceProvider::class,
+    ApiExceptionServiceProvider::class,
 
     // Modules Service Providers...
     AuthenticationServiceProvider::class,

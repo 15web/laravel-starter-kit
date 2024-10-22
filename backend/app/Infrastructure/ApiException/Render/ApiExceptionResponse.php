@@ -11,20 +11,25 @@ use App\Infrastructure\ApiException\ApiException;
  */
 final readonly class ApiExceptionResponse
 {
-    public function __construct(private ApiException $apiException) {}
+    public function __construct(
+        private ApiException $apiException,
+    ) {}
 
-    public function getErrorMessage(): string
+    public function getMessage(): string
     {
         return $this->apiException->getErrorMessage();
     }
 
-    public function getErrorEnum(): string
+    public function getCode(): string
     {
-        return $this->apiException->getErrorEnum()->value;
+        return $this->apiException->getErrorCode()->value;
     }
 
-    public function isError(): bool
+    /**
+     * @return list<string>
+     */
+    public function getErrors(): array
     {
-        return true;
+        return $this->apiException->getValidationErrors();
     }
 }

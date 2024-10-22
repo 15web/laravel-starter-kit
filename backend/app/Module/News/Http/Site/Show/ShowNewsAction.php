@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\News\Http\Site\Show;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
@@ -40,7 +40,7 @@ final readonly class ShowNewsAction
         );
 
         if ($news === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', Error::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
         }
 
         /** @var positive-int $id */

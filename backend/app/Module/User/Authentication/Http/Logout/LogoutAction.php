@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\User\Authentication\Http\Logout;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Response\ResolveSuccessResponse;
 use App\Module\User\Authentication\Domain\TokenRepository;
@@ -31,14 +31,14 @@ final readonly class LogoutAction
     {
         $user = $request->user();
         if ($user === null) {
-            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', Error::UNAUTHORIZED);
+            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', ErrorCode::UNAUTHORIZED);
         }
 
         $tokenValue = (string) $request->bearerToken();
         $token = $this->tokens->find($tokenValue);
 
         if ($token === null) {
-            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', Error::UNAUTHORIZED);
+            throw ApiException::createUnauthorizedException('Необходимо пройти аутентификацию', ErrorCode::UNAUTHORIZED);
         }
 
         try {

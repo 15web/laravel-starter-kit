@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\News\Http\Admin\Destroy;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ResolveSuccessResponse;
@@ -44,7 +44,7 @@ final readonly class DestroyNewsAction
         );
 
         if ($news === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', Error::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
         }
 
         $this->entityManager->remove($news);
