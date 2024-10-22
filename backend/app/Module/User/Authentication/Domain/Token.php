@@ -17,7 +17,7 @@ use Symfony\Component\Uid\Uuid;
 class Token
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-    private readonly Uuid $id;
+    private readonly string $id;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
@@ -26,13 +26,13 @@ class Token
         #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'tokens'), ORM\JoinColumn(nullable: false)]
         private User $user,
     ) {
-        $this->id = Uuid::v7();
+        $this->id = (string) Uuid::v7();
         $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 
     public function getUser(): User
