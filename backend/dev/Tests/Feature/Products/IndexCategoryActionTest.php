@@ -22,35 +22,35 @@ final class IndexCategoryActionTest extends TestCase
             ->assertOk();
 
         /** @var positive-int $parentId1 */
-        $parentId1 = $response->json('id');
+        $parentId1 = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', ['title' => 'Parent2', 'parent' => null])
             ->assertOk();
 
         /** @var positive-int $parentId2 */
-        $parentId2 = $response->json('id');
+        $parentId2 = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', ['title' => 'Child1', 'parent' => $parentId1])
             ->assertOk();
 
         /** @var positive-int $childId1 */
-        $childId1 = $response->json('id');
+        $childId1 = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', ['title' => 'Child2', 'parent' => $parentId2])
             ->assertOk();
 
         /** @var positive-int $childId2 */
-        $childId2 = $response->json('id');
+        $childId2 = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', ['title' => 'Child3', 'parent' => $parentId2])
             ->assertOk();
 
         /** @var positive-int $childId3 */
-        $childId3 = $response->json('id');
+        $childId3 = $response->json('data.id');
 
         $response = $this->getJson('api/products/category')->assertOk();
 
@@ -69,7 +69,7 @@ final class IndexCategoryActionTest extends TestCase
          *     updatedAt: non-empty-string|null
          * }> $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertCount(2, $data);
         self::assertSame($data[0]['id'], $parentId1);
@@ -111,6 +111,6 @@ final class IndexCategoryActionTest extends TestCase
         $this
             ->getJson('api/products/category')
             ->assertOk()
-            ->assertJson([]);
+            ->assertJson(['data' => []]);
     }
 }

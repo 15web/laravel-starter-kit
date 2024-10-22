@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\News;
 use App\Module\News\Domain\NewsRepository;
@@ -60,6 +61,8 @@ final readonly class StoreNewsAction
             updatedAt: $news->getUpdatedAt(),
         );
 
-        return ($this->resolveResponse)($response);
+        return ($this->resolveResponse)(
+            new ApiObjectResponse($response),
+        );
     }
 }

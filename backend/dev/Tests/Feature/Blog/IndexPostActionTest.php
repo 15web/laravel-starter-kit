@@ -35,7 +35,7 @@ final class IndexPostActionTest extends TestCase
          *     createdAt: non-empty-string,
          * }> $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertCount(2, $data);
 
@@ -56,6 +56,6 @@ final class IndexPostActionTest extends TestCase
         $this
             ->getJson('api/blog')
             ->assertOk()
-            ->assertJson([]);
+            ->assertJson(['data' => []]);
     }
 }

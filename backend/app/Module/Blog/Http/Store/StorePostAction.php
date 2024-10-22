@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\Post;
 use App\Module\Blog\Domain\PostRepository;
@@ -56,6 +57,8 @@ final readonly class StorePostAction
             updatedAt: $post->getUpdatedAt(),
         );
 
-        return ($this->resolveResponse)($response);
+        return ($this->resolveResponse)(
+            new ApiObjectResponse($response),
+        );
     }
 }

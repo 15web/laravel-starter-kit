@@ -9,6 +9,7 @@ use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequest;
 use App\Infrastructure\Request\ResolveRouteParameters;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\News\Http\Site\Show\ShowNewsRequest;
@@ -65,6 +66,8 @@ final readonly class UpdateNewsAction
             updatedAt: $news->getUpdatedAt(),
         );
 
-        return ($this->resolveResponse)($response);
+        return ($this->resolveResponse)(
+            new ApiObjectResponse($response),
+        );
     }
 }

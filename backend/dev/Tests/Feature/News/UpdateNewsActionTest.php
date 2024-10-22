@@ -28,7 +28,7 @@ final class UpdateNewsActionTest extends TestCase
             ->assertOk();
 
         /** @var positive-int $newsId */
-        $newsId = $response->json('id');
+        $newsId = $response->json('data.id');
 
         $response = $this
             ->withToken($auth['token'])
@@ -45,7 +45,7 @@ final class UpdateNewsActionTest extends TestCase
          *     updatedAt: non-empty-string
          * } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertSame($data['id'], $newsId);
         self::assertSame($data['title'], 'New Title');

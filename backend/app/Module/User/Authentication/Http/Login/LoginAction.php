@@ -7,6 +7,7 @@ namespace App\Module\User\Authentication\Http\Login;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequest;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\Module\User\Authorization\Domain\Role;
@@ -64,11 +65,13 @@ final readonly class LoginAction
         $roles = $user->getRoles();
 
         return ($this->resolveResponse)(
-            new LoginResponse(
-                token: (string) $token->getId(),
-                email: $user->getEmail(),
-                roles: $roles,
-            )
+            new ApiObjectResponse(
+                new LoginResponse(
+                    token: (string) $token->getId(),
+                    email: $user->getEmail(),
+                    roles: $roles,
+                )
+            ),
         );
     }
 }
