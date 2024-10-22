@@ -36,7 +36,7 @@ final class StoreCategoryActionTest extends TestCase
          *     updatedAt: non-empty-string|null,
          * } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Title');
@@ -52,7 +52,7 @@ final class StoreCategoryActionTest extends TestCase
             ->assertOk();
 
         /** @var positive-int $parentId */
-        $parentId = $response->json('id');
+        $parentId = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', [
@@ -69,7 +69,7 @@ final class StoreCategoryActionTest extends TestCase
          *     updatedAt: non-empty-string|null,
          * } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Child');
@@ -99,7 +99,7 @@ final class StoreCategoryActionTest extends TestCase
             ->assertOk();
 
         /** @var positive-int $parentId */
-        $parentId = $response->json('id');
+        $parentId = $response->json('data.id');
 
         $response = $this
             ->postJson('api/products/category', ['title' => 'Title', 'parent' => $parentId])
@@ -113,7 +113,7 @@ final class StoreCategoryActionTest extends TestCase
          *     updatedAt: non-empty-string|null,
          * } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Title');

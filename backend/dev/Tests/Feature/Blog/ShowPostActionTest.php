@@ -35,7 +35,7 @@ final class ShowPostActionTest extends TestCase
          *     updatedAt: non-empty-string|null,
          * } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
         self::assertSame($data['title'], 'Title');

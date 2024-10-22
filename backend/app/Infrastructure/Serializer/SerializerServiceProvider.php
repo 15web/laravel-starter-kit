@@ -7,6 +7,7 @@ namespace App\Infrastructure\Serializer;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -22,6 +23,7 @@ final class SerializerServiceProvider extends ServiceProvider
         $this->app->bind(Serializer::class, static function (): Serializer {
             $encoders = [new JsonEncoder()];
             $normalizers = [ // порядок имеет значение
+                new BackedEnumNormalizer(),
                 new DateTimeNormalizer(),
                 new ObjectNormalizer(),
             ];

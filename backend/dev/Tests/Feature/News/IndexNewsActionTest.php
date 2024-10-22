@@ -42,7 +42,7 @@ final class IndexNewsActionTest extends TestCase
          *     createdAt: non-empty-string,
          * }> $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
         self::assertCount(2, $data);
 
@@ -70,7 +70,7 @@ final class IndexNewsActionTest extends TestCase
             ->withToken($auth['token'])
             ->getJson('api/news')
             ->assertOk()
-            ->assertJson([]);
+            ->assertJson(['data' => []]);
     }
 
     #[TestDox('Запрос без авторизации')]

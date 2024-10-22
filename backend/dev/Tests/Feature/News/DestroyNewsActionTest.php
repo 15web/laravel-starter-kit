@@ -31,12 +31,12 @@ final class DestroyNewsActionTest extends TestCase
 
         /**
          * @var array{
-         *     success: bool
-         * } $data
+         *      status: non-empty-string
+         *  } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
-        self::assertTrue($data['success']);
+        self::assertSame('success', $data['status']);
     }
 
     #[TestDox('Запись не найдена')]

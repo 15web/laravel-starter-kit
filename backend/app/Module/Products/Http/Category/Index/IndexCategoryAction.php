@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Products\Http\Category\Index;
 
+use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Products\Domain\Category;
 use Doctrine\ORM\EntityManager;
@@ -34,7 +35,9 @@ final readonly class IndexCategoryAction
         /** @var iterable<Category> $categories */
         $categories = $this->repository->getRootNodesQuery()->toIterable();
 
-        return ($this->resolveResponse)($this->getTreeData($categories));
+        return ($this->resolveResponse)(
+            new ApiListObjectResponse($this->getTreeData($categories)),
+        );
     }
 
     /**

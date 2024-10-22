@@ -15,6 +15,10 @@ final readonly class ResolveSuccessResponse
 
     public function __invoke(): JsonResponse
     {
-        return ($this->resolveApiResponse)(new SuccessResponse());
+        return ($this->resolveApiResponse)(
+            new ApiObjectResponse(
+                data: new SuccessResponse(),
+            )
+        );
     }
 }

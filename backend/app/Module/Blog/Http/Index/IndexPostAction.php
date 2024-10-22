@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Blog\Http\Index;
 
+use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\PostRepository;
 use Illuminate\Http\JsonResponse;
-use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
@@ -23,12 +23,18 @@ final readonly class IndexPostAction
     #[Router\Get('/blog')]
     public function __invoke(): JsonResponse
     {
-        return ($this->resolveResponse)($this->getPostsData());
+        return ($this->resolveResponse)(
+            new ApiListObjectResponse($this->getPostsData()),
+        );
     }
 
-    private function getPostsData(): Iterator
+    /**
+     * @return iterable<IndexPostData>
+     */
+    private function getPostsData(): iterable
     {
         $postList = $this->repository->findAll();
+
         foreach ($postList as $post) {
             /** @var positive-int $id */
             $id = $post->getId();

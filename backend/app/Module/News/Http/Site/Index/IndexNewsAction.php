@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\News\Http\Site\Index;
 
+use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\Authorization\Http\CheckRoleGranted;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use Iterator;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
@@ -29,11 +29,13 @@ final readonly class IndexNewsAction
     {
         Gate::authorize(CheckRoleGranted::class, Role::User);
 
-        return ($this->resolveResponse)($this->getNewsData());
+        return ($this->resolveResponse)(
+            new ApiListObjectResponse($this->getNewsData()),
+        );
     }
 
     /**
-     * @return Iterator
+     * @return iterable<IndexNewsData>
      */
     private function getNewsData(): iterable
     {

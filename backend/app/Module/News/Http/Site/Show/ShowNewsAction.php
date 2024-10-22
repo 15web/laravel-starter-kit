@@ -7,6 +7,7 @@ namespace App\Module\News\Http\Site\Show;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Request\ResolveRouteParameters;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
@@ -55,6 +56,8 @@ final readonly class ShowNewsAction
             updatedAt: $news->getUpdatedAt(),
         );
 
-        return ($this->resolveResponse)($response);
+        return ($this->resolveResponse)(
+            new ApiObjectResponse($response),
+        );
     }
 }

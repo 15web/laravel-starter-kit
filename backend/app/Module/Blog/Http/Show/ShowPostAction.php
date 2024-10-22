@@ -7,6 +7,7 @@ namespace App\Module\Blog\Http\Show;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\Handler\Error;
 use App\Infrastructure\Request\ResolveRouteParameters;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Module\Blog\Domain\PostRepository;
 use Illuminate\Http\JsonResponse;
@@ -54,6 +55,8 @@ final readonly class ShowPostAction
             updatedAt: $post->getUpdatedAt(),
         );
 
-        return ($this->resolveResponse)($response);
+        return ($this->resolveResponse)(
+            new ApiObjectResponse($response),
+        );
     }
 }

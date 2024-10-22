@@ -355,64 +355,85 @@ components:
           schema:
             type: object
             required:
-              - token
-              - roles
-              - email
+              - data
+              - status
             additionalProperties: false
             properties:
-              token:
-                $ref: '#/components/schemas/authToken'
-              roles:
-                type: array
-                description: Список ролей пользователя
-                items:
-                  $ref: '#/components/schemas/role'
-              email:
-                $ref: '#/components/schemas/email'
+              data:
+                type: object
+                required:
+                  - token
+                  - roles
+                  - email
+                additionalProperties: false
+                properties:
+                  token:
+                    $ref: '#/components/schemas/authToken'
+                  roles:
+                    type: array
+                    description: Список ролей пользователя
+                    items:
+                      $ref: '#/components/schemas/role'
+                  email:
+                    $ref: '#/components/schemas/email'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            token: 0192901d-f418-7bf4-bf12-868a311f5a91
-            roles:
-              - name: Пользователь
-                value: user
-            email: user@example.com
+            data:
+              token: 0192901d-f418-7bf4-bf12-868a311f5a91
+              roles:
+                - user
+              email: user@example.com
+            status: success
     indexBlog:
       description: Возвращает список записей в блоге
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              required:
-                - id
-                - title
-                - author
-                - createdAt
-              additionalProperties: false
-              properties:
-                id:
-                  $ref: '#/components/schemas/id'
-                title:
-                  type: string
-                  description: Заголовок записи в блоге
-                  minLength: 1
-                  example: Введение
-                author:
-                  type: string
-                  description: Автор блога
-                  minLength: 1
-                  example: Иван
-                createdAt:
-                  $ref: '#/components/schemas/createdAt'
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - author
+                    - createdAt
+                  additionalProperties: false
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    title:
+                      type: string
+                      description: Заголовок записи в блоге
+                      minLength: 1
+                      example: Введение
+                    author:
+                      type: string
+                      description: Автор блога
+                      minLength: 1
+                      example: Иван
+                    createdAt:
+                      $ref: '#/components/schemas/createdAt'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            - id: 11
-              title: Введение
-              author: Иван
-              createdAt: 2021-10-28T16:19:44+00:00
-            - id: 12
-              title: Заключение
-              author: Потап
-              createdAt: 2021-11-28T16:19:44+00:00
+            data:
+              - id: 11
+                title: Введение
+                author: Иван
+                createdAt: 2021-10-28T16:19:44+00:00
+              - id: 12
+                title: Заключение
+                author: Потап
+                createdAt: 2021-11-28T16:19:44+00:00
+            status: success
     storeBlog:
       description: Запись в блоге создана
       content:
@@ -421,31 +442,42 @@ components:
             oneOf:
               - type: object
                 required:
-                  - id
-                  - title
-                  - createdAt
-                  - updatedAt
+                  - data
+                  - status
                 additionalProperties: false
                 properties:
-                  id:
-                    $ref: '#/components/schemas/id'
-                  title:
-                    type: string
-                    description: Заголовок записи
-                    minLength: 1
-                    example: Введение
-                  createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                  updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                      - updatedAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/id'
+                      title:
+                        type: string
+                        description: Заголовок записи
+                        minLength: 1
+                        example: Введение
+                      createdAt:
+                        $ref: '#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '#/components/schemas/updatedAt'
+                  status:
+                    $ref: '#/components/schemas/status'
               - $ref: '#/components/schemas/error'
           examples:
             Успешный запрос:
               value:
-                id: 11
-                title: Введение
-                createdAt: 2024-10-15T10:59:14+00:00
-                updatedAt: null
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
             Запись с таким заголовком уже существует:
               value:
                 errorMessage: Запись с таким заголовком уже существует
@@ -458,69 +490,91 @@ components:
           schema:
             type: object
             required:
-              - id
-              - title
-              - author
-              - content
-              - createdAt
-              - updatedAt
+              - data
+              - status
             additionalProperties: false
             properties:
-              id:
-                $ref: '#/components/schemas/id'
-              title:
-                type: string
-                description: Заголовок записи в блоге
-                minLength: 1
-              author:
-                type: string
-                description: Автор блог
-                minLength: 1
-              content:
-                type: string
-                description: Текст записи
-                minLength: 1
-              createdAt:
-                $ref: '#/components/schemas/createdAt'
-              updatedAt:
-                $ref: '#/components/schemas/updatedAt'
+              data:
+                type: object
+                required:
+                  - id
+                  - title
+                  - author
+                  - content
+                  - createdAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  title:
+                    type: string
+                    description: Заголовок записи в блоге
+                    minLength: 1
+                  author:
+                    type: string
+                    description: Автор блог
+                    minLength: 1
+                  content:
+                    type: string
+                    description: Текст записи
+                    minLength: 1
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            id: 11
-            title: Введение
-            author: Иван
-            content: Начало рассказа...
-            createdAt: 2021-10-28T16:19:44+00:00
-            updatedAt: null
+            data:
+              id: 11
+              title: Введение
+              author: Иван
+              content: Начало рассказа...
+              createdAt: 2021-10-28T16:19:44+00:00
+              updatedAt: null
+            status: success
     indexNews:
       description: Возвращает список новостей
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              required:
-                - id
-                - title
-                - createdAt
-              additionalProperties: false
-              properties:
-                id:
-                  $ref: '#/components/schemas/id'
-                title:
-                  type: string
-                  description: Заголовок новости
-                  minLength: 1
-                  example: Новость
-                createdAt:
-                  $ref: '#/components/schemas/createdAt'
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - createdAt
+                  additionalProperties: false
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/id'
+                    title:
+                      type: string
+                      description: Заголовок новости
+                      minLength: 1
+                      example: Новость
+                    createdAt:
+                      $ref: '#/components/schemas/createdAt'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            - id: 11
-              title: Новость
-              createdAt: 2021-10-28T16:19:44+00:00
-            - id: 12
-              title: Объявление
-              createdAt: 2021-11-28T16:19:44+00:00
+            data:
+              - id: 11
+                title: Новость
+                createdAt: 2021-10-28T16:19:44+00:00
+              - id: 12
+                title: Объявление
+                createdAt: 2021-11-28T16:19:44+00:00
+            status: success
     storeNews:
       description: Новость создана
       content:
@@ -529,30 +583,41 @@ components:
             oneOf:
               - type: object
                 required:
-                  - id
-                  - title
-                  - createdAt
+                  - data
+                  - status
                 additionalProperties: false
                 properties:
-                  id:
-                    $ref: '#/components/schemas/id'
-                  title:
-                    type: string
-                    description: Заголовок новости
-                    minLength: 1
-                    example: Новость
-                  createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                  updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/id'
+                      title:
+                        type: string
+                        description: Заголовок новости
+                        minLength: 1
+                        example: Новость
+                      createdAt:
+                        $ref: '#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '#/components/schemas/updatedAt'
+                  status:
+                    $ref: '#/components/schemas/status'
               - $ref: '#/components/schemas/error'
           examples:
             Успешный запрос:
               value:
-                id: 11
-                title: Введение
-                createdAt: 2024-10-15T10:59:14+00:00
-                updatedAt: null
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
             Новость с таким заголовком уже существует:
               value:
                 errorMessage: Новость с таким заголовком уже существует
@@ -565,53 +630,75 @@ components:
           schema:
             type: object
             required:
-              - id
-              - title
-              - createdAt
+              - data
+              - status
             additionalProperties: false
             properties:
-              id:
-                $ref: '#/components/schemas/id'
-              title:
-                type: string
-                description: Заголовок новости
-                minLength: 1
-              createdAt:
-                $ref: '#/components/schemas/createdAt'
-              updatedAt:
-                $ref: '#/components/schemas/updatedAt'
+              data:
+                type: object
+                required:
+                  - id
+                  - title
+                  - createdAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/id'
+                  title:
+                    type: string
+                    description: Заголовок новости
+                    minLength: 1
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            id: 11
-            title: Новость
-            createdAt: 2021-10-28T16:19:44+00:00
-            updatedAt: null
+            data:
+              id: 11
+              title: Новость
+              createdAt: 2021-10-28T16:19:44+00:00
+              updatedAt: null
+            status: success
     indexCategory:
       description: Возвращает дерево категорий товаров
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/productCategory'
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/productCategory'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            - id: 11
-              title: Мебель
-              children:
-                - id: 13
-                  title: Диваны
-                  createdAt: 2021-11-28T16:19:44+00:00
-                  updatedAt: null
-                - id: 14
-                  title: Кровати
-                  createdAt: 2021-11-28T16:19:44+00:00
-                  updatedAt: null
-              createdAt: 2021-10-28T16:19:44+00:00
-              updatedAt: null
-            - id: 12
-              title: Посуда
-              children: []
-              createdAt: 2021-11-28T16:19:44+00:00
-              updatedAt: null
+            data:
+              - id: 11
+                title: Мебель
+                children:
+                  - id: 13
+                    title: Диваны
+                    createdAt: 2021-11-28T16:19:44+00:00
+                    updatedAt: null
+                  - id: 14
+                    title: Кровати
+                    createdAt: 2021-11-28T16:19:44+00:00
+                    updatedAt: null
+                createdAt: 2021-10-28T16:19:44+00:00
+                updatedAt: null
+              - id: 12
+                title: Посуда
+                children: [ ]
+                createdAt: 2021-11-28T16:19:44+00:00
+                updatedAt: null
+            status: success
     storeCategory:
       description: Категория создана
       content:
@@ -620,31 +707,42 @@ components:
             oneOf:
               - type: object
                 required:
-                  - id
-                  - title
-                  - createdAt
-                  - updatedAt
+                  - data
+                  - status
                 additionalProperties: false
                 properties:
-                  id:
-                    $ref: '#/components/schemas/id'
-                  title:
-                    type: string
-                    description: Заголовок категории
-                    minLength: 1
-                    example: Диваны
-                  createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                  updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                      - updatedAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/id'
+                      title:
+                        type: string
+                        description: Заголовок категории
+                        minLength: 1
+                        example: Диваны
+                      createdAt:
+                        $ref: '#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '#/components/schemas/updatedAt'
+                  status:
+                    $ref: '#/components/schemas/status'
               - $ref: '#/components/schemas/error'
           examples:
             Успешный запрос:
               value:
-                id: 11
-                title: Введение
-                createdAt: 2024-10-15T10:59:14+00:00
-                updatedAt: null
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
             Запись с таким заголовком уже существует:
               value:
                 errorMessage: Запись с таким заголовком уже существует
@@ -660,9 +758,26 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/success'
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                required:
+                  - status
+                additionalProperties: false
+                properties:
+                  status:
+                    $ref: '#/components/schemas/status'
+              status:
+                $ref: '#/components/schemas/status'
           example:
-            success: true
+            data:
+              status: success
+            status: success
     badRequest:
       description: Ошибка запроса
       content:
@@ -714,16 +829,13 @@ components:
       format: ^\\S+@\\S+\\.\\S+$
       description: Адрес электронной почты
       example: customer@kabosh.ru
-    success:
-      type: object
-      required:
+    status:
+      type: string
+      enum:
         - success
-      additionalProperties: false
-      properties:
-        success:
-          type: boolean
-          description: Статус запроса
-          example: true
+        - error
+      description: Статус запроса
+      example: success
     error:
       type: object
       required:
@@ -747,25 +859,13 @@ components:
         error:
           type: boolean
     role:
-      type: object
+      type: string
       description: Роль пользователя
-      required:
-        - name
-        - value
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          minLength: 1
-          description: Название роли
-          example: Пользователь
-        value:
-          type: string
-          enum:
-            - user
-            - admin
-          description: Обозначение роли
-          example: user
+      enum:
+        - user
+        - admin
+      minLength: 1
+      example: user
     password:
       type: string
       description: Пароль пользователя

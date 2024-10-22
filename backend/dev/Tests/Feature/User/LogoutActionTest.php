@@ -18,6 +18,7 @@ final class LogoutActionTest extends TestCase
     public function testSucceedRequest(): void
     {
         $auth = $this->auth();
+
         $response = $this
             ->withToken($auth['token'])
             ->postJson('api/auth/logout')
@@ -25,12 +26,12 @@ final class LogoutActionTest extends TestCase
 
         /**
          * @var array{
-         *      success: bool
+         *      status: non-empty-string
          *  } $data
          */
-        $data = $response->json();
+        $data = $response->json('data');
 
-        self::assertTrue($data['success']);
+        self::assertSame('success', $data['status']);
     }
 
     #[TestDox('Запрос без авторизации')]

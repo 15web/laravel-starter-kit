@@ -46,7 +46,7 @@ abstract class TestCase extends BaseTestCase
                 'password' => $password,
             ])
             ->assertOk()
-            ->json();
+            ->json('data');
 
         return $response;
     }

@@ -17,10 +17,10 @@ final readonly class ResolveResponse
         private Serializer $serializer,
     ) {}
 
-    public function __invoke(mixed $responseData): JsonResponse
+    public function __invoke(ApiResponse $data): JsonResponse
     {
         $normalizedResponseData = $this->serializer->serialize(
-            data: $responseData,
+            data: $data,
             format: JsonEncoder::FORMAT,
         );
 
