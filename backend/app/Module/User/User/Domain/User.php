@@ -25,6 +25,9 @@ use Symfony\Component\Uid\Uuid;
 /** @final */
 class User implements Authenticatable
 {
+    #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
+    private readonly string $id;
+
     #[ORM\Column]
     private string $email;
 
@@ -50,11 +53,11 @@ class User implements Authenticatable
      * @param non-empty-string $password
      */
     public function __construct(
-        #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-        private readonly Uuid $id,
+        Uuid $id,
         Email $email,
         string $password,
     ) {
+        $this->id = (string) $id;
         $this->email = $email->value;
         $this->password = Hash::make($password);
         $this->roles = [Role::User->value];
@@ -64,7 +67,7 @@ class User implements Authenticatable
 
     public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 
     public function getCreatedAt(): DateTimeImmutable
