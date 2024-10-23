@@ -7,25 +7,25 @@ namespace App\Module\User\User\Query;
 use App\Infrastructure\ValueObject\Email;
 use DomainException;
 use SensitiveParameter;
-use Webmozart\Assert\Assert;
 
 /**
  * Запрос на нахождение данных пользователя
  */
 final readonly class FindUserQuery
 {
+    /**
+     * @param non-empty-string|null $authToken
+     */
     public function __construct(
         public ?Email $email = null,
         #[SensitiveParameter]
-        public ?string $authTokenId = null,
+        public ?string $authToken = null,
     ) {
         if ($email !== null) {
             return;
         }
 
-        if ($authTokenId !== null) {
-            Assert::uuid($authTokenId);
-
+        if ($authToken !== null) {
             return;
         }
 

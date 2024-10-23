@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Module\User\User\Domain;
 
 use App\Infrastructure\ValueObject\Email;
-use App\Module\User\Authentication\Domain\Token;
+use App\Module\User\Authentication\Domain\AuthToken;
+use App\Module\User\Authentication\Domain\UserToken;
 use App\Module\User\Authorization\Domain\Role;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,9 +21,10 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * Пользователь
+ *
+ * @final
  */
 #[ORM\Entity, ORM\Table(name: 'users')]
-/** @final */
 class User implements Authenticatable
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
@@ -44,9 +46,9 @@ class User implements Authenticatable
     private readonly DateTimeImmutable $createdAt;
 
     /**
-     * @var Collection<int, Token>
+     * @var Collection<int, UserToken>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Token::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: UserToken::class, mappedBy: 'user', cascade: ['all'], orphanRemoval: true)]
     private Collection $tokens;
 
     /**
@@ -80,26 +82,40 @@ class User implements Authenticatable
         return $this->email;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function addToken(): Token
+    public function addToken(AuthToken $token): void
     {
-        $token = new Token($this);
-        $this->tokens->add($token);
+        $userToken = new UserToken(
+            user: $this,
+            token: $token,
+        );
 
-        return $token;
+        $this->tokens->add($userToken);
     }
 
-    public function removeToken(Token $token): void
+    public function removeToken(UserToken $token): void
     {
         if ($this->tokens->contains($token) === false) {
             throw new DomainException('Токен не найден');
         }
 
         $this->tokens->removeElement($token);
+    }
+
+    /**
+     * @param non-empty-string $password
+     */
+    public function checkPassword(string $password): void
+    {
+        $valid = Hash::check($password, $this->password);
+
+        if (!$valid) {
+            throw new IncorrectPassword();
+        }
     }
 
     #[Override]

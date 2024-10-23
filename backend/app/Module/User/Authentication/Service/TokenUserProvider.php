@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\User\Authentication\Service;
 
+use App\Module\User\Authentication\Domain\AuthToken;
+use App\Module\User\Authentication\Domain\UserTokenRepository;
 use App\Module\User\User\Domain\User;
-use App\Module\User\User\Query\FindUser;
-use App\Module\User\User\Query\FindUserQuery;
+use DomainException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Override;
@@ -24,7 +25,7 @@ final readonly class TokenUserProvider implements UserProvider
     private const string CREDENTIALS_TOKEN_KEY = 'api_token';
 
     public function __construct(
-        private FindUser $findUser,
+        private UserTokenRepository $repository,
     ) {}
 
     /**
@@ -61,14 +62,26 @@ final readonly class TokenUserProvider implements UserProvider
     #[Override]
     public function retrieveByCredentials(array $credentials): ?User
     {
-        /** @var string $token */
-        $token = $credentials[self::CREDENTIALS_TOKEN_KEY];
+        /** @var string $tokenValue */
+        $tokenValue = $credentials[self::CREDENTIALS_TOKEN_KEY];
 
-        $query = new FindUserQuery(
-            authTokenId: $token,
-        );
+        try {
+            $authToken = AuthToken::createFromString($tokenValue);
+        } catch (DomainException) {
+            return null;
+        }
 
-        return ($this->findUser)($query);
+        $userToken = $this->repository->find($authToken->tokenId);
+
+        if ($userToken === null) {
+            return null;
+        }
+
+        if (!$authToken->verify($userToken)) {
+            return null;
+        }
+
+        return $userToken->getUser();
     }
 
     /**

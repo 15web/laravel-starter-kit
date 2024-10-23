@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\User\User\Query;
 
+use App\Module\User\Authentication\Domain\AuthToken;
 use App\Module\User\User\Domain\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -35,10 +36,12 @@ final readonly class FindUser
                 ->setParameter('email', $query->email->value);
         }
 
-        if ($query->authTokenId !== null) {
+        if ($query->authToken !== null) {
+            $authToken = AuthToken::createFromString($query->authToken);
+
             $queryBuilder
                 ->join('user.tokens', 'tokens', Join::WITH, 'tokens.id = :tokenId')
-                ->setParameter('tokenId', $query->authTokenId);
+                ->setParameter('tokenId', (string) $authToken->tokenId);
         }
 
         /** @var User|null $result */

@@ -34,6 +34,8 @@ paths:
           $ref: '#/components/responses/login'
         '400':
           $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
   /auth/logout:
     post:
       operationId: logout
@@ -47,7 +49,7 @@ paths:
         '200':
           $ref: '#/components/responses/success'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '500':
           $ref: '#/components/responses/badRequest'
   /blog:
@@ -92,7 +94,7 @@ paths:
         '200':
           $ref: '#/components/responses/indexNews'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '403':
           $ref: '#/components/responses/forbidden'
     post:
@@ -111,7 +113,7 @@ paths:
         '400':
           $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '403':
           $ref: '#/components/responses/forbidden'
   /news/{title}:
@@ -129,7 +131,7 @@ paths:
         '200':
           $ref: '#/components/responses/showNews'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
@@ -152,7 +154,7 @@ paths:
         '400':
           $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
@@ -171,7 +173,7 @@ paths:
         '200':
           $ref: '#/components/responses/success'
         '401':
-          $ref: '#/components/responses/authRequired'
+          $ref: '#/components/responses/unauthenticated'
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
@@ -824,7 +826,7 @@ components:
             message: Неверный формат запроса
             code: bad_request
             errors: []
-    authRequired:
+    unauthenticated:
       description: Для доступ к ресурсу требуется аутентификация
       content:
         application/json:
@@ -832,7 +834,7 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: Для доступ к ресурсу требуется аутентификация
-            code: unauthorized
+            code: unauthenticated
             errors: []
     forbidden:
       description: Доступ к ресурсу ограничен
@@ -842,7 +844,7 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: Доступ к ресурсу ограничен
-            code: access_denied
+            code: forbidden
             errors: []
     notFound:
       description: Запись не найдена
@@ -886,8 +888,8 @@ components:
           type: string
           enum:
             - bad_request
-            - unauthorized
-            - access_denied
+            - unauthenticated
+            - forbidden
             - not_found
             - method_not_allowed
             - unexpected

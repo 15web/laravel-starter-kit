@@ -11,9 +11,9 @@ enum ErrorCode: string
 {
     case BAD_REQUEST = 'bad_request';
 
-    case UNAUTHORIZED = 'unauthorized';
+    case UNAUTHENTICATED = 'unauthenticated';
 
-    case ACCESS_DENIED = 'access_denied';
+    case FORBIDDEN = 'forbidden';
 
     case NOT_FOUND = 'not_found';
 

@@ -10,7 +10,9 @@ use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\ValueObject\Email;
+use App\Module\User\Authentication\Domain\AuthToken;
 use App\Module\User\Authorization\Domain\Role;
+use App\Module\User\User\Domain\IncorrectPassword;
 use App\Module\User\User\Query\FindUser;
 use App\Module\User\User\Query\FindUserQuery;
 use App\Module\User\User\Service\CreateUser;
@@ -44,6 +46,14 @@ final readonly class LoginAction
 
         $user = ($this->findUser)($query);
 
+        if ($user !== null) {
+            try {
+                $user->checkPassword($request->password);
+            } catch (IncorrectPassword) {
+                throw ApiException::createUnauthenticatedException('Некорректный логин или пароль');
+            }
+        }
+
         if ($user === null) {
             try {
                 $user = ($this->createUser)(
@@ -58,7 +68,9 @@ final readonly class LoginAction
             }
         }
 
-        $token = $user->addToken();
+        $authToken = AuthToken::generate();
+
+        $user->addToken($authToken);
         $this->flusher->flush();
 
         /** @var list<Role> $roles */
@@ -67,7 +79,7 @@ final readonly class LoginAction
         return ($this->resolveResponse)(
             new ApiObjectResponse(
                 new LoginResponse(
-                    token: (string) $token->getId(),
+                    token: (string) $authToken,
                     email: $user->getEmail(),
                     roles: $roles,
                 )

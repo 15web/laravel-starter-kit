@@ -6,25 +6,28 @@ namespace App\Module\User\Authentication\Domain;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Репозиторий токенов авторизации
  */
-final readonly class TokenRepository
+final readonly class UserTokenRepository
 {
     /**
-     * @var EntityRepository<Token>
+     * @var EntityRepository<UserToken>
      */
     private EntityRepository $repository;
 
     public function __construct(
         private EntityManager $entityManager,
     ) {
-        $this->repository = $this->entityManager->getRepository(Token::class);
+        $this->repository = $this->entityManager->getRepository(UserToken::class);
     }
 
-    public function find(string $id): ?Token
+    public function find(Uuid $id): ?UserToken
     {
-        return $this->repository->find($id);
+        return $this->repository->find(
+            (string) $id,
+        );
     }
 }
