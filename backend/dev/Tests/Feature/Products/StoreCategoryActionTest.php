@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\Products;
 
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
 use Dev\Tests\Feature\TestCase;
@@ -88,7 +88,7 @@ final class StoreCategoryActionTest extends TestCase
             ->postJson('api/products/category', ['title' => 'Title', 'parent' => null])
             ->assertOk();
 
-        $this->assertApiError($response, Error::EXISTS->value);
+        $this->assertApiError($response, ErrorCode::EXISTS->value);
     }
 
     #[TestDox('Запись с одинаковым заголовком, но с разными "родителями')]

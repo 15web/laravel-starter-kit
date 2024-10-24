@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Products\Http\Category\Store;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
@@ -34,7 +34,7 @@ final readonly class StoreCategoryAction
 
         $categoryExists = $this->repository->existsByTitle($request->title, $request->parent);
         if ($categoryExists) {
-            throw ApiException::createDomainException('Категория с таким заголовком уже существует', Error::EXISTS);
+            throw ApiException::createDomainException('Категория с таким заголовком уже существует', ErrorCode::EXISTS);
         }
 
         $parent = null;
@@ -42,7 +42,7 @@ final readonly class StoreCategoryAction
             $parent = $this->repository->find($request->parent);
 
             if ($parent === null) {
-                throw ApiException::createDomainException('Не найдена родительская категория', Error::BAD_REQUEST);
+                throw ApiException::createDomainException('Не найдена родительская категория', ErrorCode::BAD_REQUEST);
             }
         }
 

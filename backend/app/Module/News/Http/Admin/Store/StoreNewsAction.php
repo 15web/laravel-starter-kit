@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\News\Http\Admin\Store;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
@@ -40,7 +40,7 @@ final readonly class StoreNewsAction
 
         $newsExists = $this->repository->existsByTitle($request->title);
         if ($newsExists) {
-            throw ApiException::createDomainException('Новость с таким заголовком уже существует', Error::EXISTS);
+            throw ApiException::createDomainException('Новость с таким заголовком уже существует', ErrorCode::EXISTS);
         }
 
         $news = new News($request->title);

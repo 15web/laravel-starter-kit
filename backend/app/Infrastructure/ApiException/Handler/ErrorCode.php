@@ -7,7 +7,7 @@ namespace App\Infrastructure\ApiException\Handler;
 /**
  * Код ошибки API
  */
-enum Error: string
+enum ErrorCode: string
 {
     case BAD_REQUEST = 'bad_request';
 

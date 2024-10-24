@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Blog\Http\Store;
 
 use App\Infrastructure\Request\Request;
-use Webmozart\Assert\Assert;
 
 /**
  * Запрос для создания записи в блоге
@@ -21,9 +20,5 @@ final readonly class StorePostRequest implements Request
         public string $title,
         public string $author,
         public string $content,
-    ) {
-        Assert::stringNotEmpty($this->title);
-        Assert::stringNotEmpty($this->author);
-        Assert::stringNotEmpty($this->content);
-    }
+    ) {}
 }

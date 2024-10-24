@@ -507,9 +507,9 @@ components:
                 status: success
             Запись с таким заголовком уже существует:
               value:
-                errorMessage: Запись с таким заголовком уже существует
-                errorEnum: entity_exists
-                error: true
+                message: Запись с таким заголовком уже существует
+                code: entity_exists
+                errors: []
     showBlog:
       description: Возвращает информацию о записи в блоге
       content:
@@ -652,9 +652,9 @@ components:
                 status: success
             Новость с таким заголовком уже существует:
               value:
-                errorMessage: Новость с таким заголовком уже существует
-                errorEnum: entity_exists
-                error: true
+                message: Новость с таким заголовком уже существует
+                code: entity_exists
+                errors: []
     showNews:
       description: Возвращает информацию о новости
       content:
@@ -781,14 +781,14 @@ components:
                 status: success
             Запись с таким заголовком уже существует:
               value:
-                errorMessage: Запись с таким заголовком уже существует
-                errorEnum: entity_exists
-                error: true
+                message: Запись с таким заголовком уже существует
+                code: entity_exists
+                errors: []
             Не найдена родительская категория:
               value:
-                errorMessage: Не найдена родительская категория
-                errorEnum: bad_request
-                error: true
+                message: Не найдена родительская категория
+                code: bad_request
+                errors: []
     success:
       description: Успешный ответ
       content:
@@ -821,9 +821,9 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: bad_request
-            errorMessage: Неверный формат запроса
-            error: true
+            message: Неверный формат запроса
+            code: bad_request
+            errors: []
     authRequired:
       description: Для доступ к ресурсу требуется аутентификация
       content:
@@ -831,9 +831,9 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: unauthorized
-            errorMessage: Для доступ к ресурсу требуется аутентификация
-            error: true
+            message: Для доступ к ресурсу требуется аутентификация
+            code: unauthorized
+            errors: []
     forbidden:
       description: Доступ к ресурсу ограничен
       content:
@@ -841,9 +841,9 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: access_denied
-            errorMessage: Доступ к ресурсу ограничен
-            error: true
+            message: Доступ к ресурсу ограничен
+            code: access_denied
+            errors: []
     notFound:
       description: Запись не найдена
       content:
@@ -851,9 +851,9 @@ components:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            errorEnum: not_found
-            errorMessage: Запись не найдена
-            error: true
+            message: Запись не найдена
+            code: not_found
+            errors: []
   schemas:
     id:
       type: number
@@ -875,12 +875,14 @@ components:
     error:
       type: object
       required:
-        - errorEnum
-        - errorMessage
-        - error
+        - message
+        - code
+        - errors
       additionalProperties: false
       properties:
-        errorEnum:
+        message:
+          type: string
+        code:
           type: string
           enum:
             - bad_request
@@ -890,10 +892,13 @@ components:
             - method_not_allowed
             - unexpected
             - entity_exists
-        errorMessage:
-          type: string
-        error:
-          type: boolean
+        errors:
+          type: array
+          description: Список ошибок
+          items:
+            type: string
+            description: Текст ошибки
+            example: Cannot be empty
     pagination:
       type: object
       nullable: true

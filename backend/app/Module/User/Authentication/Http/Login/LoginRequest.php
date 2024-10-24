@@ -20,7 +20,6 @@ final readonly class LoginRequest implements Request
         public string $email,
         public string $password,
     ) {
-        Assert::email($email);
-        Assert::notEmpty($password);
+        Assert::email($email, "Значение '{$email}' должно быть действительным электронным адресом.");
     }
 }

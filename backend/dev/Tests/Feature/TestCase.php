@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature;
 
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -74,11 +74,10 @@ abstract class TestCase extends BaseTestCase
         $response
             ->assertOk()
             ->assertJson([
-                'error' => true,
-                'errorEnum' => Error::from($code)->value,
+                'code' => ErrorCode::from($code)->value,
             ])
             ->when(filled($message), static fn (TestResponse $response) => $response->assertJson([
-                'errorMessage' => $message,
+                'message' => $message,
             ]));
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\Blog;
 
-use App\Infrastructure\ApiException\Handler\Error;
+use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
 use Dev\Tests\Feature\TestCase;
@@ -62,7 +62,7 @@ final class StorePostActionTest extends TestCase
             ->postJson('api/blog', $body)
             ->assertOk();
 
-        $this->assertApiError($response, Error::EXISTS->value);
+        $this->assertApiError($response, ErrorCode::EXISTS->value);
     }
 
     /**
