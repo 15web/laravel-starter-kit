@@ -172,4 +172,9 @@ class User implements Authenticatable
     {
         return 'password';
     }
+
+    public function rehashPassword(string $hash): void
+    {
+        $this->password = $hash;
+    }
 }

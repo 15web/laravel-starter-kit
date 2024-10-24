@@ -11,6 +11,7 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\Module\User\Authentication\Domain\AuthToken;
+use App\Module\User\Authentication\Service\TokenUserProvider;
 use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\User\Domain\IncorrectPassword;
 use App\Module\User\User\Query\FindUser;
@@ -33,6 +34,7 @@ final readonly class LoginAction
         private Flusher $flusher,
         private ResolveResponse $resolveResponse,
         private ResolveRequestBody $resolveRequest,
+        private TokenUserProvider $auth,
     ) {}
 
     #[Router\Post('/auth/login')]
@@ -49,6 +51,11 @@ final readonly class LoginAction
         if ($user !== null) {
             try {
                 $user->checkPassword($request->password);
+
+                $this->auth->rehashPasswordIfRequired(
+                    user: $user,
+                    credentials: ['password' => $request->password],
+                );
             } catch (IncorrectPassword) {
                 throw ApiException::createUnauthenticatedException('Некорректный логин или пароль');
             }
