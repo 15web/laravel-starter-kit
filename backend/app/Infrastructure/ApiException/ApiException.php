@@ -54,7 +54,7 @@ final class ApiException extends Exception
     /**
      * @param list<string> $messages
      */
-    public static function createBadRequestException(array $messages, ErrorCode $errorCode, ?Throwable $previous = null): self
+    public static function createBadRequestException(array $messages, ErrorCode $errorCode = ErrorCode::BAD_REQUEST, ?Throwable $previous = null): self
     {
         return new self(
             errorMessage: 'Неверный формат запроса',
@@ -65,17 +65,17 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createUnauthorizedException(string $errorMessage, ErrorCode $errorCode, ?Throwable $previous = null): self
+    public static function createUnauthenticatedException(string $errorMessage, ErrorCode $errorCode = ErrorCode::UNAUTHENTICATED, ?Throwable $previous = null): self
     {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
-            statusCode: StatusCode::UNAUTHORIZED,
+            statusCode: StatusCode::UNAUTHENTICATED,
             previous: $previous,
         );
     }
 
-    public static function createAccessDeniedException(string $errorMessage, ErrorCode $errorCode, ?Throwable $previous = null): self
+    public static function createForbiddenException(string $errorMessage, ErrorCode $errorCode = ErrorCode::FORBIDDEN, ?Throwable $previous = null): self
     {
         return new self(
             errorMessage: $errorMessage,
@@ -85,7 +85,7 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createNotFoundException(string $errorMessage, ErrorCode $errorCode, ?Throwable $previous = null): self
+    public static function createNotFoundException(string $errorMessage, ErrorCode $errorCode = ErrorCode::NOT_FOUND, ?Throwable $previous = null): self
     {
         return new self(
             errorMessage: $errorMessage,
@@ -95,7 +95,7 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createMethodNotAllowedException(string $errorMessage, ErrorCode $errorCode, ?Throwable $previous = null): self
+    public static function createMethodNotAllowedException(string $errorMessage, ErrorCode $errorCode = ErrorCode::METHOD_NOT_ALLOWED, ?Throwable $previous = null): self
     {
         return new self(
             errorMessage: $errorMessage,

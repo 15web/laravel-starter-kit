@@ -100,11 +100,11 @@ final class ExceptionHandler extends ExceptionHandlerContract
         }
 
         if ($e instanceof UnauthorizedHttpException || $e instanceof AuthenticationException) {
-            return ApiException::createUnauthorizedException('Для доступ к ресурсу требуется аутентификация.', ErrorCode::UNAUTHORIZED, $e);
+            return ApiException::createUnauthenticatedException('Для доступ к ресурсу требуется аутентификация.', ErrorCode::UNAUTHENTICATED, $e);
         }
 
         if ($e instanceof AccessDeniedHttpException || $e instanceof AuthorizationException) {
-            return ApiException::createAccessDeniedException('Доступ к ресурсу ограничен.', ErrorCode::ACCESS_DENIED, $e);
+            return ApiException::createForbiddenException('Доступ к ресурсу ограничен.', ErrorCode::FORBIDDEN, $e);
         }
 
         return null;
