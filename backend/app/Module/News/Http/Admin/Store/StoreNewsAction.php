@@ -14,7 +14,9 @@ use App\Module\News\Domain\News;
 use App\Module\News\Domain\NewsRepository;
 use App\Module\User\Authorization\Domain\Role;
 use App\Module\User\Authorization\Http\CheckRoleGranted;
+use App\Module\User\User\Domain\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\RouteAttributes\Attributes as Router;
 
@@ -29,6 +31,7 @@ final readonly class StoreNewsAction
         private Flusher $flusher,
         private ResolveRequestBody $resolveRequest,
         private ResolveResponse $resolveResponse,
+        private Request $request,
     ) {}
 
     #[Router\Post('/news')]
@@ -43,7 +46,14 @@ final readonly class StoreNewsAction
             throw ApiException::createDomainException('Новость с таким заголовком уже существует', ErrorCode::EXISTS);
         }
 
-        $news = new News($request->title);
+        /** @var User $user */
+        $user = $this->request->user();
+
+        $news = new News(
+            title: $request->title,
+            user: $user,
+        );
+
         $this->repository->add($news);
 
         $this->flusher->flush();
