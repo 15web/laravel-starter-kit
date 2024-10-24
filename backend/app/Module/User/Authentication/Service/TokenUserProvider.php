@@ -10,6 +10,7 @@ use App\Module\User\User\Domain\User;
 use DomainException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Facades\Hash;
 use Override;
 use SensitiveParameter;
 
@@ -96,9 +97,16 @@ final readonly class TokenUserProvider implements UserProvider
     #[Override]
     public function rehashPasswordIfRequired(Authenticatable $user, #[SensitiveParameter] array $credentials, bool $force = false): void
     {
-        /*
-         * @todo: Implement rehashPasswordIfRequired() method.
-         * @see \Illuminate\Auth\DatabaseUserProvider::rehashPasswordIfRequired
+        if (!Hash::needsRehash($user->getAuthPassword()) && !$force) {
+            return;
+        }
+
+        /**
+         * @var User $user
+         * @var array{password: non-empty-string} $credentials
          */
+        $user->rehashPassword(
+            Hash::make($credentials['password']),
+        );
     }
 }
