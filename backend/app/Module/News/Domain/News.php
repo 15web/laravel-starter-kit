@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\News\Domain;
 
+use App\Module\User\User\Domain\User;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,6 +28,8 @@ class News
     public function __construct(
         #[ORM\Column]
         private string $title,
+        #[ORM\ManyToOne, ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+        private User $user,
     ) {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
@@ -46,6 +49,11 @@ class News
     {
         $this->title = $title;
         $this->updatedAt = new DateTimeImmutable();
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     public function getCreatedAt(): DateTimeImmutable
