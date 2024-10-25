@@ -32,7 +32,7 @@ final readonly class ValidateOpenApiSchema
     {
         $openApiPath = (string) config('openapi.path');
         $validatorBuilder = (new ValidatorBuilder())->fromYamlFile(
-            base_path($openApiPath)
+            base_path($openApiPath),
         );
 
         $this->requestValidator = $validatorBuilder->getRequestValidator();
@@ -57,7 +57,10 @@ final readonly class ValidateOpenApiSchema
 
     private function validateRequest(Request $request): void
     {
-        if (!$this->needValidateTest($request, self::VALIDATE_REQUEST_KEY)) {
+        if (!$this->needValidateTest(
+            request: $request,
+            requestParameterName: self::VALIDATE_REQUEST_KEY,
+        )) {
             return;
         }
 
@@ -69,7 +72,10 @@ final readonly class ValidateOpenApiSchema
 
     private function validateResponse(Request $request, Response $response): void
     {
-        if (!$this->needValidateTest($request, self::VALIDATE_RESPONSE_KEY)) {
+        if (!$this->needValidateTest(
+            request: $request,
+            requestParameterName: self::VALIDATE_RESPONSE_KEY,
+        )) {
             return;
         }
 
@@ -82,10 +88,10 @@ final readonly class ValidateOpenApiSchema
 
         $this->responseValidator->validate(
             opAddr: new OperationAddress(
-                $request->getPathInfo(),
-                strtolower($request->getMethod())
+                path: $request->getPathInfo(),
+                method: strtolower($request->getMethod()),
             ),
-            response: $psrResponse
+            response: $psrResponse,
         );
     }
 
@@ -106,6 +112,11 @@ final readonly class ValidateOpenApiSchema
     {
         $psr17Factory = new Psr17Factory();
 
-        return new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        return new PsrHttpFactory(
+            serverRequestFactory: $psr17Factory,
+            streamFactory: $psr17Factory,
+            uploadedFileFactory: $psr17Factory,
+            responseFactory: $psr17Factory,
+        );
     }
 }

@@ -32,9 +32,15 @@ final readonly class StoreCategoryAction
     {
         $request = ($this->resolveRequest)(StoreCategoryRequest::class);
 
-        $categoryExists = $this->repository->existsByTitle($request->title, $request->parent);
+        $categoryExists = $this->repository->existsByTitle(
+            title: $request->title,
+            parentId: $request->parent,
+        );
         if ($categoryExists) {
-            throw ApiException::createDomainException('Категория с таким заголовком уже существует', ErrorCode::EXISTS);
+            throw ApiException::createDomainException(
+                errorMessage: 'Категория с таким заголовком уже существует',
+                errorCode: ErrorCode::EXISTS,
+            );
         }
 
         $parent = null;
@@ -42,7 +48,10 @@ final readonly class StoreCategoryAction
             $parent = $this->repository->find($request->parent);
 
             if ($parent === null) {
-                throw ApiException::createDomainException('Не найдена родительская категория', ErrorCode::BAD_REQUEST);
+                throw ApiException::createDomainException(
+                    errorMessage: 'Не найдена родительская категория',
+                    errorCode: ErrorCode::BAD_REQUEST,
+                );
             }
         }
 

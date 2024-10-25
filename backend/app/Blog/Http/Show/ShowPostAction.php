@@ -6,7 +6,6 @@ namespace App\Blog\Http\Show;
 
 use App\Blog\Domain\PostRepository;
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
@@ -31,7 +30,7 @@ final readonly class ShowPostAction
 
         $post = $this->repository->findByTitle($request->title);
         if ($post === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена');
         }
 
         /** @var positive-int $id */

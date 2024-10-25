@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\News\Http\Site\Show;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
@@ -31,16 +30,19 @@ final readonly class ShowNewsAction
     #[Router\Get('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        Gate::authorize(CheckRoleGranted::class, Role::User);
+        Gate::authorize(
+            ability: CheckRoleGranted::class,
+            arguments: Role::User,
+        );
 
         $request = ($this->resolveRequest)(ShowNewsRequest::class);
 
         $news = $this->repository->findByTitle(
-            $request->title
+            $request->title,
         );
 
         if ($news === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена');
         }
 
         /** @var positive-int $id */

@@ -37,13 +37,19 @@ final readonly class StoreNewsAction
     #[Router\Post('/news')]
     public function __invoke(): JsonResponse
     {
-        Gate::authorize(CheckRoleGranted::class, Role::User);
+        Gate::authorize(
+            ability: CheckRoleGranted::class,
+            arguments: Role::User,
+        );
 
         $request = ($this->resolveRequest)(StoreNewsRequest::class);
 
         $newsExists = $this->repository->existsByTitle($request->title);
         if ($newsExists) {
-            throw ApiException::createDomainException('Новость с таким заголовком уже существует', ErrorCode::EXISTS);
+            throw ApiException::createDomainException(
+                errorMessage: 'Новость с таким заголовком уже существует',
+                errorCode: ErrorCode::EXISTS,
+            );
         }
 
         /** @var User $user */

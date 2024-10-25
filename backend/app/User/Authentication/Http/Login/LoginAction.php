@@ -89,7 +89,7 @@ final readonly class LoginAction
                     token: (string) $authToken,
                     email: $user->getEmail(),
                     roles: $roles,
-                )
+                ),
             ),
         );
     }

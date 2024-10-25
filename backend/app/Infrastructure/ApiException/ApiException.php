@@ -91,7 +91,7 @@ final class ApiException extends Exception
             errorMessage: $errorMessage,
             errorCode: $errorCode,
             statusCode: StatusCode::NOT_FOUND,
-            previous: $previous
+            previous: $previous,
         );
     }
 
@@ -101,7 +101,7 @@ final class ApiException extends Exception
             errorMessage: $errorMessage,
             errorCode: $errorCode,
             statusCode: StatusCode::METHOD_NOT_ALLOWED,
-            previous: $previous
+            previous: $previous,
         );
     }
 
@@ -111,7 +111,7 @@ final class ApiException extends Exception
             errorMessage: $errorMessage,
             errorCode: $errorCode,
             statusCode: StatusCode::OK,
-            previous: $previous
+            previous: $previous,
         );
     }
 
@@ -121,7 +121,7 @@ final class ApiException extends Exception
             errorMessage: 'Ошибка фреймворка не обрабатывается приложением. Обратитесь к разработчикам.',
             errorCode: ErrorCode::UNEXPECTED,
             statusCode: StatusCode::SERVER_ERROR,
-            previous: $httpException
+            previous: $httpException,
         );
     }
 
@@ -131,7 +131,7 @@ final class ApiException extends Exception
             errorMessage: 'Произошла неожиданная ошибка. Обратитесь к администратору.',
             errorCode: ErrorCode::UNEXPECTED,
             statusCode: StatusCode::SERVER_ERROR,
-            previous: $previous
+            previous: $previous,
         );
     }
 }

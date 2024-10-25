@@ -26,7 +26,7 @@ final readonly class ResolveResponse
 
         return new JsonResponse(
             data: $normalizedResponseData,
-            json: true
+            json: true,
         );
     }
 }

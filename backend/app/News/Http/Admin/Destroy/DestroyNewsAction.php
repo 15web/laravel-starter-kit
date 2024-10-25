@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\News\Http\Admin\Destroy;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ResolveSuccessResponse;
@@ -35,16 +34,19 @@ final readonly class DestroyNewsAction
     #[Router\Delete('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        Gate::authorize(CheckRoleGranted::class, Role::User);
+        Gate::authorize(
+            ability: CheckRoleGranted::class,
+            arguments: Role::User,
+        );
 
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
 
         $news = $this->repository->findByTitle(
-            $routeParameters->title
+            $routeParameters->title,
         );
 
         if ($news === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена');
         }
 
         $this->entityManager->remove($news);

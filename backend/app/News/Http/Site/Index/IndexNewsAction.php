@@ -31,7 +31,10 @@ final readonly class IndexNewsAction
     #[Router\Get('/news')]
     public function __invoke(): JsonResponse
     {
-        Gate::authorize(CheckRoleGranted::class, Role::User);
+        Gate::authorize(
+            ability: CheckRoleGranted::class,
+            arguments: Role::User,
+        );
 
         $pagination = ($this->resolveQuery)(PaginationRequest::class);
 

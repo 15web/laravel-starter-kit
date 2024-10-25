@@ -34,7 +34,10 @@ final readonly class StorePostAction
 
         $postExists = $this->repository->existsByTitle($request->title);
         if ($postExists) {
-            throw ApiException::createDomainException('Запись с таким заголовком уже существует', ErrorCode::EXISTS);
+            throw ApiException::createDomainException(
+                errorMessage: 'Запись с таким заголовком уже существует',
+                errorCode: ErrorCode::EXISTS,
+            );
         }
         $post = new Post(
             title: $request->title,

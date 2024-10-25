@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\News\Http\Admin\Update;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\ErrorCode;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Request\ResolveRouteParameters;
@@ -37,17 +36,20 @@ final readonly class UpdateNewsAction
     #[Router\Post('/news/{title}')]
     public function __invoke(): JsonResponse
     {
-        Gate::authorize(CheckRoleGranted::class, Role::User);
+        Gate::authorize(
+            ability: CheckRoleGranted::class,
+            arguments: Role::User,
+        );
 
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);
         $updateRequest = ($this->resolveRequest)(UpdateNewsRequest::class);
 
         $news = $this->repository->findByTitle(
-            $routeParameters->title
+            $routeParameters->title,
         );
 
         if ($news === null) {
-            throw ApiException::createNotFoundException('Запись не найдена', ErrorCode::NOT_FOUND);
+            throw ApiException::createNotFoundException('Запись не найдена');
         }
 
         $news->setTitle($updateRequest->title);
