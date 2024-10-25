@@ -25,6 +25,12 @@ final class EntityManagerFactory
             $dbname .= "_{$test_token}";
         }
 
+        $configuration = DoctrineConfigurationFactory::create(
+            searchEntitiesPath: $app->path('Module'),
+            isDevMode: $app->hasDebugModeEnabled(),
+            proxyDir: $app->storagePath('framework/cache/doctrine/orm/Proxies'),
+        );
+
         /**
          * @see https://www.doctrine-project.org/projects/doctrine-migrations/en/3.8/reference/configuration.html#connection-configuration
          */
@@ -37,13 +43,7 @@ final class EntityManagerFactory
             'dbname' => $dbname,
             'unix_socket' => (string) config("database.connections.{$connectionName}.unix_socket"),
             'charset' => (string) config("database.connections.{$connectionName}.charset"),
-        ]);
-
-        $configuration = DoctrineConfigurationFactory::create(
-            searchEntitiesPath: $app->path('Module'),
-            isDevMode: $app->hasDebugModeEnabled(),
-            proxyDir: $app->storagePath('framework/cache/doctrine/orm/Proxies'),
-        );
+        ], $configuration);
 
         return new EntityManager(
             conn: $connection,
