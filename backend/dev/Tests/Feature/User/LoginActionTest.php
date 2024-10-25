@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\User;
 
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
+use App\Module\User\User\Domain\User;
 use Dev\Tests\Feature\TestCase;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -52,6 +55,56 @@ final class LoginActionTest extends TestCase
                 'password' => 'fakePassword',
             ])
             ->assertUnauthorized();
+    }
+
+    #[TestDox('Обновление хэша пароля')]
+    public function testRehashPassword(): void
+    {
+        $this
+            ->postJson('api/auth/login', [
+                'email' => 'user@example.com',
+                'password' => '123456',
+            ])
+            ->assertOk();
+
+        /** @var User $user */
+        $user = $this->getEntityManager()
+            ->getRepository(User::class)
+            ->findOneBy(['email' => 'user@example.com']);
+
+        // Текущий хэш пароля
+        $currentPasswordHash = $user->getAuthPassword();
+
+        // Необходимо убедиться, что алгоритмическую сложность меняется
+        self::assertNotSame(10, (int) config('hashing.bcrypt.rounds'));
+
+        // Инициализируем драйвер с новой конфигурацией
+        Hash::forgetDrivers();
+        Config::set('hashing.bcrypt.rounds', 10);
+
+        $this
+            ->postJson('api/auth/login', [
+                'email' => 'user@example.com',
+                'password' => '123456',
+            ])
+            ->assertOk();
+
+        /** @var User $user */
+        $user = $this->getEntityManager()
+            ->getRepository(User::class)
+            ->findOneBy(['email' => 'user@example.com']);
+
+        // Обновленный хэш пароля
+        $updatedPasswordHash = $user->getAuthPassword();
+        self::assertNotSame($currentPasswordHash, $updatedPasswordHash);
+
+        // Успешный вход со старым паролем
+        $this
+            ->postJson('api/auth/login', [
+                'email' => 'user@example.com',
+                'password' => '123456',
+            ])
+            ->assertOk();
     }
 
     /**

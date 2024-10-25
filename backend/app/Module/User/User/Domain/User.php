@@ -133,7 +133,7 @@ class User implements Authenticatable
     #[Override]
     public function getAuthPassword(): string
     {
-        return $this->password;
+        return $this->getPassword();
     }
 
     #[Override]
@@ -171,5 +171,10 @@ class User implements Authenticatable
     public function getAuthPasswordName(): string
     {
         return 'password';
+    }
+
+    public function rehashPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }
