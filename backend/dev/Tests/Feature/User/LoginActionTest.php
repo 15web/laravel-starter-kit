@@ -21,7 +21,7 @@ final class LoginActionTest extends TestCase
     {
         $response = $this
             ->postJson('api/auth/login', [
-                'email' => 'test@example.com',
+                'email' => 'user@example.com',
                 'password' => '123456',
             ])
             ->assertOk();
@@ -35,10 +35,23 @@ final class LoginActionTest extends TestCase
          */
         $data = $response->json('data');
 
-        self::assertSame($data['email'], 'test@example.com');
+        self::assertSame($data['email'], 'user@example.com');
         self::assertCount(1, $data['roles']);
         self::assertSame($data['roles'][0], 'user');
         self::assertNotEmpty($data['token']);
+    }
+
+    #[TestDox('Неправильный пароль')]
+    public function testIncorrectPassword(): void
+    {
+        $this->auth();
+
+        $this
+            ->postJson('api/auth/login', [
+                'email' => 'user@example.com',
+                'password' => 'fakePassword',
+            ])
+            ->assertUnauthorized();
     }
 
     /**
@@ -63,6 +76,8 @@ final class LoginActionTest extends TestCase
 
         yield 'невалидный email' => [['email' => 'fake', 'password' => '123456']];
 
-        yield 'пустой пароль' => [['email' => 'test@example.com', 'password' => '']];
+        yield 'пустой пароль' => [['email' => 'user@example.com', 'password' => '']];
+
+        yield 'короткий пароль' => [['email' => 'user@example.com', 'password' => '123']];
     }
 }
