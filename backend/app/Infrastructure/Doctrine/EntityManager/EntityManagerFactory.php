@@ -26,7 +26,7 @@ final class EntityManagerFactory
         }
 
         $configuration = DoctrineConfigurationFactory::create(
-            searchEntitiesPath: $app->path('Module'),
+            searchEntitiesPath: $app->path(),
             isDevMode: $app->hasDebugModeEnabled(),
             proxyDir: $app->storagePath('framework/cache/doctrine/orm/Proxies'),
         );

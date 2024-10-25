@@ -1,4 +1,4 @@
 parameters:
 	ignoreErrors:
-	    - '#Property App\\Module\\Products\\Domain\\Category\:\:\$children type mapping mismatch#'
+	    - '#Property App\\Products\\Domain\\Category\:\:\$children type mapping mismatch#'
 
