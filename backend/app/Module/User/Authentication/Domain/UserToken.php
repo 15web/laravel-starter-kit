@@ -18,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
 class UserToken
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-    private readonly string $id;
+    private readonly Uuid $id;
 
     #[ORM\Column]
     private readonly string $hash;
@@ -31,14 +31,14 @@ class UserToken
         private User $user,
         AuthToken $token,
     ) {
-        $this->id = (string) $token->tokenId;
+        $this->id = $token->tokenId;
         $this->hash = $token->hash();
         $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): Uuid
     {
-        return Uuid::fromString($this->id);
+        return $this->id;
     }
 
     public function getUser(): User
