@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\EntityManager;
 
+use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\ORMSetup;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -26,6 +27,14 @@ final class DoctrineConfigurationFactory
         $config->setProxyNamespace('DoctrineProxies');
         $config->setProxyDir($proxyDir);
 
+        $config->setSchemaAssetsFilter(static function (AbstractAsset|string $assetName): bool {
+            if ($assetName instanceof AbstractAsset) {
+                $assetName = $assetName->getName();
+            }
+
+            return !\in_array($assetName, self::getFilteredAssets(), true);
+        });
+
         $cache = new FilesystemAdapter(
             directory: storage_path('framework/cache/doctrine'),
         );
@@ -35,5 +44,30 @@ final class DoctrineConfigurationFactory
         $config->setResultCache($cache);
 
         return $config;
+    }
+
+    /**
+     * @return list<non-empty-string>
+     */
+    private static function getFilteredAssets(): array
+    {
+        $jobsTable = (string) config('queue.connections.database.table');
+        $failedJobsTable = (string) config('queue.failed.table');
+
+        $ignoredTables = [
+            $jobsTable,
+            $failedJobsTable,
+            (string) config('queue.batching.table'),
+        ];
+
+        $ignoredSequences = [
+            "{$jobsTable}_id_seq",
+            "{$failedJobsTable}_id_seq",
+        ];
+
+        /** @var list<non-empty-string> $ignoredAssets */
+        $ignoredAssets = array_merge($ignoredTables, $ignoredSequences);
+
+        return $ignoredAssets;
     }
 }
