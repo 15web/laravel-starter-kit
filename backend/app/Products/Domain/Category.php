@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Products\Domain;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -43,11 +44,11 @@ class Category
     private ?self $root = null;
 
     /**
-     * @var Collection<int, Category>|null
+     * @var Collection<int, self>
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', fetch: 'EAGER')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
-    private ?Collection $children = null;
+    private Collection $children;
 
     #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
@@ -63,6 +64,10 @@ class Category
         #[ORM\JoinColumn(name: 'parentId', referencedColumnName: 'id', onDelete: 'CASCADE')]
         private ?self $parent = null,
     ) {
+        /** @var Collection<int, self> $children */
+        $children = new ArrayCollection();
+        $this->children = $children;
+
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
     }

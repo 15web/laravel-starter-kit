@@ -19,10 +19,12 @@ final class EntityManagerFactory
         /** @var non-empty-string $connectionName */
         $connectionName = config('database.default');
 
-        $dbname = (string) config("database.connections.{$connectionName}.database");
+        /** @var string $dbname */
+        $dbname = config("database.connections.{$connectionName}.database");
         if ($app->runningUnitTests() && config('database.test_token') !== null) {
-            $test_token = (string) config('database.test_token');
-            $dbname .= "_{$test_token}";
+            /** @var string $testToken */
+            $testToken = config('database.test_token');
+            $dbname .= "_{$testToken}";
         }
 
         $configuration = DoctrineConfigurationFactory::create(
@@ -31,18 +33,36 @@ final class EntityManagerFactory
             proxyDir: $app->storagePath('framework/cache/doctrine/orm/Proxies'),
         );
 
+        /** @var string $dbHost */
+        $dbHost = config("database.connections.{$connectionName}.host");
+
+        /** @var int $dbPort */
+        $dbPort = config("database.connections.{$connectionName}.port");
+
+        /** @var string $dbUser */
+        $dbUser = config("database.connections.{$connectionName}.username");
+
+        /** @var string $dbPassword */
+        $dbPassword = config("database.connections.{$connectionName}.password");
+
+        /** @var string $dbUnixSocket */
+        $dbUnixSocket = config("database.connections.{$connectionName}.unix_socket");
+
+        /** @var string $dbCharset */
+        $dbCharset = config("database.connections.{$connectionName}.charset");
+
         /**
          * @see https://www.doctrine-project.org/projects/doctrine-migrations/en/3.8/reference/configuration.html#connection-configuration
          */
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_pgsql',
-            'host' => (string) config("database.connections.{$connectionName}.host"),
-            'port' => (int) config("database.connections.{$connectionName}.port"),
-            'user' => (string) config("database.connections.{$connectionName}.username"),
-            'password' => (string) config("database.connections.{$connectionName}.password"),
+            'host' => $dbHost,
+            'port' => $dbPort,
+            'user' => $dbUser,
+            'password' => $dbPassword,
             'dbname' => $dbname,
-            'unix_socket' => (string) config("database.connections.{$connectionName}.unix_socket"),
-            'charset' => (string) config("database.connections.{$connectionName}.charset"),
+            'unix_socket' => $dbUnixSocket,
+            'charset' => $dbCharset,
         ], $configuration);
 
         return new EntityManager(

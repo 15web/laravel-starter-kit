@@ -51,7 +51,8 @@ final class OpenApiRoutesDiffCommand extends Command
      */
     private function getOpenApiPaths(): array
     {
-        $openApiPath = (string) config('openapi.path');
+        /** @var string $openApiPath */
+        $openApiPath = config('openapi.path');
 
         /**
          * @var array{

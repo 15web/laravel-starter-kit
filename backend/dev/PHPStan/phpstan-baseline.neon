@@ -1,4 +1,0 @@
-parameters:
-	ignoreErrors:
-	    - '#Property App\\Products\\Domain\\Category\:\:\$children type mapping mismatch#'
-

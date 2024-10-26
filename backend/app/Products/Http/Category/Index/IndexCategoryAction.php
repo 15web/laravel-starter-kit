@@ -17,13 +17,16 @@ use Spatie\RouteAttributes\Attributes as Router;
  */
 final readonly class IndexCategoryAction
 {
+    /**
+     * @var NestedTreeRepository<Category>
+     */
     private NestedTreeRepository $repository;
 
     public function __construct(
         private EntityManager $entityManager,
         private ResolveResponse $resolveResponse,
     ) {
-        /** @var NestedTreeRepository $repository */
+        /** @var NestedTreeRepository<Category> $repository */
         $repository = $this->entityManager->getRepository(Category::class);
 
         $this->repository = $repository;

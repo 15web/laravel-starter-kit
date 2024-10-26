@@ -32,6 +32,11 @@ use Symfony\Component\OptionsResolver\Options;
 /**
  * Фиксер обязательных комментариев для всех классов перед class
  *
+ * @template TFixerInputConfig of array<string, mixed>
+ * @template TFixerComputedConfig of array<string, mixed>
+ *
+ * @implements ConfigurableFixerInterface<TFixerInputConfig, TFixerComputedConfig>
+ *
  * @psalm-suppress MissingTemplateParam
  */
 final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
@@ -119,6 +124,9 @@ final class Sample
         $this->whitespacesConfig = $config;
     }
 
+    /**
+     * @param TFixerInputConfig $configuration
+     */
     #[Override]
     public function configure(array $configuration): void
     {

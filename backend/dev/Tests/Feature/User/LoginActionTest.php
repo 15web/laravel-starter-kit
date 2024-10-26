@@ -75,8 +75,13 @@ final class LoginActionTest extends TestCase
         // Текущий хэш пароля
         $currentPasswordHash = $user->getAuthPassword();
 
-        // Необходимо убедиться, что алгоритмическую сложность меняется
-        self::assertNotSame(10, (int) config('hashing.bcrypt.rounds'));
+        /**
+         * Необходимо убедиться, что алгоритмическую сложность меняется
+         *
+         * @var int $bcryptRounds
+         */
+        $bcryptRounds = config('hashing.bcrypt.rounds');
+        self::assertNotSame(10, $bcryptRounds);
 
         // Инициализируем драйвер с новой конфигурацией
         Hash::forgetDrivers();

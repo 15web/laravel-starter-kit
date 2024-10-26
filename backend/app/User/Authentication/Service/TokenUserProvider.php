@@ -60,6 +60,9 @@ final readonly class TokenUserProvider implements UserProvider
     #[Override]
     public function updateRememberToken(Authenticatable $user, $token): void {}
 
+    /**
+     * @param array<array-key, mixed> $credentials
+     */
     #[Override]
     public function retrieveByCredentials(array $credentials): ?User
     {
@@ -87,6 +90,8 @@ final readonly class TokenUserProvider implements UserProvider
 
     /**
      * Используется только в \Illuminate\Auth\SessionGuard
+     *
+     * @param array<array-key, mixed> $credentials
      */
     #[Override]
     public function validateCredentials(Authenticatable $user, array $credentials): bool
@@ -94,6 +99,9 @@ final readonly class TokenUserProvider implements UserProvider
         return false;
     }
 
+    /**
+     * @param array<array-key, mixed> $credentials
+     */
     #[Override]
     public function rehashPasswordIfRequired(Authenticatable $user, #[SensitiveParameter] array $credentials, bool $force = false): void
     {

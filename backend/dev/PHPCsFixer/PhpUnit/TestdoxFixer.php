@@ -31,6 +31,11 @@ use Symfony\Component\OptionsResolver\Options;
 /**
  * Добавляет всем классам тестов атрибут testdox
  *
+ * @template TFixerInputConfig of array<string, mixed>
+ * @template TFixerComputedConfig of array<string, mixed>
+ *
+ * @implements ConfigurableFixerInterface<TFixerInputConfig, TFixerComputedConfig>
+ *
  * @psalm-suppress MissingTemplateParam
  */
 final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
@@ -49,10 +54,6 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
 
     public function __construct()
     {
-        try {
-            $this->configure([]);
-        } catch (RequiredFixerConfigurationException) {
-        }
         $this->whitespacesConfig = $this->getDefaultWhitespacesFixerConfig();
 
         $this->commentHelper = new DocCommentHelper($this->whitespacesConfig);
@@ -131,7 +132,7 @@ final class ExampleTest
     }
 
     /**
-     * @param array<mixed> $configuration
+     * @param TFixerInputConfig $configuration
      */
     #[Override]
     public function configure(array $configuration): void
