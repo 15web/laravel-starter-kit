@@ -51,13 +51,19 @@ final class DoctrineConfigurationFactory
      */
     private static function getFilteredAssets(): array
     {
-        $jobsTable = (string) config('queue.connections.database.table');
-        $failedJobsTable = (string) config('queue.failed.table');
+        /** @var string $jobsTable */
+        $jobsTable = config('queue.connections.database.table');
+
+        /** @var string $failedJobsTable */
+        $failedJobsTable = config('queue.failed.table');
+
+        /** @var string $jobsBatchingTable */
+        $jobsBatchingTable = config('queue.batching.table');
 
         $ignoredTables = [
             $jobsTable,
             $failedJobsTable,
-            (string) config('queue.batching.table'),
+            $jobsBatchingTable,
         ];
 
         $ignoredSequences = [

@@ -66,6 +66,9 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * @template TResponse of \Symfony\Component\HttpFoundation\Response
+     *
+     * @param TestResponse<TResponse> $response
      * @param non-empty-string $code
      * @param non-empty-string|null $message
      */
@@ -75,9 +78,13 @@ abstract class TestCase extends BaseTestCase
             ->assertOk()
             ->assertJson([
                 'code' => ErrorCode::from($code)->value,
-            ])
-            ->when(filled($message), static fn (TestResponse $response) => $response->assertJson([
-                'message' => $message,
-            ]));
+            ]);
+
+        if ($message !== null) {
+            $response
+                ->assertJson([
+                    'message' => $message,
+                ]);
+        }
     }
 }
