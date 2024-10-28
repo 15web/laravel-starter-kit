@@ -17,12 +17,14 @@ final class DoctrineConfigurationFactory
     public static function create(
         string $searchEntitiesPath,
         bool $isDevMode,
-        string $proxyDir,
+        string $cacheDir,
     ): Configuration {
         $config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [$searchEntitiesPath],
             isDevMode: $isDevMode,
         );
+
+        $proxyDir = "{$cacheDir}/orm/Proxies";
 
         $config->setProxyNamespace('DoctrineProxies');
         $config->setProxyDir($proxyDir);
@@ -36,7 +38,7 @@ final class DoctrineConfigurationFactory
         });
 
         $cache = new FilesystemAdapter(
-            directory: storage_path('framework/cache/doctrine'),
+            directory: $cacheDir,
         );
 
         $config->setMetadataCache($cache);

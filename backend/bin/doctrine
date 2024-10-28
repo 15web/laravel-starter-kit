@@ -8,6 +8,7 @@ use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\Tools\Console\Command;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\Command\ClearCache;
 use Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
@@ -52,6 +53,9 @@ $cli->addCommands([
     new Command\SyncMetadataCommand($dependencyFactory),
     new Command\VersionCommand($dependencyFactory),
     new GenerateProxiesCommand($managerProvider),
+    new ClearCache\QueryCommand($managerProvider),
+    new ClearCache\MetadataCommand($managerProvider),
+    new ClearCache\ResultCommand($managerProvider),
 ]);
 
 $status = $cli->run();

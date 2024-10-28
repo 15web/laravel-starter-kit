@@ -37,7 +37,15 @@ tinker: # Запуск консольного интерпретатора
 clear-cache: # Удаление кэша
 	docker compose run --rm backend-cli php artisan clear-compiled
 	docker compose run --rm backend-cli php artisan cache:clear
-	rm -rf backend/storage/framework/cache/doctrine
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:query
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:metadata --flush
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:result --flush
+
+clear-test-cache: # Удаление кэша для тестов
+	docker compose run --rm backend-cli php artisan cache:clear --env=testing
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:query --env=testing
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:metadata --flush --env=testing
+	docker compose run --rm backend-cli ./bin/doctrine orm:clear-cache:result --flush --env=testing
 
 check: # Проверка приложения
 	make clear-cache
@@ -100,7 +108,7 @@ test-install: # Подготовка тестового окружения
 	done
 
 test: # Запуск тестов
-	make clear-cache
+	make clear-test-cache
 	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --testdox'
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
