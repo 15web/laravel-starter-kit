@@ -8,7 +8,7 @@ use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\Request\ResolveRequestBody;
 use App\Infrastructure\Response\ApiObjectResponse;
-use App\Infrastructure\Response\ResolveResponse;
+use App\Infrastructure\Response\ApiResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\Authentication\Domain\AuthToken;
 use App\User\Authentication\Service\TokenUserProvider;
@@ -19,7 +19,6 @@ use App\User\User\Query\FindUserQuery;
 use App\User\User\Service\CreateUser;
 use App\User\User\Service\CreateUserCommand;
 use DomainException;
-use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 use Symfony\Component\Uid\UuidV7;
 
@@ -32,13 +31,12 @@ final readonly class LoginAction
         private FindUser $findUser,
         private CreateUser $createUser,
         private Flusher $flusher,
-        private ResolveResponse $resolveResponse,
         private ResolveRequestBody $resolveRequest,
         private TokenUserProvider $auth,
     ) {}
 
     #[Router\Post('/auth/login')]
-    public function __invoke(): JsonResponse
+    public function __invoke(): ApiResponse
     {
         $request = ($this->resolveRequest)(LoginRequest::class);
 
@@ -83,13 +81,11 @@ final readonly class LoginAction
         /** @var list<Role> $roles */
         $roles = $user->getRoles();
 
-        return ($this->resolveResponse)(
-            new ApiObjectResponse(
-                new LoginResponse(
-                    token: (string) $authToken,
-                    email: $user->getEmail(),
-                    roles: $roles,
-                ),
+        return new ApiObjectResponse(
+            new LoginResponse(
+                token: (string) $authToken,
+                email: $user->getEmail(),
+                roles: $roles,
             ),
         );
     }
