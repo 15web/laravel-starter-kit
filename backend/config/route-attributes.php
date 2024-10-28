@@ -11,7 +11,7 @@ return [
      * will automatically be registered.
      */
     'directories' => [
-        app_path('Module') => [
+        app_path() => [
             'prefix' => 'api',
             'middleware' => 'api',
         ],

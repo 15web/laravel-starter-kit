@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Request;
 
 use App\Infrastructure\ApiException\ApiException;
-use App\Infrastructure\ApiException\Handler\ErrorCode;
 use Illuminate\Support\Facades\Request as CurrentRequest;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
@@ -42,7 +41,6 @@ final readonly class ResolveRequestQuery
         } catch (Throwable $e) {
             throw ApiException::createBadRequestException(
                 messages: [$e->getMessage()],
-                errorCode: ErrorCode::BAD_REQUEST,
                 previous: $e,
             );
         }

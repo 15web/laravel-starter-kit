@@ -20,13 +20,13 @@ final readonly class ApiExceptionRender
     {
         $apiExceptionResponseJSON = $this->serializer->serialize(
             new ApiExceptionResponse($apiException),
-            JsonEncoder::FORMAT
+            JsonEncoder::FORMAT,
         );
 
         return new JsonResponse(
             data: $apiExceptionResponseJSON,
             status: $apiException->getStatusCode()->value,
-            json: true
+            json: true,
         );
     }
 }

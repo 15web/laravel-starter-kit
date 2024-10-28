@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\User;
 
 use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
-use App\Module\User\User\Domain\User;
+use App\User\User\Domain\User;
 use Dev\Tests\Feature\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;

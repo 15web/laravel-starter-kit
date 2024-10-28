@@ -80,9 +80,9 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
                     '<?php
 final class Sample
 {}
-'
+',
                 ),
-            ]
+            ],
         );
     }
 
@@ -143,7 +143,7 @@ final class Sample
                      * @psalm-suppress InternalMethod
                      */
                     Application::getMajorVersion() + 1,
-                    str_replace('`', '"', $option->getDeprecationMessage())
+                    str_replace('`', '"', $option->getDeprecationMessage()),
                 )));
             }
         }
@@ -158,7 +158,7 @@ final class Sample
             throw new RequiredFixerConfigurationException(
                 $this->getName(),
                 \sprintf('Missing required configuration: %s', $exception->getMessage()),
-                $exception
+                $exception,
             );
         } catch (InvalidOptionsForEnvException $exception) {
             /**
@@ -168,7 +168,7 @@ final class Sample
             throw new InvalidForEnvFixerConfigurationException(
                 $this->getName(),
                 \sprintf('Invalid configuration for env: %s', $exception->getMessage()),
-                $exception
+                $exception,
             );
         }
     }

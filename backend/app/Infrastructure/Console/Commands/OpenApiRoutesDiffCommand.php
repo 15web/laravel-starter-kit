@@ -63,7 +63,7 @@ final class OpenApiRoutesDiffCommand extends Command
          * } $openApiValues
          */
         $openApiValues = (array) Yaml::parseFile(
-            base_path($openApiPath)
+            base_path($openApiPath),
         );
 
         if (!\array_key_exists('paths', $openApiValues)) {

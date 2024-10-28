@@ -54,7 +54,6 @@ final class ExceptionHandler extends ExceptionHandlerContract
         if ($e instanceof InvalidArgumentException) {
             $apiException = ApiException::createBadRequestException(
                 messages: [$e->getMessage()],
-                errorCode: ErrorCode::BAD_REQUEST,
                 previous: $e,
             );
 
@@ -64,7 +63,6 @@ final class ExceptionHandler extends ExceptionHandlerContract
         if ($e instanceof MappingError) {
             $apiException = ApiException::createBadRequestException(
                 messages: ($this->buildValidationError)($e),
-                errorCode: ErrorCode::BAD_REQUEST,
                 previous: $e,
             );
 
@@ -89,22 +87,34 @@ final class ExceptionHandler extends ExceptionHandlerContract
     private function handleSpecificException(Throwable $e): ?ApiException
     {
         if ($e instanceof NotFoundHttpException) {
-            return ApiException::createNotFoundException('Запрашиваемый ресурс не найден.', ErrorCode::NOT_FOUND, $e);
+            return ApiException::createNotFoundException(
+                errorMessage: 'Запрашиваемый ресурс не найден.',
+                previous: $e,
+            );
         }
 
         if ($e instanceof MethodNotAllowedHttpException) {
             /** @var string $method */
             $method = $e->getHeaders()['Allow'];
 
-            return ApiException::createMethodNotAllowedException("Метод не поддерживается этим ресурсом. Доступные методы: {$method}.", ErrorCode::METHOD_NOT_ALLOWED, $e);
+            return ApiException::createMethodNotAllowedException(
+                errorMessage: "Метод не поддерживается этим ресурсом. Доступные методы: {$method}.",
+                previous: $e,
+            );
         }
 
         if ($e instanceof UnauthorizedHttpException || $e instanceof AuthenticationException) {
-            return ApiException::createUnauthenticatedException('Для доступ к ресурсу требуется аутентификация.', ErrorCode::UNAUTHENTICATED, $e);
+            return ApiException::createUnauthenticatedException(
+                'Для доступ к ресурсу требуется аутентификация.',
+                previous: $e,
+            );
         }
 
         if ($e instanceof AccessDeniedHttpException || $e instanceof AuthorizationException) {
-            return ApiException::createForbiddenException('Доступ к ресурсу ограничен.', ErrorCode::FORBIDDEN, $e);
+            return ApiException::createForbiddenException(
+                errorMessage: 'Доступ к ресурсу ограничен.',
+                previous: $e,
+            );
         }
 
         return null;
