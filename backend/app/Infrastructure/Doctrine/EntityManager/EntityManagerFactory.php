@@ -27,10 +27,11 @@ final class EntityManagerFactory
             $dbname .= "_{$testToken}";
         }
 
+        $env = $app->environment();
         $configuration = DoctrineConfigurationFactory::create(
             searchEntitiesPath: $app->path(),
             isDevMode: $app->hasDebugModeEnabled(),
-            proxyDir: $app->storagePath('framework/cache/doctrine/orm/Proxies'),
+            cacheDir: $app->storagePath("framework/cache/doctrine/{$env}"),
         );
 
         /** @var string $dbHost */
