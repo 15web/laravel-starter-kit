@@ -27,5 +27,12 @@ else
     echo "$USER_ID_ENV" >>./.env
 fi
 
+GROUP_ID_ENV="GROUP_ID=$(id -g)"
+if [ "$(grep 'GROUP_ID' ./.env)" != '' ]; then
+    osDependSedInPlace -E "s|^.*GROUP_ID=.*$|$GROUP_ID_ENV|" ./.env
+else
+    echo "$GROUP_ID_ENV" >>./.env
+fi
+
 [ -f ./backend/.env ] || cp ./backend/.env.example ./backend/.env
 [ -f ./docker/pgsql/.env ] || cp ./docker/pgsql/.env.dist ./docker/pgsql/.env
