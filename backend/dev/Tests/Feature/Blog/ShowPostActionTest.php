@@ -38,9 +38,9 @@ final class ShowPostActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
-        self::assertSame($data['title'], 'Title');
-        self::assertSame($data['author'], 'Author');
-        self::assertSame($data['content'], 'Content');
+        self::assertSame('Title', $data['title']);
+        self::assertSame('Author', $data['author']);
+        self::assertSame('Content', $data['content']);
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }

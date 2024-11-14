@@ -58,14 +58,14 @@ final class IndexNewsActionTest extends TestCase
         self::assertCount(2, $data);
 
         self::assertIsNumeric($data[0]['id']);
-        self::assertSame($data[0]['title'], 'Title1');
+        self::assertSame('Title1', $data[0]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
             DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']),
         );
 
         self::assertIsNumeric($data[1]['id']);
-        self::assertSame($data[1]['title'], 'Title2');
+        self::assertSame('Title2', $data[1]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
             DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']),
@@ -96,7 +96,7 @@ final class IndexNewsActionTest extends TestCase
         self::assertCount(1, $data);
 
         self::assertIsNumeric($data[0]['id']);
-        self::assertSame($data[0]['title'], 'Title3');
+        self::assertSame('Title3', $data[0]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
             DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']),

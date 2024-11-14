@@ -39,7 +39,7 @@ final class StoreCategoryActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
-        self::assertSame($data['title'], 'Title');
+        self::assertSame('Title', $data['title']);
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
@@ -72,7 +72,7 @@ final class StoreCategoryActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
-        self::assertSame($data['title'], 'Child');
+        self::assertSame('Child', $data['title']);
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
@@ -116,7 +116,7 @@ final class StoreCategoryActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
-        self::assertSame($data['title'], 'Title');
+        self::assertSame('Title', $data['title']);
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
