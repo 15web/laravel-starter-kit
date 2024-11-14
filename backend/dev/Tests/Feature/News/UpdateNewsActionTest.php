@@ -48,7 +48,7 @@ final class UpdateNewsActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertSame($data['id'], $newsId);
-        self::assertSame($data['title'], 'New Title');
+        self::assertSame('New Title', $data['title']);
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
         self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['updatedAt']));
     }

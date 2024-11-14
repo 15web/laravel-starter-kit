@@ -41,7 +41,7 @@ final class ShowNewsActionTest extends TestCase
         $data = $response->json('data');
 
         self::assertIsNumeric($data['id']);
-        self::assertSame($data['title'], 'Title');
+        self::assertSame('Title', $data['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
             DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']),

@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return array{
      *     token: non-empty-string,
-     *     roles: list<array{name: string, value: non-empty-string}>,
+     *     roles: list<non-empty-string>,
      *     email: non-empty-string
      * }
      */
@@ -36,7 +36,7 @@ abstract class TestCase extends BaseTestCase
         /**
          * @var array{
          *     token: non-empty-string,
-         *     roles: list<array{name: string, value: non-empty-string}>,
+         *     roles: list<non-empty-string>,
          *     email: non-empty-string
          * } $response
          */

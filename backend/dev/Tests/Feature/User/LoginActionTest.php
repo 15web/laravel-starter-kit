@@ -32,15 +32,15 @@ final class LoginActionTest extends TestCase
         /**
          * @var array{
          *      token: non-empty-string,
-         *      roles: list<array{name: string, value: non-empty-string}>,
+         *      roles: list<non-empty-string>,
          *      email: non-empty-string
          *  } $data
          */
         $data = $response->json('data');
 
-        self::assertSame($data['email'], 'user@example.com');
+        self::assertSame('user@example.com', $data['email']);
         self::assertCount(1, $data['roles']);
-        self::assertSame($data['roles'][0], 'user');
+        self::assertSame('user', $data['roles'][0]);
         self::assertNotEmpty($data['token']);
     }
 
