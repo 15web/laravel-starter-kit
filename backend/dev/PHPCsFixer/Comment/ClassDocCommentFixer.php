@@ -197,7 +197,7 @@ final class Sample
     private function createConfigurationDefinition(): FixerConfigurationResolver
     {
         return new FixerConfigurationResolver([
-            (new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded class filepath.'))
+            new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded class filepath.')
                 ->setAllowedTypes(['string'])
                 ->setNormalizer(static function (Options $options, string $value): string {
                     if (trim($value) === '') {

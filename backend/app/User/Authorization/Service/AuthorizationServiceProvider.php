@@ -19,7 +19,7 @@ final class AuthorizationServiceProvider extends ServiceProvider
     {
         Gate::define(
             ability: CheckRoleGranted::class,
-            callback: static fn (User $user, Role $role): bool => (new CheckRoleGranted())(
+            callback: static fn (User $user, Role $role): bool => new CheckRoleGranted()(
                 user: $user,
                 role: $role,
             ),

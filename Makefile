@@ -109,10 +109,10 @@ test-install: # Подготовка тестового окружения
 
 test: # Запуск тестов
 	make clear-test-cache
-	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --testdox'
+	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4'
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --testdox --filter=$(class)'
+	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --filter=$(class)'
 
 spectral: # Валидация openapi.yaml с помощью spectral
 	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/openapi.yaml -F warn --ruleset=/app/dev/.spectral.yaml

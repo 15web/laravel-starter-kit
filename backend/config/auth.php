@@ -67,4 +67,8 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
     ],
+
+    'rate_limiter_max_attempts' => [
+        'login' => (int) env('RATE_LIMITER_LOGIN_MAX_ATTEMPTS', 3), // Количество попыток входа/регистрации в минуту
+    ],
 ];
