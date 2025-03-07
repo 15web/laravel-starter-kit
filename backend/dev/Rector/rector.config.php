@@ -7,7 +7,6 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
-use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use RectorLaravel\Set\LaravelSetList;
 
 return RectorConfig::configure()
@@ -19,13 +18,11 @@ return RectorConfig::configure()
         __DIR__.'/../../bootstrap/providers.php',
         __DIR__.'/../../config',
         __DIR__.'/../../dev',
-        __DIR__.'/../../resources',
+        __DIR__.'/../../migrations',
     ])
     ->withParallel()
-    ->withPhpSets(php83: true)
+    ->withPhpSets()
     ->withImportNames(importShortClasses: false)
-    ->withTypeCoverageLevel(100)
-    ->withDeadCodeLevel(50)
     ->withPreparedSets(
         codeQuality: true,
         privatization: true,
@@ -34,7 +31,6 @@ return RectorConfig::configure()
         strictBooleans: true,
         rectorPreset: true,
         phpunitCodeQuality: true,
-        phpunit: true,
     )
     ->withSets([
         LaravelSetList::LARAVEL_CODE_QUALITY,
@@ -46,8 +42,5 @@ return RectorConfig::configure()
         InlineConstructorDefaultToPropertyRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         SimplifyBoolIdenticalTrueRector::class,
-        AddParamTypeSplFixedArrayRector::class => [
-            __DIR__.'/../PHPCsFixer',
-        ],
         PreferPHPUnitThisCallRector::class,
     ]);

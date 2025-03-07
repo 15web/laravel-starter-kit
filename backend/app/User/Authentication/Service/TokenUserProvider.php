@@ -8,6 +8,7 @@ use App\User\Authentication\Domain\AuthToken;
 use App\User\Authentication\Domain\UserTokenRepository;
 use App\User\User\Domain\User;
 use DomainException;
+use Illuminate\Auth\TokenGuard;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ final readonly class TokenUserProvider implements UserProvider
 {
     /**
      * @see \Illuminate\Auth\TokenGuard::$storageKey
-     * @see \Illuminate\Auth\TokenGuard::user
+     * @see TokenGuard::user
      */
     private const string CREDENTIALS_TOKEN_KEY = 'api_token';
 

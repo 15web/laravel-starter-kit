@@ -15,7 +15,7 @@ $finder = (new Finder())
         __DIR__.'/../../bootstrap',
         __DIR__.'/../../config',
         __DIR__.'/../../dev',
-        __DIR__.'/../../resources',
+        __DIR__.'/../../migrations',
     ])
     ->exclude('cache')
     ->append([
@@ -34,7 +34,7 @@ return (new Config())
         '@PER-CS' => true,
         '@PER-CS:risky' => true,
         '@PHP80Migration:risky' => true,
-        '@PHP82Migration' => true,
+        '@PHP83Migration' => true,
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
         '@PHPUnit100Migration:risky' => true,
@@ -63,7 +63,7 @@ return (new Config())
         'phpdoc_summary' => false,
         'phpdoc_types_order' => ['null_adjustment' => 'always_last'],
         'php_unit_test_class_requires_covers' => false,
-        'ClassDocComment/class_doc_comment' => true,
+        'ClassDocComment/class_doc_comment' => ['exclude' => 'migrations'],
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
         'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['arguments', 'array_destructuring', 'arrays', 'match', 'parameters']],
     ])
