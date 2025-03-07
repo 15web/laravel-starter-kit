@@ -8,6 +8,8 @@ info:
     url: https://www.15web.ru
     email: info@15web.ru
 tags:
+  - name: general
+    description: Общее
   - name: auth
     description: Аутентификация
   - name: blog
@@ -20,6 +22,17 @@ servers:
   - url: http://localhost:8088/api
     description: Локальный сервер для разработки
 paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Пинг приложения
+      description: Пинг приложения
+      tags:
+        - general
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/ping'
   /auth/login:
     post:
       operationId: login
@@ -372,6 +385,30 @@ components:
                 example: 11
                 nullable: true
   responses:
+    ping:
+      description: Возвращает ответ Pong
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - result
+                additionalProperties: false
+                properties:
+                  result:
+                    type: string
+                    description: Ответ
+                    minLength: 1
+                    example: Pong
+                  now:
+                    type: string
+                    description: Серверное время
+                    example: '2021-10-28T16:19:44+00:00'
+              status:
+                $ref: '#/components/schemas/status'
     login:
       description: Аутентификация прошла успешно
       content:
