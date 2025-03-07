@@ -8,7 +8,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
-$finder = (new Finder())
+$finder = new Finder()
     ->in([
         __DIR__.'/../../app',
         __DIR__.'/../../bin',
@@ -22,7 +22,7 @@ $finder = (new Finder())
         __FILE__,
     ]);
 
-return (new Config())
+return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setCacheFile(__DIR__.'/../../storage/framework/cache/.php-cs-fixer-cache')
     ->setRiskyAllowed(true)

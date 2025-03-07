@@ -23,7 +23,7 @@ final readonly class ValidateOpenApiSchemaMiddleware
         $response = $next($request);
 
         if (!App::isProduction()) {
-            (new ValidateOpenApiSchema())(
+            new ValidateOpenApiSchema()(
                 request: $request,
                 response: $response,
             );

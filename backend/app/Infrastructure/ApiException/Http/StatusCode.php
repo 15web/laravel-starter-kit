@@ -21,5 +21,7 @@ enum StatusCode: int
 
     case METHOD_NOT_ALLOWED = 405;
 
+    case TOO_MANY_REQUESTS = 429;
+
     case SERVER_ERROR = 500;
 }

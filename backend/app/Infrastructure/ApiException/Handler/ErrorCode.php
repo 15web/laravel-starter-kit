@@ -21,5 +21,7 @@ enum ErrorCode: string
 
     case UNEXPECTED = 'unexpected';
 
+    case TOO_MANY_REQUESTS = 'too_many_requests';
+
     case EXISTS = 'entity_exists';
 }

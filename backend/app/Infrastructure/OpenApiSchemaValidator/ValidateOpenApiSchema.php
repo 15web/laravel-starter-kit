@@ -32,7 +32,7 @@ final readonly class ValidateOpenApiSchema
     {
         /** @var string $openApiPath */
         $openApiPath = config('openapi.path');
-        $validatorBuilder = (new ValidatorBuilder())->fromYamlFile(
+        $validatorBuilder = new ValidatorBuilder()->fromYamlFile(
             base_path($openApiPath),
         );
 
