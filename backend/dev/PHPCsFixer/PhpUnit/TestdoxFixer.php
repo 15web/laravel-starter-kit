@@ -268,7 +268,7 @@ final class ExampleTest
     private function createConfigurationDefinition(): FixerConfigurationResolver
     {
         return new FixerConfigurationResolver([
-            (new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded test namespace.'))
+            new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded test namespace.')
                 ->setAllowedTypes(['string'])
                 ->setNormalizer(static function (Options $options, string $value): string {
                     if (trim($value) === '') {

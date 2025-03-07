@@ -9,7 +9,9 @@ use App\User\User\Domain\User;
 use Dev\Tests\Feature\TestCase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\TestResponse;
 use Iterator;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -19,6 +21,15 @@ use PHPUnit\Framework\Attributes\TestDox;
 #[TestDox('Ручка логина')]
 final class LoginActionTest extends TestCase
 {
+    #[Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Устанавливаем завышенное значение рейт лимитера для тестов
+        Config::set('auth.rate_limiter_max_attempts.login', 100);
+    }
+
     #[TestDox('Успешный запрос')]
     public function testSucceedRequest(): void
     {
@@ -110,6 +121,30 @@ final class LoginActionTest extends TestCase
                 'password' => '123456',
             ])
             ->assertOk();
+    }
+
+    #[TestDox('Неправильный запрос')]
+    public function testTooManyRequests(): void
+    {
+        $email = 'user@example.com';
+
+        $this
+            ->postJson('api/auth/login', [
+                'email' => $email,
+                'password' => '123456',
+            ])
+            ->assertOk();
+
+        $response = fn (): TestResponse => $this
+            ->postJson('api/auth/login', [
+                'email' => $email,
+                'password' => 'fakePassword',
+            ]);
+
+        Config::set('auth.rate_limiter_max_attempts.login', 1);
+
+        ($response)()->assertUnauthorized();
+        ($response)()->assertTooManyRequests();
     }
 
     /**

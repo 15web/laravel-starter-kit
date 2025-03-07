@@ -33,7 +33,7 @@ final class ApiExceptionServiceProvider extends ServiceProvider
 
     private function bindValidationMapper(): void
     {
-        $mapperBuilder = (new MapperBuilder())
+        $mapperBuilder = new MapperBuilder()
             ->filterExceptions(static function (Throwable $exception): ErrorMessage {
                 if ($exception instanceof InvalidArgumentException) {
                     return MessageBuilder::from($exception);
