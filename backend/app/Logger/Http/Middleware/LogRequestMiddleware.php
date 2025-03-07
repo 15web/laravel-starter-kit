@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
@@ -82,6 +83,13 @@ final readonly class LogRequestMiddleware
             'error' => $error,
             'requestId' => $requestId,
         ];
+
+        /** @var Uuid|null $authenticatedUserId */
+        $authenticatedUserId = auth()->id();
+
+        if ($authenticatedUserId !== null) {
+            $context['authId'] = (string) $authenticatedUserId;
+        }
 
         Log::info($message, $context);
     }
