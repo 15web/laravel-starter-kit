@@ -27,7 +27,10 @@ use Webmozart\Assert\InvalidArgumentException;
  */
 final class ExceptionHandler extends ExceptionHandlerContract
 {
-    protected $internalDontReport = [];
+    protected $dontReport = [
+        ApiException::class,
+        MappingError::class,
+    ];
 
     public function __construct(
         private readonly BuildValidationError $buildValidationError,
