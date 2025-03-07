@@ -6,12 +6,11 @@ namespace App\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20241004064228 extends AbstractMigration
 {
+    #[Override]
     public function getDescription(): string
     {
         return 'Laravel Queue';
@@ -63,6 +62,7 @@ final class Version20241004064228 extends AbstractMigration
         $this->addSql('alter table public.failed_jobs owner to postgres;');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE failed_jobs');

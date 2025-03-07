@@ -83,10 +83,10 @@ psalm: # Запуск psalm
 	docker compose run --rm backend-cli vendor/bin/psalm --config=./dev/psalm.xml
 
 fixer-check: # Проверка стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi -v
+	docker compose run --rm backend-cli bash -c 'PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi -v'
 
 fixer-fix: # Фикс стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix
+	docker compose run --rm backend-cli bash -c 'PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer --config=dev/PHPCsFixer/php-cs-fixer-config.php fix'
 
 rector-check: # Какой код необходимо отрефакторить
 	docker compose run --rm backend-cli vendor/bin/rector process --config=dev/Rector/rector.config.php --dry-run --ansi

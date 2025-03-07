@@ -5,14 +5,12 @@ parameters:
     paths:
         - ../../app
         - ../../bin
-        - ../../bootstrap/app.php
-        - ../../bootstrap/providers.php
+        - ../../bootstrap
         - ../../dev
-        - ../../resources
+        - ../../migrations
     tmpDir: ../../storage/framework/cache/phpstan
     excludePaths:
         - ../../bootstrap/cache
-        - ../../storage
         - ../Rector/rector.config.php
     parallel:
         maximumNumberOfProcesses: 4

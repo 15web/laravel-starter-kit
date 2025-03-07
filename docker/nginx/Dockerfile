@@ -1,4 +1,4 @@
-FROM nginx:1.27.1
+FROM nginx:1.27.4
 
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 

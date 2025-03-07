@@ -4,18 +4,20 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
-        findUnusedBaselineEntry="true"
+        findUnusedCode="false"
         cacheDirectory="../storage/framework/cache/psalm"
 >
     <projectFiles>
         <directory name="../app"/>
+        <directory name="../bin"/>
         <directory name="../bootstrap"/>
         <directory name="../dev"/>
-        <directory name="../migrations"/>
         <ignoreFiles>
             <directory name="../bootstrap/cache"/>
-            <directory name="../vendor"/>
+            <directory name="../resources"/>
             <directory name="../storage"/>
+            <directory name="../vendor"/>
+            <file name="" />
         </ignoreFiles>
     </projectFiles>
 
