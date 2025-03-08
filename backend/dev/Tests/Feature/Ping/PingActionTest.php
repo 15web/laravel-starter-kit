@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\Ping;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -32,7 +33,7 @@ final class PingActionTest extends TestCase
         self::assertSame('pong', $data['result']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
-            DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['now']),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['now']),
         );
     }
 }

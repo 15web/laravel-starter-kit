@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\OpenApiSchemaValidator\Middleware;
+namespace Dev\OpenApi\Middleware;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use Closure;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final readonly class ValidateOpenApiSchemaMiddleware
 {
-    public function __construct(
-        private ValidateOpenApiSchema $validateOpenApiSchema,
-    ) {}
-
     /**
      * @param Closure(Request): (Response) $next
      */
@@ -26,12 +22,14 @@ final readonly class ValidateOpenApiSchemaMiddleware
     {
         $response = $next($request);
 
-        if (!App::isProduction()) {
-            ($this->validateOpenApiSchema)(
-                request: $request,
-                response: $response,
-            );
+        if (!App::runningUnitTests()) {
+            return $response;
         }
+
+        new ValidateOpenApiSchema()(
+            request: $request,
+            response: $response,
+        );
 
         return $response;
     }

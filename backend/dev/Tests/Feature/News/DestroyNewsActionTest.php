@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -54,7 +54,10 @@ final class DestroyNewsActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->deleteJson(\sprintf('api/news/Title?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
+            ->deleteJson(
+                uri: 'api/news/Title',
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

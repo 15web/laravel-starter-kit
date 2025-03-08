@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\User;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -38,7 +38,10 @@ final class LogoutActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->postJson('api/auth/logout', [ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => false])
+            ->postJson(
+                uri: 'api/auth/logout',
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

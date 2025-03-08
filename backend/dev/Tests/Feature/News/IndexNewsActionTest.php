@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -61,14 +62,14 @@ final class IndexNewsActionTest extends TestCase
         self::assertSame('Title1', $data[0]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
-            DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[0]['createdAt']),
         );
 
         self::assertIsNumeric($data[1]['id']);
         self::assertSame('Title2', $data[1]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
-            DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[1]['createdAt']),
         );
 
         self::assertSame(3, $total);
@@ -99,7 +100,7 @@ final class IndexNewsActionTest extends TestCase
         self::assertSame('Title3', $data[0]['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
-            DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[0]['createdAt']),
         );
 
         self::assertSame(3, $total);
@@ -145,7 +146,10 @@ final class IndexNewsActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->getJson(\sprintf('api/news?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
+            ->getJson(
+                uri: 'api/news',
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

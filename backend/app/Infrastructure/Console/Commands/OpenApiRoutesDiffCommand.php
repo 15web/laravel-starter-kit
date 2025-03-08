@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Container\Attributes\Config;
 use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -17,11 +16,9 @@ use Symfony\Component\Yaml\Yaml;
 #[AsCommand(name: 'openapi-routes-diff', description: 'Находит расхождения endpoints и документации openapi')]
 final class OpenApiRoutesDiffCommand extends Command
 {
-    public function handle(
-        #[Config('openapi.path')]
-        string $openApiPath,
-    ): int {
-        $openApiPaths = $this->getOpenApiPaths($openApiPath);
+    public function handle(): int
+    {
+        $openApiPaths = $this->getOpenApiPaths('dev/openapi.yaml');
         $appPaths = $this->getAppPaths();
         $missingAppPaths = array_diff($openApiPaths, $appPaths);
         $missingOpenApiPaths = array_diff($appPaths, $openApiPaths);

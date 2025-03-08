@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -49,8 +50,14 @@ final class UpdateNewsActionTest extends TestCase
 
         self::assertSame($data['id'], $newsId);
         self::assertSame('New Title', $data['title']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['updatedAt']));
+        self::assertInstanceOf(
+            DateTimeImmutable::class,
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['createdAt']),
+        );
+        self::assertInstanceOf(
+            DateTimeImmutable::class,
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['updatedAt']),
+        );
     }
 
     #[TestDox('Запись не найдена')]
@@ -77,11 +84,13 @@ final class UpdateNewsActionTest extends TestCase
     {
         $auth = $this->auth();
 
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news/Title', $body)
+            ->postJson(
+                uri: 'api/news/Title',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 
@@ -97,11 +106,14 @@ final class UpdateNewsActionTest extends TestCase
     {
         $body = [
             'title' => 'New Title',
-            ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => false,
         ];
 
         $this
-            ->postJson('api/news/Title', $body)
+            ->postJson(
+                uri: 'api/news/Title',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

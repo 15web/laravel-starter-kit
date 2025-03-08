@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\Blog;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -41,7 +42,7 @@ final class ShowPostActionTest extends TestCase
         self::assertSame('Title', $data['title']);
         self::assertSame('Author', $data['author']);
         self::assertSame('Content', $data['content']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
 

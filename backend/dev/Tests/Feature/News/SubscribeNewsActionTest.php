@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -42,10 +42,12 @@ final class SubscribeNewsActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
-            ->postJson('api/subscribe', $body)
+            ->postJson(
+                uri: 'api/subscribe',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 

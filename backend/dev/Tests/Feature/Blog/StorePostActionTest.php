@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\Blog;
 
 use App\Infrastructure\ApiException\Handler\ErrorCode;
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -41,7 +42,7 @@ final class StorePostActionTest extends TestCase
 
         self::assertIsNumeric($data['id']);
         self::assertSame('Title', $data['title']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
 
@@ -72,10 +73,12 @@ final class StorePostActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
-            ->postJson('api/blog', $body)
+            ->postJson(
+                uri: 'api/blog',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 

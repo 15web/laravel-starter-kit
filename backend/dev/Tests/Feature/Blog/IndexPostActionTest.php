@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\Blog;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -54,12 +55,12 @@ final class IndexPostActionTest extends TestCase
         self::assertIsNumeric($data[0]['id']);
         self::assertSame('Title1', $data[0]['title']);
         self::assertSame('Author1', $data[0]['author']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[0]['createdAt']));
 
         self::assertIsNumeric($data[1]['id']);
         self::assertSame('Title2', $data[1]['title']);
         self::assertSame('Author2', $data[1]['author']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[1]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[1]['createdAt']));
 
         self::assertSame(3, $total);
 
@@ -88,7 +89,7 @@ final class IndexPostActionTest extends TestCase
         self::assertIsNumeric($data[0]['id']);
         self::assertSame('Title3', $data[0]['title']);
         self::assertSame('Author3', $data[0]['author']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data[0]['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data[0]['createdAt']));
 
         self::assertSame(3, $total);
 
