@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 /**
  * @internal
  */
-#[TestDox('Ручка логина')]
+#[TestDox('Ручка логина/регистрации')]
 final class LoginActionTest extends TestCase
 {
     #[TestDox('Успешный запрос')]
@@ -54,6 +54,36 @@ final class LoginActionTest extends TestCase
                 'email' => 'user@example.com',
                 'password' => 'fakePassword',
             ])
+            ->assertUnauthorized();
+    }
+
+    #[TestDox('Короткий пароль при регистрации')]
+    public function testShortPasswordWhileRegister(): void
+    {
+        $this
+            ->postJson(
+                uri: 'api/auth/login',
+                data: [
+                    'email' => 'user@example.com',
+                    'password' => '123',
+                ],
+            )
+            ->assertBadRequest();
+    }
+
+    #[TestDox('Короткий пароль при входе')]
+    public function testShortPasswordWhileLogin(): void
+    {
+        $this->auth();
+
+        $this
+            ->postJson(
+                uri: 'api/auth/login',
+                data: [
+                    'email' => 'user@example.com',
+                    'password' => '123',
+                ],
+            )
             ->assertUnauthorized();
     }
 
@@ -119,10 +149,12 @@ final class LoginActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
-            ->postJson('api/auth/login', $body)
+            ->postJson(
+                uri: 'api/auth/login',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 
@@ -135,7 +167,5 @@ final class LoginActionTest extends TestCase
         yield 'невалидный email' => [['email' => 'fake', 'password' => '123456']];
 
         yield 'пустой пароль' => [['email' => 'user@example.com', 'password' => '']];
-
-        yield 'короткий пароль' => [['email' => 'user@example.com', 'password' => '123']];
     }
 }

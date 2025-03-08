@@ -6,7 +6,6 @@ namespace App\Infrastructure\OpenApiSchemaValidator;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\RequestValidator;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
@@ -20,9 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final readonly class ValidateOpenApiSchema
 {
-    public const string VALIDATE_REQUEST_KEY = 'validate_request';
+    public const string IGNORE_REQUEST_VALIDATE = 'X-IGNORE-REQUEST-VALIDATE';
 
-    public const string VALIDATE_RESPONSE_KEY = 'validate_response';
+    public const string IGNORE_RESPONSE_VALIDATE = 'X-IGNORE-RESPONSE-VALIDATE';
 
     private RequestValidator $requestValidator;
 
@@ -32,7 +31,7 @@ final readonly class ValidateOpenApiSchema
     {
         /** @var string $openApiPath */
         $openApiPath = config('openapi.path');
-        $validatorBuilder = (new ValidatorBuilder())->fromYamlFile(
+        $validatorBuilder = new ValidatorBuilder()->fromYamlFile(
             base_path($openApiPath),
         );
 
@@ -58,10 +57,7 @@ final readonly class ValidateOpenApiSchema
 
     private function validateRequest(Request $request): void
     {
-        if (!$this->needValidateTest(
-            request: $request,
-            requestParameterName: self::VALIDATE_REQUEST_KEY,
-        )) {
+        if ($request->hasHeader(self::IGNORE_REQUEST_VALIDATE)) {
             return;
         }
 
@@ -73,10 +69,7 @@ final readonly class ValidateOpenApiSchema
 
     private function validateResponse(Request $request, Response $response): void
     {
-        if (!$this->needValidateTest(
-            request: $request,
-            requestParameterName: self::VALIDATE_RESPONSE_KEY,
-        )) {
+        if ($request->hasHeader(self::IGNORE_RESPONSE_VALIDATE)) {
             return;
         }
 
@@ -99,14 +92,6 @@ final readonly class ValidateOpenApiSchema
     private function needValidate(string $path): bool
     {
         return str_starts_with($path, 'api');
-    }
-
-    private function needValidateTest(Request $request, string $requestParameterName): bool
-    {
-        /** @var bool $parameterValue */
-        $parameterValue = $request->get($requestParameterName, true);
-
-        return App::runningUnitTests() && $parameterValue === true;
     }
 
     private function buildPsrHttpFactory(): PsrHttpFactory

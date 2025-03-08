@@ -38,7 +38,10 @@ final class LogoutActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->postJson('api/auth/logout', [ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => false])
+            ->postJson(
+                uri: 'api/auth/logout',
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

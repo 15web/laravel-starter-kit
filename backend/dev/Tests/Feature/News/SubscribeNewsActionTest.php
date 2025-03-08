@@ -42,10 +42,12 @@ final class SubscribeNewsActionTest extends TestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
-            ->postJson('api/subscribe', $body)
+            ->postJson(
+                uri: 'api/subscribe',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 
