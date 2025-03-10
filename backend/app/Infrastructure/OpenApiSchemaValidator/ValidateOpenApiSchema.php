@@ -25,14 +25,24 @@ final readonly class ValidateOpenApiSchema
 
     public const string VALIDATE_RESPONSE_KEY = 'validate_response';
 
+    /**
+     * @phpstan-ignore property.uninitializedReadonly
+     */
     private RequestValidator $requestValidator;
 
+    /**
+     * @phpstan-ignore property.uninitializedReadonly
+     */
     private ResponseValidator $responseValidator;
 
     public function __construct(
         #[Config('openapi.path')]
         private string $openApiPath,
     ) {
+        if (app()->isProduction()) {
+            return;
+        }
+
         $validatorBuilder = new ValidatorBuilder()->fromYamlFile(
             base_path($this->openApiPath),
         );
