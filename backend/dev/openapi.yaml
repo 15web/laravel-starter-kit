@@ -49,6 +49,8 @@ paths:
           $ref: '#/components/responses/badRequest'
         '401':
           $ref: '#/components/responses/unauthenticated'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
   /auth/logout:
     post:
       operationId: logout
@@ -250,6 +252,19 @@ components:
       description: |
         Укажите токен без префикса `Bearer `, \
         например '01928fb2-4147-7a36-a67b-88deaaee45b9'
+  headers:
+    rateLimitRetryAfter:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество секунд до повторного запроса
+      example: 120
+    rateLimitLimit:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество допустимых попыток в период времени
+      example: 60
   parameters:
     limit:
       in: query
@@ -893,6 +908,21 @@ components:
             message: Запись не найдена
             code: not_found
             errors: []
+    tooManyRequests:
+      description: Превышено количество запросов
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Превышено количество запросов
+            code: too_many_requests
+            errors: []
+      headers:
+        X-RateLimit-Retry-After:
+          $ref: '#/components/headers/rateLimitRetryAfter'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitLimit'
   schemas:
     id:
       type: number
@@ -930,6 +960,7 @@ components:
             - not_found
             - method_not_allowed
             - unexpected
+            - too_many_requests
             - entity_exists
         errors:
           type: array

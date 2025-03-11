@@ -17,6 +17,7 @@ final class ApiException extends Exception
 {
     /**
      * @param list<string> $validationErrors
+     * @param array<non-empty-string, string> $headers
      */
     private function __construct(
         private readonly string $errorMessage,
@@ -24,6 +25,7 @@ final class ApiException extends Exception
         private readonly StatusCode $statusCode,
         ?Throwable $previous = null,
         private readonly array $validationErrors = [],
+        private readonly array $headers = [],
     ) {
         parent::__construct(previous: $previous);
     }
@@ -52,10 +54,21 @@ final class ApiException extends Exception
     }
 
     /**
+     * @return array<non-empty-string, string>
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
      * @param list<string> $messages
      */
-    public static function createBadRequestException(array $messages, ErrorCode $errorCode = ErrorCode::BAD_REQUEST, ?Throwable $previous = null): self
-    {
+    public static function createBadRequestException(
+        array $messages,
+        ErrorCode $errorCode = ErrorCode::BAD_REQUEST,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: 'Неверный формат запроса',
             errorCode: $errorCode,
@@ -65,8 +78,11 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createUnauthenticatedException(string $errorMessage, ErrorCode $errorCode = ErrorCode::UNAUTHENTICATED, ?Throwable $previous = null): self
-    {
+    public static function createUnauthenticatedException(
+        string $errorMessage,
+        ErrorCode $errorCode = ErrorCode::UNAUTHENTICATED,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
@@ -75,8 +91,11 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createForbiddenException(string $errorMessage, ErrorCode $errorCode = ErrorCode::FORBIDDEN, ?Throwable $previous = null): self
-    {
+    public static function createForbiddenException(
+        string $errorMessage,
+        ErrorCode $errorCode = ErrorCode::FORBIDDEN,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
@@ -85,8 +104,11 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createNotFoundException(string $errorMessage, ErrorCode $errorCode = ErrorCode::NOT_FOUND, ?Throwable $previous = null): self
-    {
+    public static function createNotFoundException(
+        string $errorMessage,
+        ErrorCode $errorCode = ErrorCode::NOT_FOUND,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
@@ -95,8 +117,11 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createMethodNotAllowedException(string $errorMessage, ErrorCode $errorCode = ErrorCode::METHOD_NOT_ALLOWED, ?Throwable $previous = null): self
-    {
+    public static function createMethodNotAllowedException(
+        string $errorMessage,
+        ErrorCode $errorCode = ErrorCode::METHOD_NOT_ALLOWED,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
@@ -105,8 +130,11 @@ final class ApiException extends Exception
         );
     }
 
-    public static function createDomainException(string $errorMessage, ErrorCode $errorCode, ?Throwable $previous = null): self
-    {
+    public static function createDomainException(
+        string $errorMessage,
+        ErrorCode $errorCode,
+        ?Throwable $previous = null,
+    ): self {
         return new self(
             errorMessage: $errorMessage,
             errorCode: $errorCode,
@@ -132,6 +160,19 @@ final class ApiException extends Exception
             errorCode: ErrorCode::UNEXPECTED,
             statusCode: StatusCode::SERVER_ERROR,
             previous: $previous,
+        );
+    }
+
+    public static function createTooManyRequestsException(int $retryAfter, int $limit): self
+    {
+        return new self(
+            errorMessage: 'Превышено количество запросов.',
+            errorCode: ErrorCode::TOO_MANY_REQUESTS,
+            statusCode: StatusCode::TOO_MANY_REQUESTS,
+            headers: [
+                'X-RateLimit-Retry-After' => (string) $retryAfter,
+                'X-RateLimit-Limit' => (string) $limit,
+            ],
         );
     }
 }

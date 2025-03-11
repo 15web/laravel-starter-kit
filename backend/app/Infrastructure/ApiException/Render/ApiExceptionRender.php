@@ -26,6 +26,7 @@ final readonly class ApiExceptionRender
         return new JsonResponse(
             data: $apiExceptionResponseJSON,
             status: $apiException->getStatusCode()->value,
+            headers: $apiException->getHeaders(),
             json: true,
         );
     }
