@@ -33,7 +33,7 @@ services:
         ports:
             - ${NGINX_PORT}:80
         volumes:
-            - ../backend/public/storage/:/app/:ro
+            - ../backend/:/app/:ro
         depends_on: [ backend ]
     pgsql:
         build:
