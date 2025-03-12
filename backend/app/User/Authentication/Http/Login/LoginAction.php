@@ -21,6 +21,7 @@ use App\User\User\Query\FindUserQuery;
 use App\User\User\Service\CreateUser;
 use App\User\User\Service\CreateUserCommand;
 use DomainException;
+use Illuminate\Container\Attributes\Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\RouteAttributes\Attributes as Router;
@@ -40,14 +41,17 @@ final readonly class LoginAction
         private TokenUserProvider $auth,
     ) {}
 
+    /**
+     * @param positive-int $maxAttempts
+     */
     #[Router\Post('/auth/login')]
-    public function __invoke(Request $request): JsonResponse
-    {
+    public function __invoke(
+        Request $request,
+        #[Config('auth.rate_limiter_max_attempts.login')]
+        int $maxAttempts,
+    ): JsonResponse {
         /** @var non-empty-string $clientIp */
         $clientIp = $request->getClientIp();
-
-        /** @var positive-int $maxAttempts */
-        $maxAttempts = config('auth.rate_limiter_max_attempts.login');
 
         $rateLimiter = new RateLimiter(
             key: $clientIp,

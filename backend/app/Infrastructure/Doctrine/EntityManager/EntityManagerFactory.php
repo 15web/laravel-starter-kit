@@ -7,50 +7,60 @@ namespace App\Infrastructure\Doctrine\EntityManager;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Container\Attributes\Config;
 use Illuminate\Foundation\Application;
 
 /**
  * Фабрика для создания Entity Manager
  */
-final class EntityManagerFactory
+final readonly class EntityManagerFactory
 {
-    public static function create(Application $app): EntityManager
-    {
-        /** @var non-empty-string $connectionName */
-        $connectionName = config('database.default');
+    /**
+     * @param non-empty-string $connectionName
+     * @param array<string, array{database: string}> $databaseConnections
+     */
+    public function __construct(
+        #[Config('database.default')]
+        private string $connectionName,
+        #[Config('database.test_token')]
+        private string $testToken,
+        #[Config('database.connections')]
+        private array $databaseConnections,
+    ) {}
 
-        /** @var string $dbname */
-        $dbname = config("database.connections.{$connectionName}.database");
+    public function create(Application $app): EntityManager
+    {
+        $dbname = $this->databaseConnections[$this->connectionName]['database'];
         if ($app->runningUnitTests() && config('database.test_token') !== null) {
-            /** @var string $testToken */
-            $testToken = config('database.test_token');
-            $dbname .= "_{$testToken}";
+            $dbname .= "_{$this->testToken}";
         }
 
+        /** @var string $env */
         $env = $app->environment();
-        $configuration = DoctrineConfigurationFactory::create(
+
+        $configuration = $app->make(DoctrineConfigurationFactory::class)->create(
             searchEntitiesPath: $app->path(),
             isDevMode: $app->hasDebugModeEnabled(),
             cacheDir: $app->storagePath("framework/cache/doctrine/{$env}"),
         );
 
         /** @var string $dbHost */
-        $dbHost = config("database.connections.{$connectionName}.host");
+        $dbHost = config("database.connections.{$this->connectionName}.host");
 
         /** @var int $dbPort */
-        $dbPort = config("database.connections.{$connectionName}.port");
+        $dbPort = config("database.connections.{$this->connectionName}.port");
 
         /** @var string $dbUser */
-        $dbUser = config("database.connections.{$connectionName}.username");
+        $dbUser = config("database.connections.{$this->connectionName}.username");
 
         /** @var string $dbPassword */
-        $dbPassword = config("database.connections.{$connectionName}.password");
+        $dbPassword = config("database.connections.{$this->connectionName}.password");
 
         /** @var string $dbUnixSocket */
-        $dbUnixSocket = config("database.connections.{$connectionName}.unix_socket");
+        $dbUnixSocket = config("database.connections.{$this->connectionName}.unix_socket");
 
         /** @var string $dbCharset */
-        $dbCharset = config("database.connections.{$connectionName}.charset");
+        $dbCharset = config("database.connections.{$this->connectionName}.charset");
 
         /**
          * @see https://www.doctrine-project.org/projects/doctrine-migrations/en/3.8/reference/configuration.html#connection-configuration

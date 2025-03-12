@@ -24,7 +24,7 @@ final class DoctrineServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             EntityManager::class,
-            static fn (Application $app): EntityManager => EntityManagerFactory::create($app),
+            static fn (Application $app): EntityManager => $app->make(EntityManagerFactory::class)->create($app),
         );
 
         $this->app->singleton(
