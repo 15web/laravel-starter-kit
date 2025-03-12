@@ -7,14 +7,24 @@ namespace App\Infrastructure\Doctrine\EntityManager;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\ORMSetup;
+use Illuminate\Container\Attributes\Config;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * Фабрика конфигурации Doctrine
  */
-final class DoctrineConfigurationFactory
+final readonly class DoctrineConfigurationFactory
 {
-    public static function create(
+    public function __construct(
+        #[Config('queue.connections.database.table')]
+        private string $jobsTable,
+        #[Config('queue.failed.table')]
+        private string $failedJobsTable,
+        #[Config('queue.batching.table')]
+        private string $jobsBatchingTable,
+    ) {}
+
+    public function create(
         string $searchEntitiesPath,
         bool $isDevMode,
         string $cacheDir,
@@ -29,12 +39,12 @@ final class DoctrineConfigurationFactory
         $config->setProxyNamespace('DoctrineProxies');
         $config->setProxyDir($proxyDir);
 
-        $config->setSchemaAssetsFilter(static function (AbstractAsset|string $assetName): bool {
+        $config->setSchemaAssetsFilter(function (AbstractAsset|string $assetName): bool {
             if ($assetName instanceof AbstractAsset) {
                 $assetName = $assetName->getName();
             }
 
-            return !\in_array($assetName, self::getFilteredAssets(), true);
+            return !\in_array($assetName, $this->getFilteredAssets(), true);
         });
 
         $cache = new FilesystemAdapter(
@@ -51,26 +61,17 @@ final class DoctrineConfigurationFactory
     /**
      * @return list<non-empty-string>
      */
-    private static function getFilteredAssets(): array
+    private function getFilteredAssets(): array
     {
-        /** @var string $jobsTable */
-        $jobsTable = config('queue.connections.database.table');
-
-        /** @var string $failedJobsTable */
-        $failedJobsTable = config('queue.failed.table');
-
-        /** @var string $jobsBatchingTable */
-        $jobsBatchingTable = config('queue.batching.table');
-
         $ignoredTables = [
-            $jobsTable,
-            $failedJobsTable,
-            $jobsBatchingTable,
+            $this->jobsTable,
+            $this->failedJobsTable,
+            $this->jobsBatchingTable,
         ];
 
         $ignoredSequences = [
-            "{$jobsTable}_id_seq",
-            "{$failedJobsTable}_id_seq",
+            "{$this->jobsTable}_id_seq",
+            "{$this->failedJobsTable}_id_seq",
         ];
 
         /** @var list<non-empty-string> $ignoredAssets */

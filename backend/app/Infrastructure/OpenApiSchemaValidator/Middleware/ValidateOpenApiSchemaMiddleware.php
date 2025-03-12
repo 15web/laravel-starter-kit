@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final readonly class ValidateOpenApiSchemaMiddleware
 {
+    public function __construct(
+        private ValidateOpenApiSchema $validateOpenApiSchema,
+    ) {}
+
     /**
      * @param Closure(Request): (Response) $next
      */
@@ -23,7 +27,7 @@ final readonly class ValidateOpenApiSchemaMiddleware
         $response = $next($request);
 
         if (!App::isProduction()) {
-            new ValidateOpenApiSchema()(
+            ($this->validateOpenApiSchema)(
                 request: $request,
                 response: $response,
             );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\OpenApiSchemaValidator;
 
+use Illuminate\Container\Attributes\Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -28,12 +29,12 @@ final readonly class ValidateOpenApiSchema
 
     private ResponseValidator $responseValidator;
 
-    public function __construct()
-    {
-        /** @var string $openApiPath */
-        $openApiPath = config('openapi.path');
+    public function __construct(
+        #[Config('openapi.path')]
+        private string $openApiPath,
+    ) {
         $validatorBuilder = new ValidatorBuilder()->fromYamlFile(
-            base_path($openApiPath),
+            base_path($this->openApiPath),
         );
 
         $this->requestValidator = $validatorBuilder->getRequestValidator();
