@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\EntityManager;
 
+use Doctrine\DBAL\Logging\Middleware;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\ORMSetup;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
@@ -44,6 +46,13 @@ final class DoctrineConfigurationFactory
         $config->setMetadataCache($cache);
         $config->setQueryCache($cache);
         $config->setResultCache($cache);
+
+        if (app()->hasDebugModeEnabled()) {
+            $config->setMiddlewares([
+                new Middleware(Log::getLogger()),
+                new \App\Infrastructure\Doctrine\Logging\Middleware(),
+            ]);
+        }
 
         return $config;
     }
