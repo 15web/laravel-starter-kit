@@ -8,6 +8,7 @@
         cacheDirectory="../storage/framework/cache/psalm"
 >
     <projectFiles>
+        <directory name="../admin"/>
         <directory name="../app"/>
         <directory name="../bin"/>
         <directory name="../bootstrap"/>

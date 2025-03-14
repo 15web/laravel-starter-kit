@@ -3,6 +3,7 @@ parameters:
     fileExtensions:
         - php
     paths:
+        - ../../admin
         - ../../app
         - ../../bin
         - ../../bootstrap
