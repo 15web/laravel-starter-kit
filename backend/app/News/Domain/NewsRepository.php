@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\News\Domain;
 
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -41,6 +42,7 @@ final readonly class NewsRepository
     {
         $query = $this->repository
             ->createQueryBuilder('news')
+            ->orderBy('news.createdAt', Order::Descending->value)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
@@ -84,5 +86,10 @@ final readonly class NewsRepository
     public function countTotal(): int
     {
         return $this->repository->count();
+    }
+
+    public function remove(News $news): void
+    {
+        $this->entityManager->remove($news);
     }
 }
