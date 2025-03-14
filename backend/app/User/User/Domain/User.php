@@ -53,7 +53,7 @@ class User implements Authenticatable
      */
     public function __construct(
         #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-        private readonly Uuid $id,
+        private Uuid $id,
         Email $email,
         string $password,
     ) {
