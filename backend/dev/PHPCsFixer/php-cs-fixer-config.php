@@ -10,6 +10,7 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = new Finder()
     ->in([
+        __DIR__.'/../../admin',
         __DIR__.'/../../app',
         __DIR__.'/../../bin',
         __DIR__.'/../../bootstrap',
