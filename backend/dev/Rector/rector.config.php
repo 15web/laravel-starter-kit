@@ -12,6 +12,7 @@ use RectorLaravel\Set\LaravelSetList;
 return RectorConfig::configure()
     ->withCache(__DIR__.'/../../storage/framework/cache/rector')
     ->withPaths([
+        __DIR__.'/../../admin',
         __DIR__.'/../../app',
         __DIR__.'/../../bin',
         __DIR__.'/../../bootstrap/app.php',

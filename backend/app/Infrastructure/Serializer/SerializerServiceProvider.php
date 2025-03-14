@@ -20,7 +20,7 @@ final class SerializerServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->bind(Serializer::class, static function (): Serializer {
+        $this->app->singleton(Serializer::class, static function (): Serializer {
             $encoders = [new JsonEncoder()];
             $normalizers = [ // порядок имеет значение
                 new BackedEnumNormalizer(),
