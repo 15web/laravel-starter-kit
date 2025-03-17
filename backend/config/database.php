@@ -122,5 +122,5 @@ return [
         ],
     ],
 
-    'test_token' => env('TEST_TOKEN'),
+    'test_token' => env('TEST_TOKEN', '1'),
 ];
