@@ -7,19 +7,15 @@ use App\Infrastructure\Doctrine\DoctrineServiceProvider;
 use App\Infrastructure\Serializer\SerializerServiceProvider;
 use App\User\Authentication\Service\AuthenticationServiceProvider;
 use App\User\Authorization\Service\AuthorizationServiceProvider;
+use Dev\Telescope\TelescopeServiceProvider;
 use Spatie\RouteAttributes\RouteAttributesServiceProvider;
 
 return [
-    // Package Service Providers...
-    RouteAttributesServiceProvider::class,
-    // \Laravel\Tinker\TinkerServiceProvider::class,
-
-    // Application Service Providers...
+    ApiExceptionServiceProvider::class,
     DoctrineServiceProvider::class,
     SerializerServiceProvider::class,
-    ApiExceptionServiceProvider::class,
-
-    // Modules Service Providers...
+    TelescopeServiceProvider::class,
     AuthenticationServiceProvider::class,
     AuthorizationServiceProvider::class,
+    RouteAttributesServiceProvider::class,
 ];

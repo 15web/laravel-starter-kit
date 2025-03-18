@@ -30,6 +30,7 @@ migration-prev: # Откатить последнюю миграцию
 migrate: # Запуск миграций
 	make clear-cache
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
+	docker compose run --rm backend-cli php artisan migrate
 
 tinker: # Запуск консольного интерпретатора
 	docker compose run --rm backend-cli php artisan tinker
