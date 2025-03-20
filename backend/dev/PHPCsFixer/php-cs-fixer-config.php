@@ -14,6 +14,7 @@ $finder = new Finder()
         __DIR__.'/../../bin',
         __DIR__.'/../../bootstrap',
         __DIR__.'/../../config',
+        __DIR__.'/../../database/migrations',
         __DIR__.'/../../dev',
         __DIR__.'/../../migrations',
     ])

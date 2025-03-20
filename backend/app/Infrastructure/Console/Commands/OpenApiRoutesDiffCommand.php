@@ -18,7 +18,7 @@ final class OpenApiRoutesDiffCommand extends Command
 {
     public function handle(): int
     {
-        $openApiPaths = $this->getOpenApiPaths('dev/openapi.yaml');
+        $openApiPaths = $this->getOpenApiPaths('dev/OpenApi/openapi.yaml');
         $appPaths = $this->getAppPaths();
         $missingAppPaths = array_diff($openApiPaths, $appPaths);
         $missingOpenApiPaths = array_diff($appPaths, $openApiPaths);

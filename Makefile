@@ -28,7 +28,6 @@ migration-prev: # Откатить последнюю миграцию
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate prev
 
 migrate: # Запуск миграций
-	make clear-cache
 	docker compose run --rm backend-cli ./bin/doctrine migrations:migrate --no-interaction
 	docker compose run --rm backend-cli php artisan migrate
 
@@ -116,12 +115,15 @@ test-single: # Запуск одного теста, пример: make test-sin
 	docker compose run --rm backend-cli bash -c 'vendor/bin/paratest -c ./dev/phpunit.xml --processes=4 --filter=$(class)'
 
 spectral: # Валидация openapi.yaml с помощью spectral
-	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/openapi.yaml -F warn --ruleset=/app/dev/.spectral.yaml
+	docker run --rm -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/dev/OpenApi/openapi.yaml -F warn --ruleset=/app/dev/OpenApi/.spectral.yaml
 
 check-openapi-schema: spectral # Валидация openapi.yaml
 
 check-openapi-diff: # Валидация соответствия роутов и схемы openapi
 	docker compose run --rm backend-cli php artisan openapi-routes-diff
+
+generate-openapi: # Сборка файла спецификации OpenAPI
+	docker compose run --rm backend-cli php artisan make:openapi
 
 setup:
 	@[ -x ./docker/bin/setup_envs ] || chmod +x ./docker/bin/setup_envs

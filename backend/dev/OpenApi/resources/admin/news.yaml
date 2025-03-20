@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+tags:
+  - name: admin-news
+    description: Админка / Новости
+paths:
+  /news:
+    post:
+      operationId: storeNews
+      summary: Создать новость
+      description: Создать новость
+      tags:
+        - admin-news
+      security:
+        - bearerHttpAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeNews'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeNews'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /news/{title}:
+    post:
+      operationId: updateNews
+      summary: Обновление новости
+      description: Обновление новости
+      tags:
+        - admin-news
+      security:
+        - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '../site/news.yaml#/components/parameters/newsTitle'
+      requestBody:
+        $ref: '#/components/requestBodies/updateNews'
+      responses:
+        '200':
+          $ref: '../site/news.yaml#/components/responses/showNews'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    delete:
+      operationId: destroyNews
+      summary: Удаление новости
+      description: Удаление новости
+      tags:
+        - admin-news
+      security:
+        - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '../site/news.yaml#/components/parameters/newsTitle'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  requestBodies:
+    storeNews:
+      description: Запрос на создание новости
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок новости
+                minLength: 1
+                example: Новость
+    updateNews:
+      description: Запрос на обновление новости
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок новости
+                minLength: 1
+                example: Новость
+  responses:
+    storeNews:
+      description: Новость создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '../site/news.yaml#/components/schemas/newsId'
+                      title:
+                        type: string
+                        description: Заголовок новости
+                        minLength: 1
+                        example: Новость
+                      createdAt:
+                        $ref: '../common.yaml#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '../common.yaml#/components/schemas/updatedAt'
+                  status:
+                    $ref: '../common.yaml#/components/schemas/status'
+              - $ref: '../common.yaml#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
+            Новость с таким заголовком уже существует:
+              value:
+                message: Новость с таким заголовком уже существует
+                code: entity_exists
+                errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'

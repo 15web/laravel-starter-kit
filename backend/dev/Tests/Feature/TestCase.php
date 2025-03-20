@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Базовый класс для тестов
@@ -66,7 +67,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @template TResponse of \Symfony\Component\HttpFoundation\Response
+     * @template TResponse of Response
      *
      * @param TestResponse<TResponse> $response
      * @param non-empty-string $code

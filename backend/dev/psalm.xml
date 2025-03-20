@@ -11,6 +11,7 @@
         <directory name="../app"/>
         <directory name="../bin"/>
         <directory name="../bootstrap"/>
+        <directory name="../database/migrations"/>
         <directory name="../dev"/>
         <ignoreFiles>
             <directory name="../bootstrap/cache"/>

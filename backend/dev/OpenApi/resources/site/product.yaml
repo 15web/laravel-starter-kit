@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+tags:
+  - name: products
+    description: Товары
+paths:
+  /products/category:
+    get:
+      operationId: indexCategory
+      summary: Дерево категорий товаров
+      description: Дерево категорий товаров
+      tags:
+        - products
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/indexCategory'
+    post:
+      operationId: storeCategory
+      summary: Создать категорию товаров
+      description: Создать категорию товаров
+      tags:
+        - products
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeCategory'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeCategory'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+components:
+  requestBodies:
+    storeCategory:
+      description: Запрос на создание категории товаров
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+              - parent
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок категории
+                minLength: 1
+                example: Диваны
+              parent:
+                type: number
+                description: Id родительской категории
+                minimum: 1
+                example: 11
+                nullable: true
+  responses:
+    indexCategory:
+      description: Возвращает дерево категорий товаров
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/productCategory'
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              - id: 11
+                title: Мебель
+                children:
+                  - id: 13
+                    title: Диваны
+                    createdAt: 2021-11-28T16:19:44+00:00
+                    updatedAt: null
+                  - id: 14
+                    title: Кровати
+                    createdAt: 2021-11-28T16:19:44+00:00
+                    updatedAt: null
+                createdAt: 2021-10-28T16:19:44+00:00
+                updatedAt: null
+              - id: 12
+                title: Посуда
+                children: [ ]
+                createdAt: 2021-11-28T16:19:44+00:00
+                updatedAt: null
+            pagination: null
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    storeCategory:
+      description: Категория создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                      - updatedAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/categoryId'
+                      title:
+                        type: string
+                        description: Заголовок категории
+                        minLength: 1
+                        example: Диваны
+                      createdAt:
+                        $ref: '../common.yaml#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '../common.yaml#/components/schemas/updatedAt'
+                  status:
+                    $ref: '../common.yaml#/components/schemas/status'
+              - $ref: '../common.yaml#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
+            Запись с таким заголовком уже существует:
+              value:
+                message: Запись с таким заголовком уже существует
+                code: entity_exists
+                errors: []
+            Не найдена родительская категория:
+              value:
+                message: Не найдена родительская категория
+                code: bad_request
+                errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    categoryId:
+      type: number
+      minimum: 1
+      description: Id записи
+      example: 11
+    productCategory:
+      type: object
+      required:
+        - id
+        - title
+        - children
+        - createdAt
+        - updatedAt
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/categoryId'
+        title:
+          type: string
+          description: Заголовок категории
+          minLength: 1
+          example: Диваны
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/productCategory'
+        createdAt:
+          $ref: '../common.yaml#/components/schemas/createdAt'
+        updatedAt:
+          $ref: '../common.yaml#/components/schemas/updatedAt'

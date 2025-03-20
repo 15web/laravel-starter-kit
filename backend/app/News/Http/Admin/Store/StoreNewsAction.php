@@ -39,7 +39,7 @@ final readonly class StoreNewsAction
     {
         Gate::authorize(
             ability: CheckRoleGranted::class,
-            arguments: Role::User,
+            arguments: Role::Admin,
         );
 
         $request = ($this->resolveRequest)(StoreNewsRequest::class);
