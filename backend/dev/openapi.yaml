@@ -983,12 +983,11 @@ components:
       enum:
         - user
         - admin
-      minLength: 1
       example: user
     password:
       type: string
       description: Пароль пользователя
-      minLength: 6
+      minLength: 1
       example: '123456'
     createdAt:
       type: string

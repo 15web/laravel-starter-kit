@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Feature\News;
 
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 
@@ -44,7 +45,7 @@ final class ShowNewsActionTest extends TestCase
         self::assertSame('Title', $data['title']);
         self::assertInstanceOf(
             DateTimeImmutable::class,
-            DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['createdAt']),
         );
         self::assertNull($data['updatedAt']);
     }
@@ -64,7 +65,10 @@ final class ShowNewsActionTest extends TestCase
     public function testUnauthorized(): void
     {
         $this
-            ->getJson(\sprintf('api/news/Title?%s=false', ValidateOpenApiSchema::VALIDATE_REQUEST_KEY))
+            ->getJson(
+                uri: 'api/news/Title',
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }

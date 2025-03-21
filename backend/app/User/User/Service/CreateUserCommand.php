@@ -13,6 +13,8 @@ use Webmozart\Assert\Assert;
  */
 final readonly class CreateUserCommand
 {
+    private const int MIN_PASSWORD_LENGTH = 6;
+
     /**
      * @param Uuid $id Id пользователя
      * @param Email $email Email
@@ -23,6 +25,6 @@ final readonly class CreateUserCommand
         public Email $email,
         public string $password,
     ) {
-        Assert::notEmpty($password);
+        Assert::minLength($password, self::MIN_PASSWORD_LENGTH);
     }
 }

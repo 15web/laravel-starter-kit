@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Dev\Tests\Feature\News;
 
 use App\Infrastructure\ApiException\Handler\ErrorCode;
-use App\Infrastructure\OpenApiSchemaValidator\ValidateOpenApiSchema;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Dev\OpenApi\ValidateOpenApiSchema;
 use Dev\Tests\Feature\TestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -42,7 +43,7 @@ final class StoreNewsActionTest extends TestCase
 
         self::assertIsNumeric($data['id']);
         self::assertSame('Title', $data['title']);
-        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeImmutable::ATOM, $data['createdAt']));
+        self::assertInstanceOf(DateTimeImmutable::class, DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['createdAt']));
         self::assertNull($data['updatedAt']);
     }
 
@@ -76,11 +77,13 @@ final class StoreNewsActionTest extends TestCase
     {
         $auth = $this->auth();
 
-        $body[ValidateOpenApiSchema::VALIDATE_REQUEST_KEY] = false;
-
         $this
             ->withToken($auth['token'])
-            ->postJson('api/news', $body)
+            ->postJson(
+                uri: 'api/news',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertBadRequest();
     }
 
@@ -96,11 +99,14 @@ final class StoreNewsActionTest extends TestCase
     {
         $body = [
             'title' => 'Title',
-            ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => false,
         ];
 
         $this
-            ->postJson('api/news', $body)
+            ->postJson(
+                uri: 'api/news',
+                data: $body,
+                headers: [ValidateOpenApiSchema::IGNORE_REQUEST_VALIDATE => true],
+            )
             ->assertUnauthorized();
     }
 }
