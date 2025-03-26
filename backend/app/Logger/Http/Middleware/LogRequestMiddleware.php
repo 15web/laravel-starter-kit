@@ -13,6 +13,9 @@ use CuyZ\Valinor\Normalizer\Format;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Log;
+use Laravel\Telescope\IncomingEntry;
+use Laravel\Telescope\Telescope;
+use Laravel\Telescope\TelescopeServiceProvider;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +57,17 @@ final readonly class LogRequestMiddleware
         );
 
         $response->headers->set('X-Trace-Id', $requestId);
+
+        if (class_exists(TelescopeServiceProvider::class)) {
+            Telescope::tag(
+                static fn (IncomingEntry $entry): array => $entry->type === 'request' ? [$requestId] : [],
+            );
+
+            $response->headers->set(
+                key: 'X-Telescope',
+                values: url(\sprintf('/telescope/requests?tag=%s', $requestId)),
+            );
+        }
 
         $this->logResponse(
             response: $response,
