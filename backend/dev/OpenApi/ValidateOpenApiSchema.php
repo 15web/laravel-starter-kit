@@ -40,7 +40,7 @@ final readonly class ValidateOpenApiSchema
         }
 
         $validatorBuilder = new ValidatorBuilder()->fromYamlFile(
-            base_path('dev/openapi.yaml'),
+            base_path('dev/OpenApi/openapi.yaml'),
         );
 
         $this->requestValidator = $validatorBuilder->getRequestValidator();

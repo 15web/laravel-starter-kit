@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+tags:
+  - name: auth
+    description: Аутентификация
+paths:
+  /auth/login:
+    post:
+      operationId: login
+      summary: Аутентификация пользователя
+      description: Аутентификация пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        '200':
+          $ref: '#/components/responses/login'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '429':
+          $ref: '../common.yaml#/components/responses/tooManyRequests'
+  /auth/logout:
+    post:
+      operationId: logout
+      summary: Выйти из приложения
+      description: Выполняет выход пользователя из приложения
+      tags:
+        - auth
+      security:
+        - bearerHttpAuth: [ ]
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '500':
+          $ref: '../common.yaml#/components/responses/badRequest'
+components:
+  requestBodies:
+    login:
+      description: Запрос на аутентификацию
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+              - password
+            additionalProperties: false
+            properties:
+              email:
+                $ref: '../common.yaml#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+  responses:
+    login:
+      description: Аутентификация прошла успешно
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                required:
+                  - token
+                  - roles
+                  - email
+                additionalProperties: false
+                properties:
+                  token:
+                    $ref: '#/components/schemas/authToken'
+                  roles:
+                    type: array
+                    description: Список ролей пользователя
+                    items:
+                      $ref: '#/components/schemas/role'
+                  email:
+                    $ref: '../common.yaml#/components/schemas/email'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              token: 0192901d-f418-7bf4-bf12-868a311f5a91
+              roles:
+                - user
+              email: user@example.com
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    role:
+      type: string
+      description: Роль пользователя
+      enum:
+        - user
+        - admin
+      example: user
+    password:
+      type: string
+      description: Пароль пользователя
+      minLength: 1
+      example: '123456'
+    authToken:
+      type: string
+      example: 01928fdc-9091-777b-9155-1dc6bee8843f

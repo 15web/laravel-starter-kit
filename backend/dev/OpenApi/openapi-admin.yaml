@@ -1,0 +1,345 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+  description: 'Заготовка для проектов на Laravel с использованием Doctrine ORM, примеры модулей'
+  contact:
+    name: 'Студия 15'
+    url: 'https://www.15web.ru'
+    email: info@15web.ru
+servers:
+  -
+    url: 'http://localhost:8088/api'
+    description: 'Локальный сервер для разработки'
+tags:
+  -
+    name: admin-news
+    description: 'Админка / Новости'
+paths:
+  /news:
+    post:
+      operationId: storeNews
+      summary: 'Создать новость'
+      description: 'Создать новость'
+      tags:
+        - admin-news
+      security:
+        -
+          bearerHttpAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/storeNews'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeNews'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/forbidden'
+  '/news/{title}':
+    post:
+      operationId: updateNews
+      summary: 'Обновление новости'
+      description: 'Обновление новости'
+      tags:
+        - admin-news
+      security:
+        -
+          bearerHttpAuth: []
+      parameters:
+        -
+          $ref: '#/components/parameters/newsTitle'
+      requestBody:
+        $ref: '#/components/requestBodies/updateNews'
+      responses:
+        '200':
+          $ref: '#/components/responses/showNews'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+    delete:
+      operationId: destroyNews
+      summary: 'Удаление новости'
+      description: 'Удаление новости'
+      tags:
+        - admin-news
+      security:
+        -
+          bearerHttpAuth: []
+      parameters:
+        -
+          $ref: '#/components/parameters/newsTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+components:
+  securitySchemes:
+    bearerHttpAuth:
+      type: http
+      scheme: bearer
+      description: "Укажите токен без префикса `Bearer `, \\\nнапример '01928fb2-4147-7a36-a67b-88deaaee45b9'\n"
+  headers:
+    requestTraceId:
+      schema:
+        type: string
+      description: 'Уникальный идентификатор запроса'
+      example: 01904f4d-d18f-778e-a981-432d6af77425
+    rateLimitRetryAfter:
+      schema:
+        type: integer
+        minimum: 1
+      description: 'Количество секунд до повторного запроса'
+      example: 120
+    rateLimitLimit:
+      schema:
+        type: integer
+        minimum: 1
+      description: 'Количество допустимых попыток в период времени'
+      example: 60
+  parameters:
+    limit:
+      in: query
+      name: limit
+      required: false
+      description: Лимит
+      example: 10
+      schema:
+        type: integer
+    offset:
+      in: query
+      name: offset
+      required: false
+      description: Смещение
+      example: 1
+      schema:
+        type: integer
+  responses:
+    success:
+      description: 'Успешный ответ'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                required:
+                  - status
+                additionalProperties: false
+                properties:
+                  status: { $ref: '#/components/schemas/status' }
+              status:
+                $ref: '#/components/schemas/status'
+          example:
+            data:
+              status: success
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+    badRequest:
+      description: 'Ошибка запроса'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: 'Неверный формат запроса'
+            code: bad_request
+            errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+    unauthenticated:
+      description: 'Для доступ к ресурсу требуется аутентификация'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: 'Для доступ к ресурсу требуется аутентификация'
+            code: unauthenticated
+            errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+    forbidden:
+      description: 'Доступ к ресурсу ограничен'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: 'Доступ к ресурсу ограничен'
+            code: forbidden
+            errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+    notFound:
+      description: 'Запись не найдена'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: 'Запись не найдена'
+            code: not_found
+            errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+    tooManyRequests:
+      description: 'Превышено количество запросов'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: 'Превышено количество запросов'
+            code: too_many_requests
+            errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+        X-RateLimit-Retry-After:
+          $ref: '#/components/headers/rateLimitRetryAfter'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitLimit'
+    storeNews:
+      description: 'Новость создана'
+      content:
+        application/json:
+          schema:
+            oneOf:
+              -
+                type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data: { type: object, required: [id, title, createdAt], additionalProperties: false, properties: { id: { $ref: '#/components/schemas/newsId' }, title: { type: string, description: 'Заголовок новости', minLength: 1, example: Новость }, createdAt: { $ref: '#/components/schemas/createdAt' }, updatedAt: { $ref: '#/components/schemas/updatedAt' } } }
+                  status: { $ref: '#/components/schemas/status' }
+              -
+                $ref: '#/components/schemas/error'
+          examples:
+            'Успешный запрос':
+              value:
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
+            'Новость с таким заголовком уже существует':
+              value:
+                message: 'Новость с таким заголовком уже существует'
+                code: entity_exists
+                errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '#/components/headers/requestTraceId'
+  schemas:
+    status:
+      type: string
+      enum:
+        - success
+        - error
+      description: 'Статус запроса'
+      example: success
+    error:
+      type: object
+      required:
+        - message
+        - code
+        - errors
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+          enum:
+            - bad_request
+            - unauthenticated
+            - forbidden
+            - not_found
+            - method_not_allowed
+            - unexpected
+            - too_many_requests
+            - entity_exists
+        errors:
+          type: array
+          description: 'Список ошибок'
+          items:
+            type: string
+            description: 'Текст ошибки'
+            example: 'Cannot be empty'
+    pagination:
+      type: object
+      nullable: true
+      properties:
+        total:
+          type: integer
+          description: 'Количество всех данных'
+          example: 2
+    email:
+      type: string
+      format: ^\\S+@\\S+\\.\\S+$
+      description: 'Адрес электронной почты'
+      example: customer@kabosh.ru
+    createdAt:
+      type: string
+      description: 'Дата создания'
+      example: '2021-10-28T16:19:44+00:00'
+    updatedAt:
+      type: string
+      description: 'Дата обновления'
+      example: '2021-10-28T16:19:44+00:00'
+      nullable: true
+  requestBodies:
+    storeNews:
+      description: 'Запрос на создание новости'
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: 'Заголовок новости'
+                minLength: 1
+                example: Новость
+    updateNews:
+      description: 'Запрос на обновление новости'
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: 'Заголовок новости'
+                minLength: 1
+                example: Новость

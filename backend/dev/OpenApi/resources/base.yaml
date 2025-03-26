@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+  description: Заготовка для проектов на Laravel с использованием Doctrine ORM, примеры модулей
+  contact:
+    name: Студия 15
+    url: https://www.15web.ru
+    email: info@15web.ru
+servers:
+  - url: http://localhost:8088/api
+    description: Локальный сервер для разработки
+tags: [ ]
+paths: { }
+components: { }

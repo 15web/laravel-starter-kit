@@ -6,6 +6,7 @@ parameters:
         - ../../app
         - ../../bin
         - ../../bootstrap
+        - ../../database/migrations
         - ../../dev
         - ../../migrations
     tmpDir: ../../storage/framework/cache/phpstan

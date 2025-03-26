@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+tags:
+  - name: news
+    description: Новости
+paths:
+  /news:
+    get:
+      operationId: indexNews
+      summary: Список новостей
+      description: Список новостей
+      tags:
+        - news
+      security:
+        - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '../common.yaml#/components/parameters/limit'
+        - $ref: '../common.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/indexNews'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /news/{title}:
+    get:
+      operationId: showNews
+      summary: Просмотр новости
+      description: Просмотр новости
+      tags:
+        - news
+      security:
+        - bearerHttpAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/newsTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/showNews'
+        '401':
+          $ref: '../common.yaml#/components/responses/unauthenticated'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /subscribe:
+    post:
+      operationId: subscribeNews
+      summary: Подписаться на рассылку новостей
+      description: Подписаться на рассылку новостей
+      tags:
+        - news
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/subscribeNews'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+components:
+  parameters:
+    newsTitle:
+      name: title
+      in: path
+      schema:
+        type: string
+      required: true
+      description: Заголовок новости
+      example: Новость
+  requestBodies:
+    subscribeNews:
+      description: Запрос на получение рассылки новостей
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+            additionalProperties: false
+            properties:
+              email:
+                $ref: '../common.yaml#/components/schemas/email'
+  responses:
+    indexNews:
+      description: Возвращает список новостей
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - createdAt
+                  additionalProperties: false
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/newsId'
+                    title:
+                      type: string
+                      description: Заголовок новости
+                      minLength: 1
+                      example: Новость
+                    createdAt:
+                      $ref: '../common.yaml#/components/schemas/createdAt'
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              - id: 11
+                title: Новость
+                createdAt: 2021-10-28T16:19:44+00:00
+              - id: 12
+                title: Объявление
+                createdAt: 2021-11-28T16:19:44+00:00
+            pagination:
+              total: 10
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    showNews:
+      description: Возвращает информацию о новости
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                  - title
+                  - createdAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/newsId'
+                  title:
+                    type: string
+                    description: Заголовок новости
+                    minLength: 1
+                  createdAt:
+                    $ref: '../common.yaml#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '../common.yaml#/components/schemas/updatedAt'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              id: 11
+              title: Новость
+              createdAt: 2021-10-28T16:19:44+00:00
+              updatedAt: null
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    newsId:
+      type: number
+      minimum: 1
+      description: Id записи
+      example: 11

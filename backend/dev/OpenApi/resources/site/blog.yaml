@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  title: laravel-starter-kit
+  version: 1.0.0
+tags:
+  - name: blog
+    description: Блог
+paths:
+  /blog:
+    get:
+      operationId: indexBlog
+      summary: Список записей блога
+      description: Список записей блога
+      tags:
+        - blog
+      security: [ ]
+      parameters:
+        - $ref: '../common.yaml#/components/parameters/limit'
+        - $ref: '../common.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/indexBlog'
+    post:
+      operationId: storeBlog
+      summary: Создать запись в блоге
+      description: Создать запись в блоге
+      tags:
+        - blog
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/storeBlog'
+      responses:
+        '200':
+          $ref: '#/components/responses/storeBlog'
+        '400':
+          $ref: '../common.yaml#/components/responses/badRequest'
+  /blog/{title}:
+    get:
+      operationId: showBlog
+      summary: Просмотр записи блога
+      description: Просмотр записи блога
+      tags:
+        - blog
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/blogTitle'
+      responses:
+        '200':
+          $ref: '#/components/responses/showBlog'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  parameters:
+    blogTitle:
+      name: title
+      in: path
+      schema:
+        type: string
+      required: true
+      description: Заголовок записи
+      example: Введение
+  requestBodies:
+    storeBlog:
+      description: Запрос на создание записи в блоге
+      content:
+        application/json:
+          schema:
+            required:
+              - title
+              - author
+              - content
+            additionalProperties: false
+            properties:
+              title:
+                type: string
+                description: Заголовок записи в блоге
+                minLength: 1
+                example: Введение
+              author:
+                type: string
+                description: Автор блога
+                minLength: 1
+                example: Иван
+              content:
+                type: string
+                description: Текст записи
+                minLength: 1
+                example: Начало рассказа...
+  responses:
+    indexBlog:
+      description: Возвращает список записей в блоге
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - author
+                    - createdAt
+                  additionalProperties: false
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/blogId'
+                    title:
+                      type: string
+                      description: Заголовок записи в блоге
+                      minLength: 1
+                      example: Введение
+                    author:
+                      type: string
+                      description: Автор блога
+                      minLength: 1
+                      example: Иван
+                    createdAt:
+                      $ref: '../common.yaml#/components/schemas/createdAt'
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              - id: 11
+                title: Введение
+                author: Иван
+                createdAt: 2021-10-28T16:19:44+00:00
+              - id: 12
+                title: Заключение
+                author: Потап
+                createdAt: 2021-11-28T16:19:44+00:00
+            pagination:
+              total: 10
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    storeBlog:
+      description: Запись в блоге создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - id
+                      - title
+                      - createdAt
+                      - updatedAt
+                    additionalProperties: false
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/blogId'
+                      title:
+                        type: string
+                        description: Заголовок записи
+                        minLength: 1
+                        example: Введение
+                      createdAt:
+                        $ref: '../common.yaml#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '../common.yaml#/components/schemas/updatedAt'
+                  status:
+                    $ref: '../common.yaml#/components/schemas/status'
+              - $ref: '../common.yaml#/components/schemas/error'
+          examples:
+            Успешный запрос:
+              value:
+                data:
+                  id: 11
+                  title: Введение
+                  createdAt: 2024-10-15T10:59:14+00:00
+                  updatedAt: null
+                status: success
+            Запись с таким заголовком уже существует:
+              value:
+                message: Запись с таким заголовком уже существует
+                code: entity_exists
+                errors: []
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    showBlog:
+      description: Возвращает информацию о записи в блоге
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                  - title
+                  - author
+                  - content
+                  - createdAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    $ref: '#/components/schemas/blogId'
+                  title:
+                    type: string
+                    description: Заголовок записи в блоге
+                    minLength: 1
+                  author:
+                    type: string
+                    description: Автор блог
+                    minLength: 1
+                  content:
+                    type: string
+                    description: Текст записи
+                    minLength: 1
+                  createdAt:
+                    $ref: '../common.yaml#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '../common.yaml#/components/schemas/updatedAt'
+              status:
+                $ref: '../common.yaml#/components/schemas/status'
+          example:
+            data:
+              id: 11
+              title: Введение
+              author: Иван
+              content: Начало рассказа...
+              createdAt: 2021-10-28T16:19:44+00:00
+              updatedAt: null
+            status: success
+      headers:
+        X-Trace-Id:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    blogId:
+      type: number
+      minimum: 1
+      description: Id записи
+      example: 11

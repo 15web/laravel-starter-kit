@@ -17,6 +17,7 @@ return RectorConfig::configure()
         __DIR__.'/../../bootstrap/app.php',
         __DIR__.'/../../bootstrap/providers.php',
         __DIR__.'/../../config',
+        __DIR__.'/../../database/migrations',
         __DIR__.'/../../dev',
         __DIR__.'/../../migrations',
     ])

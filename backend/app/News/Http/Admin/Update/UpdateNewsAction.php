@@ -38,7 +38,7 @@ final readonly class UpdateNewsAction
     {
         Gate::authorize(
             ability: CheckRoleGranted::class,
-            arguments: Role::User,
+            arguments: Role::Admin,
         );
 
         $routeParameters = ($this->resolveRouteParameters)(ShowNewsRequest::class);

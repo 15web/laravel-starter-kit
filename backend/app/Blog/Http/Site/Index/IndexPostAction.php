@@ -2,30 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\News\Http\Site\Index;
+namespace App\Blog\Http\Site\Index;
 
+use App\Blog\Domain\PostRepository;
 use App\Infrastructure\Request\PaginationRequest;
 use App\Infrastructure\Request\ResolveRequestQuery;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\PaginationResponse;
 use App\Infrastructure\Response\ResolveResponse;
-use App\News\Domain\NewsRepository;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * Ручка просмотра новостей
+ * Ручка получения списка записей в блоге
  */
-#[Router\Middleware('auth')]
-final readonly class IndexNewsAction
+final readonly class IndexPostAction
 {
     public function __construct(
         private ResolveRequestQuery $resolveQuery,
-        private NewsRepository $repository,
+        private PostRepository $repository,
         private ResolveResponse $resolveResponse,
     ) {}
 
-    #[Router\Get('/news')]
+    #[Router\Get('/blog')]
     public function __invoke(): JsonResponse
     {
         $pagination = ($this->resolveQuery)(PaginationRequest::class);
@@ -34,7 +33,7 @@ final readonly class IndexNewsAction
 
         return ($this->resolveResponse)(
             new ApiListObjectResponse(
-                data: $this->getNewsData($pagination),
+                data: $this->getPostsData($pagination),
                 pagination: new PaginationResponse(
                     total: $total,
                 ),
@@ -43,26 +42,30 @@ final readonly class IndexNewsAction
     }
 
     /**
-     * @return iterable<IndexNewsData>
+     * @return iterable<IndexPostData>
      */
-    private function getNewsData(PaginationRequest $pagination): iterable
+    private function getPostsData(PaginationRequest $pagination): iterable
     {
-        $newsList = $this->repository->findAll(
+        $postList = $this->repository->findAll(
             offset: $pagination->offset,
             limit: $pagination->limit,
         );
 
-        foreach ($newsList as $news) {
+        foreach ($postList as $post) {
             /** @var positive-int $id */
-            $id = $news->getId();
+            $id = $post->getId();
 
             /** @var non-empty-string $title */
-            $title = $news->getTitle();
+            $title = $post->getTitle();
 
-            yield new IndexNewsData(
+            /** @var non-empty-string $author */
+            $author = $post->getAuthor();
+
+            yield new IndexPostData(
                 id: $id,
                 title: $title,
-                createdAt: $news->getCreatedAt(),
+                author: $author,
+                createdAt: $post->getCreatedAt(),
             );
         }
     }

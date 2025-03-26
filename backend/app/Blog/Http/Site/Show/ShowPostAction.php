@@ -2,52 +2,56 @@
 
 declare(strict_types=1);
 
-namespace App\News\Http\Site\Show;
+namespace App\Blog\Http\Site\Show;
 
+use App\Blog\Domain\PostRepository;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\Request\ResolveRouteParameters;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\ResolveResponse;
-use App\News\Domain\NewsRepository;
 use Illuminate\Http\JsonResponse;
 use Spatie\RouteAttributes\Attributes as Router;
 
 /**
- * Ручка просмотра новости
+ * Ручка просмотра записи в блоге
  */
-#[Router\Middleware('auth')]
-final readonly class ShowNewsAction
+final readonly class ShowPostAction
 {
     public function __construct(
-        private NewsRepository $repository,
+        private PostRepository $repository,
         private ResolveRouteParameters $resolveRequest,
         private ResolveResponse $resolveResponse,
     ) {}
 
-    #[Router\Get('/news/{title}')]
+    #[Router\Get('/blog/{title}')]
     public function __invoke(): JsonResponse
     {
-        $request = ($this->resolveRequest)(ShowNewsRequest::class);
+        $request = ($this->resolveRequest)(ShowPostRequest::class);
 
-        $news = $this->repository->findByTitle(
-            $request->title,
-        );
-
-        if ($news === null) {
+        $post = $this->repository->findByTitle($request->title);
+        if ($post === null) {
             throw ApiException::createNotFoundException('Запись не найдена');
         }
 
         /** @var positive-int $id */
-        $id = $news->getId();
+        $id = $post->getId();
 
         /** @var non-empty-string $title */
-        $title = $news->getTitle();
+        $title = $post->getTitle();
 
-        $response = new ShowNewsResponse(
+        /** @var non-empty-string $author */
+        $author = $post->getAuthor();
+
+        /** @var non-empty-string $content */
+        $content = $post->getContent();
+
+        $response = new ShowPostResponse(
             id: $id,
             title: $title,
-            createdAt: $news->getCreatedAt(),
-            updatedAt: $news->getUpdatedAt(),
+            author: $author,
+            content: $content,
+            createdAt: $post->getCreatedAt(),
+            updatedAt: $post->getUpdatedAt(),
         );
 
         return ($this->resolveResponse)(
